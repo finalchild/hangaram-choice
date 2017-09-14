@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 
 const vote = require('./routes/vote');
 const result = require('./routes/result');
+const setadminpw = require('./routes/setadminpw');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/vote', vote);
 app.use('/result', result);
+app.use('/setadminpw', setadminpw);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

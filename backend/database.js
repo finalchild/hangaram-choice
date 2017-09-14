@@ -9,112 +9,223 @@ const db = new sqlite3.Database('database.sqlite3', err => {
 
 db.serialize(() => {
     db.run('CREATE TABLE if not exists students (UniqueKey INT, Voted BIT, Grade TINYINT)');
-    db.run('CREATE TABLE if not exists candidates1 (Name INT, Votes INT)');
+    db.run('CREATE TABLE if not exists candidates1M (Name INT, Votes INT)');
+    db.run('CREATE TABLE if not exists candidates1F (Name INT, Votes INT)');
     db.run('CREATE TABLE if not exists candidates2 (Name INT, Votes INT)');
 });
 
-const studentQuerySql = `SELECT UniqueKey AS key,
-                         Voted AS voted,
-                         Grade AS grade
-                         FROM students
-                         WHERE Key = ?`;
-const setVotedSql = `UPDATE students
-                   SET Voted = 1
-                   WHERE UniqueKey = ?`;
-const increment1Sql = `UPDATE candidates1
-                      SET Votes = Votes + 1
-                      WHERE Name = ?`;
-const increment2Sql = `UPDATE candidates2
-                      SET Votes = Votes + 1
-                      WHERE Name = ?`;
-const candidate1QuerySql = `SELECT Name AS name,
-                                  Votes AS votes
-                           FROM candidates1
-                           WHERE Name = ?`;
-const candidate2QuerySql = `SELECT Name AS name,
-                                  Votes AS votes
-                           FROM candidates2
-                           WHERE Name = ?`;
-const candidates1QuerySql = `SELECT Name AS name,
-                                   Votes AS votes
-                            FROM candidates1`;
-const candidates2QuerySql = `SELECT Name AS name,
-                                   Votes AS votes
-                            FROM candidates2`;
+function isValidKey(key) {
+    return Number.isSafeInteger(key) && key > 0 && key < 10000000;
+}
 
-function getStudent(key, callback) {
-    if (!Number.isSafeInteger(key)) {
-        throw 'Key has to be a safe integer!';
-    }
+function assertValidKey(key) {
+    if (!isValidKey(key)) throw 'Invalid key!';
+}
 
-    db.serialize(() => {
-        db.get(studentQuerySql, [key], callback);
+function getStudent(key) {
+    return new Promise((resolve, reject) => {
+        assertValidKey(key);
+        db.serialize(() => {
+            db.get(`SELECT UniqueKey AS key,
+                       Voted AS voted,
+                       Grade AS grade
+                       FROM students
+                       WHERE Key = ?`, [key], (err, row) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(row);
+            });
+        })
     });
+}
+
+function tryToSetVoted(key) {
+    return new Promise((resolve, reject) => {
+        assertValidKey(key);
+        db.serialize(() => {
+            db.run(`UPDATE students
+                    SET Voted = 1
+                    WHERE UniqueKey = ? AND Voted = 0`, [key], function(err) {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                if (this.changes === 0) {
+                    reject('Couldn\'t set Voted. Maybe you have already voted?');
+                    return;
+                }
+                resolve();
+            });
+        })
+    })
 }
 
 /**
  * 투표
  * @param key 투표자 키
- * @param candidateName1 1학년 후보자 이름 (null인 경우 무시)
- * @param candidateName2 2학년 후보자 이름 (null인 경우 무시)
- * @param callback 콜백
+ * @param candidateName1M 1학년 남자 후보자 이름 (falsy인 경우 무시)
+ * @param candidateName1F 1학년 여자 후보자 이름 (falsy인 경우 무시)
+ * @param candidateName2 2학년 후보자 이름 (falsy인 경우 무시)
  */
-function vote(key, candidateName1, candidateName2, callback) {
-    if (!Number.isSafeInteger(key)) {
-        throw 'Key has to be a safe integer!';
-    }
-
-    db.serialize(() => {
-        db.run(setVotedSql, [key], (err) => {
-            if (err) {
-                callback(err);
-                return;
-            }
-
-            db.serialize(() => {
-                if (candidateName1 !== null) {
-                    db.run(increment1Sql, [candidateName1], (err) => {
-                        if (err || candidateName2 === null) callback(err);
-                        else db.serialize(() => db.run(increment2Sql, [candidateName2], callback))
-                    });
-                } else {
-                    db.run(increment2Sql, [candidateName2], callback);
-                }
-
+function vote(key, candidateName1M, candidateName1F, candidateName2) {
+    return new Promise((resolve, reject) => {
+        assertValidKey(key);
+        tryToSetVoted(key)
+            .then(() => {
+                db.serialize(() => {
+                    db.run('BEGIN TRANSACTION');
+                    if (candidateName1M) {
+                        db.run(`UPDATE candidates1M
+                        SET Votes = Votes + 1
+                        WHERE Name = ?`, [candidateName1M]);
+                    }
+                    if (candidateName1F) {
+                        db.run(`UPDATE candidates1F
+                        SET Votes = Votes + 1
+                        WHERE Name = ?`, [candidateName1F]);
+                    }
+                    if (candidateName2) {
+                        db.run(`UPDATE candidates2
+                        SET Votes = Votes + 1
+                        WHERE Name = ?`, [candidateName2]);
+                    }
+                    db.run('COMMIT', [], (err) => {
+                        if (err) {
+                            reject(err);
+                            return;
+                        }
+                        resolve();
+                    })
+                })
             });
-        });
     });
 }
 
-function getCandidate1(candidateName, callback) {
-    db.serialize(() => {
-        db.get(candidate1QuerySql, [candidateName], callback);
+function getCandidate1M(candidateName) {
+    return new Promise((resolve, reject) => {
+        if (candidateName) {
+            db.serialize(() => {
+                db.get(`SELECT Name AS name,
+                Votes AS votes
+                FROM candidates1M
+                WHERE Name = ?`, [candidateName], (err, row) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve(row);
+                });
+            });
+        } else {
+            // candidateName이 falsy면 truthy 값을 반환.
+            resolve('truthy');
+        }
+    })
+}
+
+function getCandidate1F(candidateName) {
+    return new Promise((resolve, reject) => {
+        if (candidateName) {
+            db.serialize(() => {
+                db.get(`SELECT Name AS name,
+                Votes AS votes
+                FROM candidates1F
+                WHERE Name = ?`, [candidateName], (err, row) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve(row);
+                });
+            });
+        } else {
+            // candidateName이 falsy면 truthy 값을 반환.
+            resolve('truthy');
+        }
+    })
+}
+
+function getCandidate2(candidateName) {
+    return new Promise((resolve, reject) => {
+        if (candidateName) {
+            db.serialize(() => {
+                db.get(`SELECT Name AS name,
+                Votes AS votes
+                FROM candidates2
+                WHERE Name = ?`, [candidateName], (err, row) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve(row);
+                });
+            });
+        } else {
+            // candidateName이 falsy면 truthy 값을 반환.
+            resolve('truthy');
+        }
+    })
+}
+
+function getCandidates1M() {
+    return new Promise((resolve, reject) => {
+        db.serialize(() => {
+            db.all(`SELECT Name AS name,
+                    Votes AS votes
+                    FROM candidates1M`, [], (err, rows) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(rows);
+            })
+        })
     });
 }
 
-function getCandidate2(candidateName, callback) {
-    db.serialize(() => {
-        db.get(candidate2QuerySql, [candidateName], callback);
+function getCandidates1F() {
+    return new Promise((resolve, reject) => {
+        db.serialize(() => {
+            db.all(`SELECT Name AS name,
+                    Votes AS votes
+                    FROM candidates1F`, [], (err, rows) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(rows);
+            })
+        })
     });
 }
 
-function getCandidates1(callback) {
-    db.serialize(() => {
-        db.all(candidates1QuerySql, callback);
-    });
-}
-
-function getCandidates2(callback) {
-    db.serialize(() => {
-        db.all(candidates2QuerySql, callback);
+function getCandidates2() {
+    return new Promise((resolve, reject) => {
+        db.serialize(() => {
+            db.all(`SELECT Name AS name,
+                    Votes AS votes
+                    FROM candidates2`, [], (err, rows) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(rows);
+            })
+        })
     });
 }
 
 module.exports.db = db;
+module.exports.isValidKey = isValidKey;
+module.exports.assertValidKey = assertValidKey;
 module.exports.getStudent = getStudent;
-module.exports.getCandidate1 = getCandidate1;
+module.exports.getCandidate1M = getCandidate1M;
+module.exports.getCandidate1F = getCandidate1F;
 module.exports.getCandidate2 = getCandidate2;
-module.exports.getCandidates1 = getCandidates1;
+module.exports.getCandidates1M = getCandidates1M;
+module.exports.getCandidates1F = getCandidates1F;
 module.exports.getCandidates2 = getCandidates2;
 
 module.exports.vote = vote;
