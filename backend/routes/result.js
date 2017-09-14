@@ -1,12 +1,15 @@
 'use strict';
 const express = require('express');
-const assertValidAdminPassword = require('../status').assertValidAdminPassword;
-const compareAdminPassword = require('../status').compareAdminPassword;
-const getCandidates1M = require('../database').getCandidates1M;
-const getCandidates1F = require('../database').getCandidates1F;
-const getCandidates2 = require('../database').getCandidates2;
-
 const router = express.Router();
+
+const Promise = require('bluebird');
+
+const assertValidAdminPassword = require('../status.js').assertValidAdminPassword;
+const compareAdminPassword = require('../status.js').compareAdminPassword;
+const getCandidates1M = require('../database.js').getCandidates1M;
+const getCandidates1F = require('../database.js').getCandidates1F;
+const getCandidates2 = require('../database.js').getCandidates2;
+
 
 router.post('/', (req, res) => {
     const adminPassword = req.body.adminPassword;
@@ -32,6 +35,7 @@ router.post('/', (req, res) => {
                 });
             });
     }).catch(e => {
+        console.error(e.stack);
         res.status(500).send(e);
     });
 });

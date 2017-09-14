@@ -8,9 +8,9 @@
   "dependencies": {
     "bcrypt": "^1.0.3",
     "bluebird": "^3.5.0",
-    "body-parser": "~1.17.1",
+    "body-parser": "~1.18.1",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.3",
+    "debug": "~3.0.1",
     "express": "~4.15.2",
     "morgan": "~1.8.1",
     "mz": "^2.6.0",

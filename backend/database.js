@@ -1,4 +1,6 @@
 'use strict';
+const Promise = require('bluebird');
+
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('database.sqlite3', err => {
     if (err) {
@@ -217,15 +219,42 @@ function getCandidates2() {
     });
 }
 
+// SQL Injection 체크를 하지 않습니다. 절대로 입력받은 것을 인자로 넣지 마세요.
+function setStudentKeys(keys) {
+    return new Promise((resolve, reject) => {
+        const firstGradeStudents = Array.from(keys.firstGradeKeys.values()).map(key => {
+            return `(${key}, 0, 1)`;
+        });
+        const secondGradeStudents = Array.from(keys.secondGradeKeys.values()).map(key => {
+            return `(${key}, 0, 2)`;
+        });
+        const values = firstGradeStudents.concat(secondGradeStudents).join(', ');
+
+        db.serialize(() => {
+            db.run('BEGIN TRANSACTION');
+            db.run('DELETE FROM students');
+            db.run('INSERT INTO students (UniqueKey, Voted, Grade) VALUES ' + values);
+            db.run('COMMIT', [], (err) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(keys);
+            });
+        });
+    });
+}
+
 module.exports.db = db;
 module.exports.isValidKey = isValidKey;
 module.exports.assertValidKey = assertValidKey;
 module.exports.getStudent = getStudent;
+module.exports.tryToSetVoted = tryToSetVoted;
+module.exports.vote = vote;
 module.exports.getCandidate1M = getCandidate1M;
 module.exports.getCandidate1F = getCandidate1F;
 module.exports.getCandidate2 = getCandidate2;
 module.exports.getCandidates1M = getCandidates1M;
 module.exports.getCandidates1F = getCandidates1F;
 module.exports.getCandidates2 = getCandidates2;
-
-module.exports.vote = vote;
+module.exports.setStudentKeys = setStudentKeys;

@@ -6,9 +6,11 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
-const vote = require('./routes/vote');
-const result = require('./routes/result');
-const setadminpw = require('./routes/setadminpw');
+const vote = require('./routes/vote.js');
+const result = require('./routes/result.js');
+const setadminpw = require('./routes/setadminpw.js');
+const generatekeys = require('./routes/generatekeys.js');
+const login = require('./routes/login.js');
 
 const app = express();
 
@@ -27,6 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/vote', vote);
 app.use('/result', result);
 app.use('/setadminpw', setadminpw);
+app.use('/generatekeys', generatekeys);
+app.use('/login', login);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

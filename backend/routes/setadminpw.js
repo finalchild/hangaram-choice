@@ -2,9 +2,9 @@
 const express = require('express');
 const router = express.Router();
 
-const assertValidAdminPassword = require('../status').assertValidAdminPassword;
-const compareAdminPassword = require('../status').compareAdminPassword;
-const setAdminPassword = require('../status').setAdminPassword;
+const assertValidAdminPassword = require('../status.js').assertValidAdminPassword;
+const compareAdminPassword = require('../status.js').compareAdminPassword;
+const setAdminPassword = require('../status.js').setAdminPassword;
 
 router.post('/', (req, res) => {
     const adminPassword = req.body.adminPassword;
@@ -16,13 +16,18 @@ router.post('/', (req, res) => {
         res.status(401).send(e);
     }
 
-    return compareAdminPassword(adminPassword).then(compareResult => {
+    compareAdminPassword(adminPassword).then(compareResult => {
         if (!compareResult) {
             res.status(401).send('The administrator password is not correct!');
             return;
         }
 
         return setAdminPassword(newAdminPassword);
+    }).then(e => {
+        res.status(200).send('Success!');
+    }).catch(e => {
+        console.error(e.stack);
+        res.status(500).send(e);
     });
 });
 

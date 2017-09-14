@@ -1,7 +1,7 @@
 'use strict';
+const Promise = require('bluebird');
 const fs = require('mz/fs');
 const bcrypt = require('bcrypt');
-const Promise = require('bluebird');
 
 const saltRounds = 10;
 fs.writeFileSync('config.json', JSON.stringify({

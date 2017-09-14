@@ -2,12 +2,14 @@
 const express = require('express');
 const router = express.Router();
 
-const assertValidKey = require('../database').assertValidKey;
-const getStudent = require('../database').getStudent;
-const getCandidate1M = require('../database').getCandidate1M;
-const getCandidate1F = require('../database').getCandidate1F;
-const getCandidate2 = require('../database').getCandidate2;
-const vote = require('../database').vote;
+const Promise = require('bluebird');
+
+const assertValidKey = require('../database.js').assertValidKey;
+const getStudent = require('../database.js').getStudent;
+const getCandidate1M = require('../database.js').getCandidate1M;
+const getCandidate1F = require('../database.js').getCandidate1F;
+const getCandidate2 = require('../database.js').getCandidate2;
+const vote = require('../database.js').vote;
 
 router.post('/', (req, res) => {
     const key = req.body.key;
@@ -40,17 +42,20 @@ router.post('/', (req, res) => {
             res.status(400).send('2nd graders can\'t vote for 1st grade candidates!');
             return;
         }
-        Promise.all([getCandidate1M(candidateName1M), getCandidate1F(candidateName1F), getCandidate2(candidateName2)])
-            .then(results => {
-                if (!results[0] || !results[1] || !results[2]) {
-                    res.status(400).send('Invalid candidate name!');
-                    return;
-                }
 
-                vote(key, candidateName1M, candidateName1F, candidateName2).then(() => {
-                    res.status(200).send('Vote successful.');
-                });
-            });
+        return Promise.all([getCandidate1M(candidateName1M), getCandidate1F(candidateName1F), getCandidate2(candidateName2)]);
+    }).then(results => {
+        if (!results[0] || !results[1] || !results[2]) {
+            res.status(400).send('Invalid candidate name!');
+            return;
+        }
+
+        return vote(key, candidateName1M, candidateName1F, candidateName2);
+    }).then(() => {
+        res.status(200).send('Vote successful.');
+    }).catch(e => {
+        console.error(e.stack);
+        res.status(500).send(e);
     });
 });
 

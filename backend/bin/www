@@ -6,7 +6,7 @@
  * Module dependencies.
  */
 
-const app = require('../app');
+const app = require('../app.js');
 const debug = require('debug')('hangaramchoiceback:server');
 const http = require('http');
 
