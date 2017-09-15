@@ -5,8 +5,8 @@ const router = express.Router();
 const Promise = require('bluebird');
 const crypto = require('mz/crypto');
 
-const assertValidAdminPassword = require('../status.js').assertValidAdminPassword;
-const compareAdminPassword = require('../status.js').compareAdminPassword;
+const assertValidAdminPassword = require('../database.js').assertValidAdminPassword;
+const compareAdminPassword = require('../database.js').compareAdminPassword;
 const setStudentKeys = require('../database.js').setStudentKeys;
 
 router.post('/', (req, res) => {
@@ -19,11 +19,13 @@ router.post('/', (req, res) => {
         res.status(401).send(e);
         return;
     }
+    if (!Number.isSafeInteger(firstGraders) || firstGraders <= 0 || firstGraders >= 10000000 || !Number.isSafeInteger(secondGraders) || secondGraders <= 0 || secondGraders >= 10000000) {
+        res.status(400).send('Invalid request!')
+    }
 
     compareAdminPassword(adminPassword).then(compareResult => {
         if (!compareResult) {
-            res.status(401).send('The administrator password is not correct!');
-            return;
+            throw 'The administrator password is not correct!';
         }
 
         const firstGradeKeys = new Set();
@@ -55,6 +57,10 @@ router.post('/', (req, res) => {
             secondGradeKeys: Array.from(keys.secondGradeKeys.values())
         });
     }).catch(e => {
+        if (e === 'The administrator password is not correct!') {
+            res.status(401).send(e);
+            return;
+        }
         console.error(e.stack);
         res.status(500).send(e);
     });

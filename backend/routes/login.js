@@ -6,17 +6,18 @@ const Promise = require('bluebird');
 
 const assertValidKey = require('../database.js').assertValidKey;
 const getStudent = require('../database.js').getStudent;
-const getCandidates1M = require('../database.js').getCandidates1M;
-const getCandidates1F = require('../database.js').getCandidates1F;
-const getCandidates2 = require('../database.js').getCandidates2;
-
+const getCandidateNames = require('../candidate_names.js').getCandidateNames;
 
 router.post('/', (req, res) => {
     const key = req.body.key;
     console.log(key);
 
-    //TODO 후보자를 캐시할 수 있다면 서버 부하를 줄일 수 있을 듯.
     const candidatesCacheId = req.body.candidatesCacheId;
+
+    if (typeof candidatesCacheId !== 'string') {
+        res.status(400).send('Cache id is not a String!');
+        return;
+    }
 
     try {
         assertValidKey(key);
@@ -27,22 +28,23 @@ router.post('/', (req, res) => {
 
     getStudent(key).then(student => {
         if (!student) {
-            res.status(400).send('No such key found!');
-            return;
+            throw 'No such key found!';
         }
         if (student.voted === 1) {
-            res.status(400).send('You\'ve already voted!');
-            return;
+            throw 'You\'ve already voted!';
         }
 
-        return Promise.all([getCandidates1M(), getCandidates1F(), getCandidates2()]);
-    }).then(results => {
-        res.status(200).send({
-            candidates1M: results[0].map(candidate => candidate.name),
-            candidates1F: results[1].map(candidate => candidate.name),
-            candidates2: results[2].map(candidate => candidate.name)
-        });
+        const candidateNames = getCandidateNames();
+        if (candidateNames.id === candidatesCacheId) {
+            res.status(200).send('Cache id is identical.');
+        } else {
+            res.status(200).send(getCandidateNames());
+        }
     }).catch(e => {
+        if (e === 'No such key found!' || e === 'You\'ve already voted!') {
+            res.status(401).send(e);
+            return;
+        }
         console.error(e.stack);
         res.status(500).send(e);
     });

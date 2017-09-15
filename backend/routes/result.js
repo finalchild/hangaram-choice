@@ -4,8 +4,8 @@ const router = express.Router();
 
 const Promise = require('bluebird');
 
-const assertValidAdminPassword = require('../status.js').assertValidAdminPassword;
-const compareAdminPassword = require('../status.js').compareAdminPassword;
+const assertValidAdminPassword = require('../database.js').assertValidAdminPassword;
+const compareAdminPassword = require('../database.js').compareAdminPassword;
 const getCandidates1M = require('../database.js').getCandidates1M;
 const getCandidates1F = require('../database.js').getCandidates1F;
 const getCandidates2 = require('../database.js').getCandidates2;
@@ -22,19 +22,21 @@ router.post('/', (req, res) => {
 
     compareAdminPassword(adminPassword).then(compareResult => {
         if (!compareResult) {
-            res.status(401).send('The administrator password is not correct!');
-            return;
+            throw 'The administrator password is not correct!';
         }
 
-        Promise.all([getCandidates1M(), getCandidates1F(), getCandidates2()])
-            .then(results => {
-                res.status(200).send({
-                    firstGradeM: results[0],
-                    firstGradeF: results[1],
-                    secondGrade: results[2]
-                });
-            });
+        return Promise.all([getCandidates1M(), getCandidates1F(), getCandidates2()]);
+    }).then(results => {
+        res.status(200).send({
+            candidates1M: results[0],
+            candidates1F: results[1],
+            candidates2: results[2]
+        });
     }).catch(e => {
+        if (e === 'The administrator password is not correct!') {
+            res.status(401).send(e);
+            return;
+        }
         console.error(e.stack);
         res.status(500).send(e);
     });

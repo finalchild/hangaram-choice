@@ -1,19 +1,22 @@
 'use strict';
 const Promise = require('bluebird');
-
+const bcrypt = require('bcrypt');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('database.sqlite3', err => {
     if (err) {
         console.error(err.message);
     }
-    console.log('Connected to the database.');
 });
 
+const saltRounds = 10;
+
 db.serialize(() => {
-    db.run('CREATE TABLE if not exists students (UniqueKey INT, Voted BIT, Grade TINYINT)');
-    db.run('CREATE TABLE if not exists candidates1M (Name INT, Votes INT)');
-    db.run('CREATE TABLE if not exists candidates1F (Name INT, Votes INT)');
-    db.run('CREATE TABLE if not exists candidates2 (Name INT, Votes INT)');
+    db.run('CREATE TABLE IF NOT EXISTS student (unique_key INTEGER NOT NULL PRIMARY KEY, voted INTEGER NOT NULL DEFAULT 0, grade INTEGER NOT NULL)');
+    db.run('CREATE TABLE IF NOT EXISTS candidate1M (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
+    db.run('CREATE TABLE IF NOT EXISTS candidate1F (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
+    db.run('CREATE TABLE IF NOT EXISTS candidate2 (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
+    db.run('CREATE TABLE IF NOT EXISTS admin_password (password TEXT NOT NULL)');
+    db.run(`INSERT INTO admin_password SELECT ? WHERE NOT EXISTS (SELECT * FROM admin_password)`, [bcrypt.hashSync("hangaram", saltRounds)]);
 });
 
 function isValidKey(key) {
@@ -28,11 +31,7 @@ function getStudent(key) {
     return new Promise((resolve, reject) => {
         assertValidKey(key);
         db.serialize(() => {
-            db.get(`SELECT UniqueKey AS key,
-                       Voted AS voted,
-                       Grade AS grade
-                       FROM students
-                       WHERE Key = ?`, [key], (err, row) => {
+            db.get('SELECT unique_key AS key, voted, grade FROM student WHERE Key = ?', [key], (err, row) => {
                 if (err) {
                     reject(err);
                     return;
@@ -47,15 +46,13 @@ function tryToSetVoted(key) {
     return new Promise((resolve, reject) => {
         assertValidKey(key);
         db.serialize(() => {
-            db.run(`UPDATE students
-                    SET Voted = 1
-                    WHERE UniqueKey = ? AND Voted = 0`, [key], function(err) {
+            db.run('UPDATE student SET voted = 1 WHERE unique_key = ? AND voted = 0', [key], function(err) {
                 if (err) {
                     reject(err);
                     return;
                 }
                 if (this.changes === 0) {
-                    reject('Couldn\'t set Voted. Maybe you have already voted?');
+                    reject('Couldn\'t set voted. Maybe you have already voted?');
                     return;
                 }
                 resolve();
@@ -79,19 +76,19 @@ function vote(key, candidateName1M, candidateName1F, candidateName2) {
                 db.serialize(() => {
                     db.run('BEGIN TRANSACTION');
                     if (candidateName1M) {
-                        db.run(`UPDATE candidates1M
-                        SET Votes = Votes + 1
-                        WHERE Name = ?`, [candidateName1M]);
+                        db.run(`UPDATE candidate1M
+                        SET votes = votes + 1
+                        WHERE name = ?`, [candidateName1M]);
                     }
                     if (candidateName1F) {
-                        db.run(`UPDATE candidates1F
-                        SET Votes = Votes + 1
-                        WHERE Name = ?`, [candidateName1F]);
+                        db.run(`UPDATE candidate1F
+                        SET votes = votes + 1
+                        WHERE name = ?`, [candidateName1F]);
                     }
                     if (candidateName2) {
-                        db.run(`UPDATE candidates2
-                        SET Votes = Votes + 1
-                        WHERE Name = ?`, [candidateName2]);
+                        db.run(`UPDATE candidate2
+                        SET votes = votes + 1
+                        WHERE name = ?`, [candidateName2]);
                     }
                     db.run('COMMIT', [], (err) => {
                         if (err) {
@@ -109,10 +106,7 @@ function getCandidate1M(candidateName) {
     return new Promise((resolve, reject) => {
         if (candidateName) {
             db.serialize(() => {
-                db.get(`SELECT Name AS name,
-                Votes AS votes
-                FROM candidates1M
-                WHERE Name = ?`, [candidateName], (err, row) => {
+                db.get('SELECT * FROM candidate1M WHERE name = ?', [candidateName], (err, row) => {
                     if (err) {
                         reject(err);
                         return;
@@ -131,10 +125,7 @@ function getCandidate1F(candidateName) {
     return new Promise((resolve, reject) => {
         if (candidateName) {
             db.serialize(() => {
-                db.get(`SELECT Name AS name,
-                Votes AS votes
-                FROM candidates1F
-                WHERE Name = ?`, [candidateName], (err, row) => {
+                db.get('SELECT * FROM candidate1F WHERE name = ?', [candidateName], (err, row) => {
                     if (err) {
                         reject(err);
                         return;
@@ -153,10 +144,7 @@ function getCandidate2(candidateName) {
     return new Promise((resolve, reject) => {
         if (candidateName) {
             db.serialize(() => {
-                db.get(`SELECT Name AS name,
-                Votes AS votes
-                FROM candidates2
-                WHERE Name = ?`, [candidateName], (err, row) => {
+                db.get('SELECT * FROM candidate2 WHERE name = ?', [candidateName], (err, row) => {
                     if (err) {
                         reject(err);
                         return;
@@ -174,9 +162,7 @@ function getCandidate2(candidateName) {
 function getCandidates1M() {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
-            db.all(`SELECT Name AS name,
-                    Votes AS votes
-                    FROM candidates1M`, [], (err, rows) => {
+            db.all('SELECT * FROM candidate1M', [], (err, rows) => {
                 if (err) {
                     reject(err);
                     return;
@@ -190,9 +176,7 @@ function getCandidates1M() {
 function getCandidates1F() {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
-            db.all(`SELECT Name AS name,
-                    Votes AS votes
-                    FROM candidates1F`, [], (err, rows) => {
+            db.all('SELECT * FROM candidate1F', [], (err, rows) => {
                 if (err) {
                     reject(err);
                     return;
@@ -206,9 +190,7 @@ function getCandidates1F() {
 function getCandidates2() {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
-            db.all(`SELECT Name AS name,
-                    Votes AS votes
-                    FROM candidates2`, [], (err, rows) => {
+            db.all('SELECT * FROM candidate2', [], (err, rows) => {
                 if (err) {
                     reject(err);
                     return;
@@ -232,14 +214,63 @@ function setStudentKeys(keys) {
 
         db.serialize(() => {
             db.run('BEGIN TRANSACTION');
-            db.run('DELETE FROM students');
-            db.run('INSERT INTO students (UniqueKey, Voted, Grade) VALUES ' + values);
+            db.run('DELETE FROM student');
+            db.run('INSERT INTO student (unique_key, voted, grade) VALUES ' + values);
             db.run('COMMIT', [], (err) => {
                 if (err) {
                     reject(err);
                     return;
                 }
                 resolve(keys);
+            });
+        });
+    });
+}
+
+function getAdminPassword() {
+    return new Promise((resolve, reject) => {
+        db.serialize(() => {
+            db.get('SELECT * from admin_password', [], (err, row) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(row.password);
+            });
+        });
+    });
+}
+
+function isValidAdminPassword(plaintextPassword) {
+    return typeof plaintextPassword === 'string' && plaintextPassword.length <= 20;
+}
+
+function assertValidAdminPassword(plaintextPassword) {
+    if (!isValidAdminPassword(plaintextPassword)) throw 'Invalid admin password!';
+}
+
+function compareAdminPassword(plaintextPassword) {
+    return new Promise((resolve, reject) => {
+        assertValidAdminPassword(plaintextPassword);
+    }).then(getAdminPassword).then(adminPassword => bcrypt.compare(result, adminPassword));
+}
+
+function setAdminPassword(newPlaintextPassword) {
+    return new Promise((resolve, reject) => {
+        assertValidAdminPassword(newPlaintextPassword);
+        resolve(newPlaintextPassword);
+    }).then(result => {
+        return bcrypt.hash(result, saltRounds)
+    }).then(result => {
+        return new Promise((resolve, reject) => {
+            db.serialize(() => {
+                db.run('UPDATE admin_password SET password = ?', [result], (err, row) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve(row.password);
+                });
             });
         });
     });
@@ -258,3 +289,6 @@ module.exports.getCandidates1M = getCandidates1M;
 module.exports.getCandidates1F = getCandidates1F;
 module.exports.getCandidates2 = getCandidates2;
 module.exports.setStudentKeys = setStudentKeys;
+module.exports.isValidAdminPassword = isValidAdminPassword;
+module.exports.compareAdminPassword = compareAdminPassword;
+module.exports.setAdminPassword = setAdminPassword;

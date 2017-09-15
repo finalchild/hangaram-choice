@@ -31,29 +31,33 @@ router.post('/', (req, res) => {
 
     getStudent(key).then(student => {
         if (!student) {
-            res.status(400).send('No such key found!');
-            return;
+            throw 'No such key found!';
         }
         if (student.voted === 1) {
-            res.status(400).send('You\'ve already voted!');
-            return;
+            throw 'You\'ve already voted!';
         }
         if (student.grade === 2 && (candidateName1M || candidate1F)) {
-            res.status(400).send('2nd graders can\'t vote for 1st grade candidates!');
-            return;
+            throw '2nd graders can\'t vote for 1st grade candidates!';
         }
 
         return Promise.all([getCandidate1M(candidateName1M), getCandidate1F(candidateName1F), getCandidate2(candidateName2)]);
     }).then(results => {
         if (!results[0] || !results[1] || !results[2]) {
-            res.status(400).send('Invalid candidate name!');
-            return;
+            throw 'Invalid candidate name!';
         }
 
         return vote(key, candidateName1M, candidateName1F, candidateName2);
     }).then(() => {
         res.status(200).send('Vote successful.');
     }).catch(e => {
+        if (e === 'No such key found!' || e === 'You\'ve already voted!') {
+            res.status(401).send(e);
+            return;
+        }
+        if (e === 'Invalid candidate name!') {
+            res.status(400).send(e);
+            return;
+        }
         console.error(e.stack);
         res.status(500).send(e);
     });

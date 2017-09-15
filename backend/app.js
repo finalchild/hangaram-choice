@@ -5,6 +5,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const helmet = require('helmet');
 
 const vote = require('./routes/vote.js');
 const result = require('./routes/result.js');
@@ -13,6 +14,8 @@ const generatekeys = require('./routes/generatekeys.js');
 const login = require('./routes/login.js');
 
 const app = express();
+
+app.use(helmet());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

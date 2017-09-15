@@ -2,6 +2,29 @@
 
 'use strict';
 
+const cluster = require('cluster');
+
+if (cluster.isMaster) {
+    const uuidv4 = require('uuid/v4');
+    const id = uuidv4();
+
+    const cpuCount = require('os').cpus().length;
+    for (let i = 0; i < cpuCount; i++) {
+        cluster.fork({
+            candidatesCacheId: id
+        });
+    }
+
+    cluster.on('exit', worker => {
+        console.log(`Worker ${worker.id} died :(`);
+        cluster.fork();
+    });
+
+    console.log(`HangaramChoiceBack running on port ${process.env.PORT || '3000'}`);
+
+    return;
+}
+
 /**
  * Module dependencies.
  */
