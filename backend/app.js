@@ -5,6 +5,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const helmet = require('helmet');
 
 const vote = require('./routes/vote.js');
@@ -15,6 +16,7 @@ const login = require('./routes/login.js');
 
 const app = express();
 
+app.use(cors());
 app.use(helmet());
 
 // view engine setup
@@ -29,11 +31,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/vote', vote);
-app.use('/result', result);
-app.use('/setadminpw', setadminpw);
-app.use('/generatekeys', generatekeys);
-app.use('/login', login);
+app.use('/api/vote', vote);
+app.use('/api/result', result);
+app.use('/api/setadminpw', setadminpw);
+app.use('/api/generatekeys', generatekeys);
+app.use('/api/login', login);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

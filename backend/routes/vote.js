@@ -31,12 +31,12 @@ router.post('/', (req, res) => {
 
     getStudent(key).then(student => {
         if (!student) {
-            throw 'No such key found!';
+            throw '키가 잘못되었습니다!!';
         }
         if (student.voted === 1) {
-            throw 'You\'ve already voted!';
+            throw '이미 투표했습니다!';
         }
-        if (student.grade === 2 && (candidateName1M || candidate1F)) {
+        if (student.grade === 2 && (candidateName1M || candidateName1F)) {
             throw '2nd graders can\'t vote for 1st grade candidates!';
         }
 
@@ -48,10 +48,14 @@ router.post('/', (req, res) => {
 
         return vote(key, candidateName1M, candidateName1F, candidateName2);
     }).then(() => {
-        res.status(200).send('Vote successful.');
+        res.status(200).send({
+            message: '투표를 완료했습니다'
+        });
     }).catch(e => {
-        if (e === 'No such key found!' || e === 'You\'ve already voted!') {
-            res.status(401).send(e);
+        if (e === '키가 잘못되었습니다!' || e === '이미 투표했습니다!') {
+            res.status(401).send({
+                message: e
+            });
             return;
         }
         if (e === 'Invalid candidate name!') {

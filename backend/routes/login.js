@@ -10,11 +10,10 @@ const getCandidateNames = require('../candidate_names.js').getCandidateNames;
 
 router.post('/', (req, res) => {
     const key = req.body.key;
-    console.log(key);
 
     const candidatesCacheId = req.body.candidatesCacheId;
 
-    if (typeof candidatesCacheId !== 'string') {
+    if (candidatesCacheId && typeof candidatesCacheId !== 'string') {
         res.status(400).send('Cache id is not a String!');
         return;
     }
@@ -28,21 +27,28 @@ router.post('/', (req, res) => {
 
     getStudent(key).then(student => {
         if (!student) {
-            throw 'No such key found!';
+            throw '키가 잘못되었습니다!';
         }
         if (student.voted === 1) {
-            throw 'You\'ve already voted!';
+            throw '이미 투표했습니다!';
         }
 
         const candidateNames = getCandidateNames();
-        if (candidateNames.id === candidatesCacheId) {
-            res.status(200).send('Cache id is identical.');
+        if (candidateNames.candidatesCacheId === candidatesCacheId) {
+            res.status(200).send({
+                grade: student.grade
+            });
         } else {
-            res.status(200).send(getCandidateNames());
+            res.status(200).send({
+                grade: student.grade,
+                candidateNames: getCandidateNames()
+            });
         }
     }).catch(e => {
-        if (e === 'No such key found!' || e === 'You\'ve already voted!') {
-            res.status(401).send(e);
+        if (e === '키가 잘못되었습니다!' || e === '이미 투표했습니다!') {
+            res.status(401).send({
+                message: e
+            });
             return;
         }
         console.error(e.stack);

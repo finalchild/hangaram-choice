@@ -11,14 +11,15 @@ const setStudentKeys = require('../database.js').setStudentKeys;
 
 router.post('/', (req, res) => {
     const adminPassword = req.body.adminPassword;
-    const firstGraders = req.body.firstGraders;
-    const secondGraders = req.body.secondGraders;
     try {
         assertValidAdminPassword(adminPassword);
     } catch (e) {
         res.status(401).send(e);
         return;
     }
+
+    const firstGraders = req.body.firstGraders;
+    const secondGraders = req.body.secondGraders;
     if (!Number.isSafeInteger(firstGraders) || firstGraders <= 0 || firstGraders >= 10000000 || !Number.isSafeInteger(secondGraders) || secondGraders <= 0 || secondGraders >= 10000000) {
         res.status(400).send('Invalid request!')
     }

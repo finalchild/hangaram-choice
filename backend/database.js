@@ -252,7 +252,8 @@ function assertValidAdminPassword(plaintextPassword) {
 function compareAdminPassword(plaintextPassword) {
     return new Promise((resolve, reject) => {
         assertValidAdminPassword(plaintextPassword);
-    }).then(getAdminPassword).then(adminPassword => bcrypt.compare(result, adminPassword));
+        resolve();
+    }).then(getAdminPassword).then(adminPassword => bcrypt.compare(plaintextPassword, adminPassword));
 }
 
 function setAdminPassword(newPlaintextPassword) {
@@ -290,5 +291,6 @@ module.exports.getCandidates1F = getCandidates1F;
 module.exports.getCandidates2 = getCandidates2;
 module.exports.setStudentKeys = setStudentKeys;
 module.exports.isValidAdminPassword = isValidAdminPassword;
+module.exports.assertValidAdminPassword = assertValidAdminPassword;
 module.exports.compareAdminPassword = compareAdminPassword;
 module.exports.setAdminPassword = setAdminPassword;

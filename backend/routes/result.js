@@ -22,7 +22,7 @@ router.post('/', (req, res) => {
 
     compareAdminPassword(adminPassword).then(compareResult => {
         if (!compareResult) {
-            throw 'The administrator password is not correct!';
+            throw '관리자 비밀번호가 잘못되었습니다!';
         }
 
         return Promise.all([getCandidates1M(), getCandidates1F(), getCandidates2()]);
@@ -33,8 +33,10 @@ router.post('/', (req, res) => {
             candidates2: results[2]
         });
     }).catch(e => {
-        if (e === 'The administrator password is not correct!') {
-            res.status(401).send(e);
+        if (e === '관리자 비밀번호가 잘못되었습니다!') {
+            res.status(401).send({
+                message: e
+            });
             return;
         }
         console.error(e.stack);

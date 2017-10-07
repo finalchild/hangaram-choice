@@ -12,7 +12,7 @@ Promise.all([getCandidates1M(), getCandidates1F(), getCandidates2()]).then(resul
         candidateNames1M: results[0].map(candidate => candidate.name),
         candidateNames1F: results[1].map(candidate => candidate.name),
         candidateNames2: results[2].map(candidate => candidate.name),
-        id: process.env.candidatesCacheId
+        candidatesCacheId: process.env.candidatesCacheId
     };
 });
 

@@ -1,0 +1,80 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet"');
+
+body {
+  margin: 0;
+}
+
+hc-login, hc-vote, hc-admin-login {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+hc-login:before, hc-login:after, hc-vote:before, hc-vote:after, hc-admin-login:before, hc-admin-login:after {
+  flex-grow: 1;
+  content: '';
+}
+
+.account_circle {
+  vertical-align: text-bottom;
+}
+
+.container-login {
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 30px;
+
+  border: outset;
+}
+
+.container-vote {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mat-form-field {
+  width: 357px;
+}
+
+.key_row {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.account_circle {
+  margin-right: 5px;
+}
+
+.login {
+  margin: auto;
+  width: 88px;
+  align-items: center;
+  align-content: center;
+  child-align: middle;
+}
+
+md-radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+md-radio-button {
+  margin: 10px;
+}
+
+.vote-paper {
+  border: outset;
+  width: 500px;
+  padding: 30px;
+  margin-bottom: 15px;
+}
+
+.vote-actions {
+  text-align: right;
+  padding-right: 15px;
+}
