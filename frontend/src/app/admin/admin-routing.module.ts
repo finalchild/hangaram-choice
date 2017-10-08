@@ -4,7 +4,7 @@ import {AdminLoginComponent} from './admin-login.component';
 import {AdminResultComponent} from './admin-result.component';
 import {
   MdFormFieldModule, MdToolbarModule, MdInputModule, MdIconModule, MdButtonModule,
-  MdCardModule, MdGridListModule, MdDialogModule
+  MdCardModule, MdGridListModule, MdDialogModule, MdTableModule
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
@@ -42,6 +42,7 @@ import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dial
     MdCardModule,
     MdGridListModule,
     MdDialogModule,
+    MdTableModule,
     NgxChartsModule
   ],
   exports: [

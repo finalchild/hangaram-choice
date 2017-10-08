@@ -2,8 +2,11 @@
 <script src="https://npmcdn.com/reflect-metadata@0.1.3/Reflect.js"></script>
 <script src="https://npmcdn.com/systemjs@0.19.31/dist/system.js"></script>
 <script src="https://npmcdn.com/typescript@2.1.1/lib/typescript.js"></script>
-<md-card class="result-card">
-  <md-grid-list cols="3" rowHeight="600px">
+<md-toolbar>
+  한가람고 학생회장단 투표 관리 페이지
+</md-toolbar>
+<md-card class="nopadding">
+  <md-grid-list cols="3" rowHeight="550px">
     <md-grid-tile>
       <md-grid-tile-header>
         2학년 회장단 투표 현황
@@ -36,9 +39,36 @@
     </md-grid-tile>
   </md-grid-list>
 </md-card>
-<md-card class="result-card">
+<div class="flexrow">
+<md-card class="width50">
+  <md-card-title>
+    투표율
+  </md-card-title>
+  <md-table [dataSource]="turnoutDataSource">
+    <ng-container mdColumnDef="name">
+      <md-header-cell *mdHeaderCellDef></md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.name}}</md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="firstGrade">
+      <md-header-cell *mdHeaderCellDef>1학년</md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.firstGrade}}</md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="secondGrade">
+      <md-header-cell *mdHeaderCellDef>2학년</md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.secondGrade}}</md-cell>
+    </ng-container>
+
+    <md-header-row *mdHeaderRowDef="turnoutColumns"></md-header-row>
+    <md-row *mdRowDef="let row; columns: turnoutColumns;"></md-row>
+  </md-table>
+</md-card>
+<md-card class="width50">
   <md-card-content>
-    <button md-raised-button (click)="openCreateStudentKeysDialog()">학생 키 생성(기존 키 초기화)</button>
-    <button md-raised-button (click)="openChangeAdminPasswordDialog()">관리자 비밀번호 변경</button>
+    <button class="margin10" md-raised-button (click)="openCreateStudentKeysDialog()">학생 키 생성(기존 키 초기화)</button>
+    <br>
+    <button class="margin10" md-raised-button (click)="openChangeAdminPasswordDialog()">관리자 비밀번호 변경</button>
   </md-card-content>
 </md-card>
+</div>

@@ -229,6 +229,54 @@ function setStudentKeys(keys) {
     });
 }
 
+function getNumberOfKeys() {
+    const firstGradeNotVotedPromise = new Promise((resolve, reject) => {
+        db.get('SELECT COUNT(*) FROM student WHERE grade = 1 and voted = 0', [], (err, row) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(row['COUNT(*)']);
+        })
+    });
+    const firstGradeVotedPromise = new Promise((resolve, reject) => {
+        db.get('SELECT COUNT(*) FROM student WHERE grade = 1 and voted = 1', [], (err, row) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(row['COUNT(*)']);
+        })
+    });
+    const secondGradeNotVotedPromise = new Promise((resolve, reject) => {
+        db.get('SELECT COUNT(*) FROM student WHERE grade = 2 and voted = 0', [], (err, row) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(row['COUNT(*)']);
+        })
+    });
+    const secondGradeVotedPromise = new Promise((resolve, reject) => {
+        db.get('SELECT COUNT(*) FROM student WHERE grade = 2 and voted = 1', [], (err, row) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(row['COUNT(*)']);
+        })
+    });
+
+    return Promise.all([firstGradeNotVotedPromise, firstGradeVotedPromise, secondGradeNotVotedPromise, secondGradeVotedPromise]).then(results => {
+        return {
+            numberOfFirstGradeNotVotedKeys: results[0],
+            numberOfFirstGradeVotedKeys: results[1],
+            numberOfSecondGradeNotVotedKeys: results[2],
+            numberOfSecondGradeVotedKeys: results[3]
+        }
+    });
+}
+
 function getAdminPassword() {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
@@ -292,6 +340,7 @@ module.exports.getCandidates1M = getCandidates1M;
 module.exports.getCandidates1F = getCandidates1F;
 module.exports.getCandidates2 = getCandidates2;
 module.exports.setStudentKeys = setStudentKeys;
+module.exports.getNumberOfKeys = getNumberOfKeys;
 module.exports.isValidAdminPassword = isValidAdminPassword;
 module.exports.assertValidAdminPassword = assertValidAdminPassword;
 module.exports.compareAdminPassword = compareAdminPassword;

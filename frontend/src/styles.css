@@ -80,10 +80,36 @@ md-radio-button {
 }
 
 .result-card {
-  width: 1500px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
+md-table {
+  overflow: auto;
+  width: 30vw;
+  height: 200px;
+}
+
+.borderauto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.nopadding {
+  padding: 0 !important;
+}
+
+.flexrow {
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.width50 {
+  width: 50% !important;
+}
+
+.margin10 {
+  margin: 10px !important;
+}
