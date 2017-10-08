@@ -19,7 +19,7 @@ export class AdminResultComponent {
   results2 = forChart(this.adminService.result.candidates2);
 
   scheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#333399', '#336633', '#FF66FF', '#CC66CC', '#FFCCFF']
   };
 
   openChangeAdminPasswordDialog() {
