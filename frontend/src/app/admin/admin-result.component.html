@@ -6,12 +6,12 @@
   한가람고 학생회장단 투표 관리 페이지
 </md-toolbar>
 <md-card class="nopadding">
-  <md-grid-list cols="3" rowHeight="570px">
+  <md-grid-list cols="3" rowHeight="400px">
     <md-grid-tile>
       <md-grid-tile-header>
         2학년 회장단 투표 현황
       </md-grid-tile-header>
-      <ngx-charts-pie-chart [view]="[500, 500]"
+      <ngx-charts-pie-chart [view]="[500, 350]"
                             [scheme]="scheme"
                             [results]="results2"
                             [labels]="true">
@@ -21,7 +21,7 @@
       <md-grid-tile-header>
         1학년 남자 부회장 투표 현황
       </md-grid-tile-header>
-      <ngx-charts-pie-chart [view]="[500, 500]"
+      <ngx-charts-pie-chart [view]="[500, 350]"
                             [scheme]="scheme"
                             [results]="results1M"
                             [labels]="true">
@@ -31,15 +31,13 @@
       <md-grid-tile-header>
         1학년 여자 부회장 투표 현황
       </md-grid-tile-header>
-      <ngx-charts-pie-chart [view]="[500, 500]"
+      <ngx-charts-pie-chart [view]="[500, 350]"
                             [scheme]="scheme"
                             [results]="results1F"
                             [labels]="true">
       </ngx-charts-pie-chart>
     </md-grid-tile>
   </md-grid-list>
-  <br>
-  <button md-raised-button color="primary" (click)="downloadResult()">Excel로 다운로드</button>
 </md-card>
 <div class="flexrow">
 <md-card class="width50">
@@ -68,9 +66,12 @@
 </md-card>
 <md-card class="width50">
   <md-card-content>
+    <button class="margin10" md-raised-button color="primary" (click)="downloadResult()">투표 현황 Excel로 다운로드</button>
+    <br>
     <button class="margin10" md-raised-button color="primary" (click)="openCreateStudentKeysDialog()">학생 키 생성(기존 키 초기화)</button>
     <br>
     <button class="margin10" md-raised-button color="primary" (click)="openChangeAdminPasswordDialog()">관리자 비밀번호 변경</button>
   </md-card-content>
 </md-card>
 </div>
+<div class="marginauto copyright">Copyright © Overflow All Rights Reserved</div>
