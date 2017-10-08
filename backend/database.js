@@ -215,7 +215,9 @@ function setStudentKeys(keys) {
         db.serialize(() => {
             db.run('BEGIN TRANSACTION');
             db.run('DELETE FROM student');
-            db.run('INSERT INTO student (unique_key, voted, grade) VALUES ' + values);
+            if (values !== '') {
+                db.run('INSERT INTO student (unique_key, voted, grade) VALUES ' + values);
+            }
             db.run('COMMIT', [], (err) => {
                 if (err) {
                     reject(err);

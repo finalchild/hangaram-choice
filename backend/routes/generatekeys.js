@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
 
     const firstGraders = req.body.firstGraders;
     const secondGraders = req.body.secondGraders;
-    if (!Number.isSafeInteger(firstGraders) || firstGraders <= 0 || firstGraders >= 10000000 || !Number.isSafeInteger(secondGraders) || secondGraders <= 0 || secondGraders >= 10000000) {
+    if (!Number.isSafeInteger(firstGraders) || firstGraders < 0 || firstGraders >= 10000000 || !Number.isSafeInteger(secondGraders) || secondGraders < 0 || secondGraders >= 10000000) {
         res.status(400).send('Invalid request!')
     }
 
@@ -59,7 +59,9 @@ router.post('/', (req, res) => {
         });
     }).catch(e => {
         if (e === 'The administrator password is not correct!') {
-            res.status(401).send(e);
+            res.status(401).send({
+                message: e
+            });
             return;
         }
         console.error(e.stack);
