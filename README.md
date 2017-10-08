@@ -2,9 +2,14 @@
 추가 할 때 마다 간략한 설명 추가 바람
 i.g.) Readme.md - 설명
 
-Node.js가 있는 상태에서
-backend와 frontend 폴더 안에서 각각
-npm install
-npm start
+In order to Run Voting_Sys, You have to follow each steps below.
 
-http://localhost:4200에 프론트엔드가 켜짐
+1) Install Node.js (Link https://nodejs.org/en/download/)
+
+2) After installing Node.js run "npm install" command using 'cmd' in both './backend','./frontend' folders.
+
+3) In those same folders, run "npm start" command as you did on Step 2.
+
+and then Bob's your uncle!
+
+go check out http://localhost:4200 (You'll be able to see frontend on that link)
