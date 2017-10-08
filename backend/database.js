@@ -265,12 +265,12 @@ function setAdminPassword(newPlaintextPassword) {
     }).then(result => {
         return new Promise((resolve, reject) => {
             db.serialize(() => {
-                db.run('UPDATE admin_password SET password = ?', [result], (err, row) => {
+                db.run('UPDATE admin_password SET password = ?', [result], err => {
                     if (err) {
                         reject(err);
                         return;
                     }
-                    resolve(row.password);
+                    resolve();
                 });
             });
         });

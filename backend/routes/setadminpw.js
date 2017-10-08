@@ -18,15 +18,19 @@ router.post('/', (req, res) => {
 
     compareAdminPassword(adminPassword).then(compareResult => {
         if (!compareResult) {
-            throw 'The administrator password is not correct!'
+            throw '관리자 비밀번호가 잘못되었습니다!'
         }
 
         return setAdminPassword(newAdminPassword);
     }).then(e => {
-        res.status(200).send('Success!');
+        res.status(200).send({
+            message: '비밀번호가 변경되었습니다.'
+        });
     }).catch(e => {
-        if (e === 'The administrator password is not correct!') {
-            res.status(401).send(e);
+        if (e === '관리자 비밀번호가 잘못되었습니다!') {
+            res.status(401).send({
+                message: e
+            });
             return;
         }
         console.error(e.stack);

@@ -37,7 +37,7 @@ export class AdminLoginComponent {
       model.control.setErrors({
         invalid: true
       });
-      this.error = '키는 20자 이내여야 합니다';
+      this.error = '비밀번호는 20자 이내여야 합니다';
       passwordElement.focus();
       return;
     }
@@ -64,6 +64,6 @@ export class AdminLoginComponent {
 
 }
 
-function isValidAdminPassword(adminPassword) {
+export function isValidAdminPassword(adminPassword) {
   return typeof adminPassword === 'string' && adminPassword.length <= 20;
 }

@@ -1,10 +1,10 @@
 import {RouterModule} from '@angular/router';
 import {NgModule} from '@angular/core';
 import {AdminLoginComponent} from './admin-login.component';
-import {AdminResultComponent} from './admin-result.component';
+import {AdminResultComponent, ChangeAdminPasswordDialogComponent} from './admin-result.component';
 import {
   MdFormFieldModule, MdToolbarModule, MdInputModule, MdIconModule, MdButtonModule,
-  MdCardModule, MdGridListModule
+  MdCardModule, MdGridListModule, MdDialogModule
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
@@ -14,7 +14,10 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
-    AdminLoginComponent, AdminResultComponent
+    AdminLoginComponent, AdminResultComponent, ChangeAdminPasswordDialogComponent
+  ],
+  entryComponents: [
+    ChangeAdminPasswordDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +39,7 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
     MdButtonModule,
     MdCardModule,
     MdGridListModule,
+    MdDialogModule,
     NgxChartsModule
   ],
   exports: [
