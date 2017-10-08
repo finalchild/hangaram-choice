@@ -4,7 +4,7 @@ import {AdminLoginComponent} from './admin-login.component';
 import {AdminResultComponent} from './admin-result.component';
 import {
   MdFormFieldModule, MdToolbarModule, MdInputModule, MdIconModule, MdButtonModule,
-  MdCardModule
+  MdCardModule, MdGridListModule
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
@@ -35,6 +35,7 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
     MdIconModule,
     MdButtonModule,
     MdCardModule,
+    MdGridListModule,
     NgxChartsModule
   ],
   exports: [
