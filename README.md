@@ -13,3 +13,5 @@ In order to Run Voting_Sys, You have to follow each steps below.
 and then Bob's your uncle!
 
 go check out http://localhost:4200 (You'll be able to see frontend on that link)
+
+ㅎㅇㅎㅇppyap
