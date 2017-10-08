@@ -59,7 +59,9 @@ router.post('/', (req, res) => {
         });
     }).catch(e => {
         if (e === 'The administrator password is not correct!') {
-            res.status(401).send(e);
+            res.status(401).send({
+                message: e
+            });
             return;
         }
         console.error(e.stack);

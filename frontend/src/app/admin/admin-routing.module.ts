@@ -1,7 +1,7 @@
 import {RouterModule} from '@angular/router';
 import {NgModule} from '@angular/core';
 import {AdminLoginComponent} from './admin-login.component';
-import {AdminResultComponent, ChangeAdminPasswordDialogComponent} from './admin-result.component';
+import {AdminResultComponent} from './admin-result.component';
 import {
   MdFormFieldModule, MdToolbarModule, MdInputModule, MdIconModule, MdButtonModule,
   MdCardModule, MdGridListModule, MdDialogModule
@@ -11,13 +11,15 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AdminGuardService} from './admin-guard.service';
 import {AdminService} from './admin.service';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {ChangeAdminPasswordDialogComponent} from './admin-change-admin-password-dialog.component';
+import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dialog.component';
 
 @NgModule({
   declarations: [
-    AdminLoginComponent, AdminResultComponent, ChangeAdminPasswordDialogComponent
+    AdminLoginComponent, AdminResultComponent, ChangeAdminPasswordDialogComponent, CreateStudentKeysDialogComponent
   ],
   entryComponents: [
-    ChangeAdminPasswordDialogComponent
+    ChangeAdminPasswordDialogComponent, CreateStudentKeysDialogComponent
   ],
   imports: [
     BrowserModule,
