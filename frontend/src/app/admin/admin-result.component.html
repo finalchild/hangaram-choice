@@ -3,12 +3,12 @@
 <script src="https://npmcdn.com/systemjs@0.19.31/dist/system.js"></script>
 <script src="https://npmcdn.com/typescript@2.1.1/lib/typescript.js"></script>
 <md-card class="result-card">
-  <md-grid-list cols="3" rowHeight="300px">
+  <md-grid-list cols="3" rowHeight="600px">
     <md-grid-tile>
       <md-grid-tile-header>
         2학년 회장단 투표 현황
       </md-grid-tile-header>
-      <ngx-charts-pie-chart [view]="[300, 300]"
+      <ngx-charts-pie-chart [view]="[500, 500]"
                             [scheme]="scheme"
                             [results]="results2"
                             [labels]="true">
@@ -18,7 +18,7 @@
       <md-grid-tile-header>
         1학년 남자 부회장 투표 현황
       </md-grid-tile-header>
-      <ngx-charts-pie-chart [view]="[300, 300]"
+      <ngx-charts-pie-chart [view]="[500, 500]"
                             [scheme]="scheme"
                             [results]="results1M"
                             [labels]="true">
@@ -28,7 +28,7 @@
       <md-grid-tile-header>
         1학년 여자 부회장 투표 현황
       </md-grid-tile-header>
-      <ngx-charts-pie-chart [view]="[300, 300]"
+      <ngx-charts-pie-chart [view]="[500, 500]"
                             [scheme]="scheme"
                             [results]="results1F"
                             [labels]="true">
