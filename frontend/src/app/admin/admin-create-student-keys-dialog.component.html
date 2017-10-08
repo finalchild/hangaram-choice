@@ -1,9 +1,10 @@
-<h1 md-dialog-title>관리자 비밀번호 변경</h1>
+<h1 md-dialog-title>학생 키 생성(기존 키 초기화)</h1>
 <div md-dialog-content>
   <md-form-field>
     <input type="number" tabIndex="1" mdInput placeholder="생성할 1학년 키 개수" name="firstGradersElement" maxlength="4" required ngModel #firstGradersElement #firstGradersControl="ngModel">
     <md-error *ngIf="error1">{{error1}}</md-error>
   </md-form-field>
+  <br>
   <md-form-field>
     <input type="number" tabIndex="2" mdInput placeholder="생성할 2학년 키 개수" name="firstGradersElement" maxlength="4" required ngModel #secondGradersElement #secondGradersControl="ngModel">
     <md-error *ngIf="error2">{{error2}}</md-error>

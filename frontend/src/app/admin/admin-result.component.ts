@@ -27,9 +27,7 @@ export class AdminResultComponent {
   }
 
   openChangeAdminPasswordDialog() {
-    this.dialog.open(ChangeAdminPasswordDialogComponent, {
-      width: '250px'
-    });
+    this.dialog.open(ChangeAdminPasswordDialogComponent);
   }
 
 }
