@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AdminService} from './admin.service';
-import {Candidate} from './result';
+import {Candidate, downloadResult} from './result';
 import {MdDialog} from '@angular/material';
 import {HttpClient} from '@angular/common/http';
 import {ChangeAdminPasswordDialogComponent} from './admin-change-admin-password-dialog.component';
@@ -28,12 +28,16 @@ export class AdminResultComponent {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#333399', '#336633', '#FF66FF', '#CC66CC', '#FFCCFF']
   };
 
-  openCreateStudentKeysDialog() {
+  openCreateStudentKeysDialog(): void {
     this.dialog.open(CreateStudentKeysDialogComponent);
   }
 
-  openChangeAdminPasswordDialog() {
+  openChangeAdminPasswordDialog(): void {
     this.dialog.open(ChangeAdminPasswordDialogComponent);
+  }
+
+  downloadResult(): void {
+    downloadResult(this.adminService.result);
   }
 
 }
@@ -72,12 +76,9 @@ class TurnoutDataSource extends DataSource<Element> {
           .toString(10)
       }
     ];
-    console.log(this.data);
   }
 
   connect(collectionViewer: CollectionViewer): Observable<Element[]> {
-    console.log('connecting');
-    console.log(Observable.of(this.data));
     return Observable.of(this.data);
   }
 

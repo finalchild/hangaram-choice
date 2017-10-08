@@ -87,7 +87,6 @@ md-radio-button {
 }
 
 md-table {
-  overflow: auto;
   width: 30vw;
   height: 200px;
 }

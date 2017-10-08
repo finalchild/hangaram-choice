@@ -6,6 +6,7 @@ import {NgModel} from '@angular/forms';
 import {Keys} from './keys';
 import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
+import {s2ab} from './result';
 
 @Component({
   selector: 'hc-create-student-keys-dialog',
@@ -110,13 +111,4 @@ function downloadKeys(keys: Keys) {
     type: 'binary'
   });
   saveAs(new Blob([s2ab(wbout)], {type: 'application/octet-stream'}), '학생키.xlsx');
-}
-
-function s2ab(s) {
-  const buf = new ArrayBuffer(s.length);
-  const view = new Uint8Array(buf);
-  for (let i = 0; i < s.length; i++) {
-    view[i] = s.charCodeAt(i) & 0xFF;
-  }
-  return buf;
 }
