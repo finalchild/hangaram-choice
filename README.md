@@ -8,7 +8,7 @@ In order to Run Voting_Sys, You have to follow each steps below.
 
 2) After installing Node.js run "npm install" command using 'cmd' in both './backend','./frontend' folders.
 
-	![Screenshot](howto.JPG)
+	![alt text](https://raw.githubusercontent.com/timothyjrbeck/Student_Election_Voting_Sys/master/howto.JPG)
 
 3) In those same folders, run "npm start" command as you did on Step 2.
 
