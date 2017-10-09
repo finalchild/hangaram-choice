@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {ChoiceService} from './choice.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {MdIconRegistry} from '@angular/material';
+import {MdIconRegistry, MdTabGroup} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
@@ -23,7 +23,22 @@ export class VoteFormComponent {
     iconRegistry.addSvgIcon('done', sanitizer.bypassSecurityTrustResourceUrl('assets/img/done.svg'));
   }
 
-  onVote() {
+  onVote(tabElement: MdTabGroup): void {
+    if (!this.candidateNameToVote2) {
+      tabElement.selectedIndex = 0;
+      return;
+    }
+    if (this.choiceService.grade === 1) {
+      if (!this.candidateNameToVote1M) {
+        tabElement.selectedIndex = 1;
+        return;
+      }
+      if (!this.candidateNameToVote1F) {
+        tabElement.selectedIndex = 2;
+        return;
+      }
+    }
+
     this.http.post(`http://localhost:3000/api/vote`, {
       key: this.choiceService.key,
       candidateName1M: this.candidateNameToVote1M,
@@ -39,5 +54,20 @@ export class VoteFormComponent {
           alert(JSON.parse(err.error)['message']);
         }
       });
+  }
+
+  canVote(): boolean {
+    if (!this.candidateNameToVote2) {
+      return false;
+    }
+    if (this.choiceService.grade === 1) {
+      if (!this.candidateNameToVote1M) {
+        return false;
+      }
+      if (!this.candidateNameToVote1F) {
+        return false;
+      }
+    }
+    return true;
   }
 }

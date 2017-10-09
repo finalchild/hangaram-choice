@@ -2,9 +2,10 @@ import {Component} from '@angular/core';
 import {ChoiceService} from './choice.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {MdIconRegistry} from '@angular/material';
+import {ErrorStateMatcher, MdIconRegistry, showOnDirtyErrorStateMatcher} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import {NgModel} from '@angular/forms';
+import {mod10} from 'checkdigit';
 
 @Component({
   selector: 'hc-login',
@@ -21,8 +22,27 @@ export class LoginComponent {
   }
 
   error: string = undefined;
+  showOnDirtyErrorStateMatcher: ErrorStateMatcher = showOnDirtyErrorStateMatcher;
 
-  onLogin(keyElement: HTMLInputElement, model: NgModel) {
+  onInput(keyElement: HTMLInputElement, model: NgModel): void {
+    if (!keyElement.value || keyElement.value.length !== 8) {
+      return;
+    }
+    const keyWithCheckDigit = parseInt(keyElement.value, 10);
+    if (!isValidKeyWithCheckDigit(keyWithCheckDigit)) {
+      model.control.setErrors({
+        invalid: true
+      });
+      this.error = '키가 잘못되었습니다';
+      keyElement.focus();
+      return;
+    }
+    const key = Math.floor(keyWithCheckDigit / 10);
+
+    this.login(key, keyElement, model);
+  }
+
+  onLogin(keyElement: HTMLInputElement, model: NgModel): void {
     if (!keyElement.value || keyElement.value === '') {
       model.control.setErrors({
         empty: true
@@ -31,16 +51,21 @@ export class LoginComponent {
       keyElement.focus();
       return;
     }
-    const key = parseInt(keyElement.value, 10);
-    if (!isValidKey(key)) {
+    const keyWithCheckDigit = parseInt(keyElement.value, 10);
+    if (!isValidKeyWithCheckDigit(keyWithCheckDigit)) {
       model.control.setErrors({
         invalid: true
       });
-      this.error = '키는 7자리 이하의 자연수여야 합니다';
+      this.error = '키가 잘못되었습니다';
       keyElement.focus();
       return;
     }
+    const key = Math.floor(keyWithCheckDigit / 10);
 
+    this.login(key, keyElement, model);
+  }
+
+  login(key: number, keyElement: HTMLInputElement, model: NgModel) {
     this.http.post(`http://localhost:3000/api/login`, {
       key: key,
       candidateCacheId: this.choiceService.candidateNames.candidatesCacheId
@@ -67,6 +92,6 @@ export class LoginComponent {
 
 }
 
-function isValidKey(key: number): boolean {
-  return Number.isSafeInteger(key) && key > 0 && key < 10000000;
+function isValidKeyWithCheckDigit(key: number): boolean {
+  return Number.isSafeInteger(key) && key > 0 && key < 100000000 && mod10.isValid(key.toString(10));
 }

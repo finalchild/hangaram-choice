@@ -3,18 +3,13 @@
     <h1>한가람고 학생회장단 투표</h1>
   </md-toolbar>
   <br>
-  <form (ngSubmit)="onLogin(keyElement, keyControl)">
-    <div class="key_row">
+  <form class="flexcolumn marginauto">
+    <div class="marginauto">
       <md-icon class="account_circle" svgIcon="account_circle"></md-icon>
-      <md-form-field hintLabel="최대 7자리의 자연수">
-        <input type="number" mdInput placeholder="학생 키" name="keyElement" maxlength="7" autocomplete="off" required ngModel #keyElement #keyControl="ngModel">
+      <md-form-field hintLabel="숫자 8개">
+        <input type="text" mdInput placeholder="학생 키" name="keyElement" maxlength="8" pattern="[0-9]{8}" autocomplete="off" required ngModel #keyElement #keyControl="ngModel" (input)="onInput(keyElement, keyControl)" [errorStateMatcher]="showOnDirtyErrorStateMatcher">
         <md-error *ngIf="error">{{error}}</md-error>
       </md-form-field>
     </div>
-    <br>
-    <div class="login">
-      <button type="submit" class="login" color="primary" md-raised-button>로그인</button>
-    </div>
   </form>
 </div>
-<div class="marginauto copyright">Copyright © Overflow All Rights Reserved</div>

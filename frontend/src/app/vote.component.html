@@ -1,47 +1,46 @@
-<div class="container-vote">
-  <div class="vote-paper">
-    <md-toolbar color="primary">
-      <h1 class="title">투표할 후보자를 선택하세요</h1>
-    </md-toolbar>
-    <md-tab-group dynamicHeight="true">
+<div class="vote-paper marginauto">
+  <md-toolbar color="primary">
+    <h1 class="title">투표할 후보자를 선택하세요</h1>
+  </md-toolbar>
+  <form (ngSubmit)="onVote(tabElement)">
+    <md-tab-group dynamicHeight="true" #tabElement>
       <md-tab>
         <ng-template md-tab-label>
           <md-icon *ngIf="candidateNameToVote2" class="done" svgIcon="done"></md-icon>
           2학년 회장단
         </ng-template>
-        <md-radio-group [(ngModel)]="candidateNameToVote2">
+        <md-radio-group required name="candidateNameToVote2" [(ngModel)]="candidateNameToVote2">
           <md-radio-button *ngFor="let candidateName of choiceService.candidateNames.candidateNames2" [value]="candidateName">
             {{candidateName}}
           </md-radio-button>
         </md-radio-group>
       </md-tab>
-      <md-tab [disabled]="choiceService.grade == 2">
+      <md-tab [disabled]="choiceService.grade !== 1">
         <ng-template md-tab-label>
           <md-icon *ngIf="candidateNameToVote1M" class="done" svgIcon="done"></md-icon>
           1학년 남자 부회장
         </ng-template>
-        <md-radio-group [(ngModel)]="candidateNameToVote1M">
+        <md-radio-group *ngIf="choiceService.grade === 1" required name="candidateNameToVote1M" [(ngModel)]="candidateNameToVote1M">
           <md-radio-button *ngFor="let candidateName of choiceService.candidateNames.candidateNames1M" [value]="candidateName">
             {{candidateName}}
           </md-radio-button>
         </md-radio-group>
       </md-tab>
-      <md-tab [disabled]="choiceService.grade == 2">
+      <md-tab [disabled]="choiceService.grade !== 1">
         <ng-template md-tab-label>
           <md-icon *ngIf="candidateNameToVote1F" class="done" svgIcon="done"></md-icon>
           1학년 여자 부회장
         </ng-template>
-        <md-radio-group [(ngModel)]="candidateNameToVote1F">
+        <md-radio-group *ngIf="choiceService.grade === 1" required name="candidateNameToVote1F" [(ngModel)]="candidateNameToVote1F">
           <md-radio-button *ngFor="let candidateName of choiceService.candidateNames.candidateNames1F" [value]="candidateName">
             {{candidateName}}
           </md-radio-button>
         </md-radio-group>
       </md-tab>
     </md-tab-group>
-  </div>
-  <div class="vote-actions">
-    <button md-raised-button color="primary" (click)="onVote()">모두 투표하기</button>
-    <button md-raised-button color="primary" (click)="choiceService.resetAuth(); router.navigate(['/login'])">로그인 화면으로 돌아가기</button>
-  </div>
+    <div class="vote-actions">
+      <button type="submit" [disabled]="!canVote()" md-raised-button color="primary">모두 투표하기</button>
+      <button md-raised-button color="primary" (click)="choiceService.resetAuth(); router.navigate(['/login'])">로그인 화면으로 돌아가기</button>
+    </div>
+  </form>
 </div>
-<div class="marginauto copyright">Copyright © Overflow All Rights Reserved</div>

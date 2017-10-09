@@ -210,7 +210,10 @@ function setStudentKeys(keys) {
         const secondGradeStudents = Array.from(keys.secondGradeKeys.values()).map(key => {
             return `(${key}, 0, 2)`;
         });
-        const values = firstGradeStudents.concat(secondGradeStudents).join(', ');
+        const thirdGradeStudents = Array.from(keys.thirdGradeKeys.values()).map(key => {
+            return `(${key}, 0, 3)`;
+        });
+        const values = firstGradeStudents.concat(secondGradeStudents).concat(thirdGradeStudents).join(', ');
 
         db.serialize(() => {
             db.run('BEGIN TRANSACTION');
@@ -266,13 +269,33 @@ function getNumberOfKeys() {
             resolve(row['COUNT(*)']);
         })
     });
+    const thirdGradeNotVotedPromise = new Promise((resolve, reject) => {
+        db.get('SELECT COUNT(*) FROM student WHERE grade = 3 and voted = 0', [], (err, row) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(row['COUNT(*)']);
+        })
+    });
+    const thirdGradeVotedPromise = new Promise((resolve, reject) => {
+        db.get('SELECT COUNT(*) FROM student WHERE grade = 3 and voted = 1', [], (err, row) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(row['COUNT(*)']);
+        })
+    });
 
-    return Promise.all([firstGradeNotVotedPromise, firstGradeVotedPromise, secondGradeNotVotedPromise, secondGradeVotedPromise]).then(results => {
+    return Promise.all([firstGradeNotVotedPromise, firstGradeVotedPromise, secondGradeNotVotedPromise, secondGradeVotedPromise, thirdGradeNotVotedPromise, thirdGradeVotedPromise]).then(results => {
         return {
             numberOfFirstGradeNotVotedKeys: results[0],
             numberOfFirstGradeVotedKeys: results[1],
             numberOfSecondGradeNotVotedKeys: results[2],
-            numberOfSecondGradeVotedKeys: results[3]
+            numberOfSecondGradeVotedKeys: results[3],
+            numberOfThirdGradeNotVotedKeys: results[4],
+            numberOfThirdGradeVotedKeys: results[5]
         }
     });
 }

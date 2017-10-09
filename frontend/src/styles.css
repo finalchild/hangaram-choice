@@ -22,12 +22,20 @@ hc-login:before, hc-login:after, hc-vote:before, hc-vote:after, hc-admin-login:b
   content: '';
 }
 
+hc-login:after, hc-vote:after, hc-admin-login:after, hc-admin-result:after {
+  content: '© 2017 Overflow';
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 11pt;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .account_circle {
   vertical-align: text-bottom;
 }
 
 .container-login {
-  width: 400px;
+  width: 300px;
   margin-left: auto;
   margin-right: auto;
 
@@ -36,26 +44,12 @@ hc-login:before, hc-login:after, hc-vote:before, hc-vote:after, hc-admin-login:b
   border: outset;
 }
 
-.container-vote {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.mat-form-field {
-  width: 357px;
-}
-
-.key_row {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
 .account_circle {
   margin-right: 5px;
 }
 
 .login {
-  margin: auto;
+  margin: auto !important;
   width: 88px;
   align-items: center;
   align-content: center;
@@ -74,20 +68,15 @@ md-radio-button {
 .vote-paper {
   border: outset;
   width: 500px;
-  padding: 30px;
-  margin-bottom: 15px;
+  padding: 30px 30px 15px;
 }
 
 .vote-actions {
   text-align: right;
-  padding-right: 15px;
 }
 
 .result-card {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 10px auto;
 }
 
 md-table {
@@ -109,6 +98,11 @@ md-table {
   flex-direction: row !important;
 }
 
+.flexcolumn {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
 .width50 {
   width: 50% !important;
 }
@@ -117,7 +111,9 @@ md-table {
   margin: 10px !important;
 }
 
-.copyright {
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 10pt;
+.admin-result-container {
+  width: 100vw;
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
 }

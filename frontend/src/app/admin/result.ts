@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
 
-export class Result {
+export interface Result {
 
   candidates1M: Array<Candidate>;
   candidates1F: Array<Candidate>;
@@ -10,6 +10,8 @@ export class Result {
   numberOfFirstGradeVotedKeys: number;
   numberOfSecondGradeNotVotedKeys: number;
   numberOfSecondGradeVotedKeys: number;
+  numberOfThirdGradeNotVotedKeys: number;
+  numberOfThirdGradeVotedKeys: number;
 
 }
 
@@ -49,7 +51,7 @@ export function downloadResult(result: Result): void {
   saveAs(new Blob([s2ab(wbout)], {type: 'application/octet-stream'}), '투표결과.xlsx');
 }
 
-export class Candidate {
+export interface Candidate {
 
   name: string;
   votes: number;

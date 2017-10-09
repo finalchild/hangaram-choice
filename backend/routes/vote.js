@@ -20,7 +20,9 @@ router.post('/', (req, res) => {
     try {
         assertValidKey(key);
     } catch (e) {
-        res.status(400).send(e);
+        res.status(400).send({
+            message: e
+        });
         return;
     }
 
@@ -36,8 +38,15 @@ router.post('/', (req, res) => {
         if (student.voted === 1) {
             throw '이미 투표했습니다!';
         }
-        if (student.grade === 2 && (candidateName1M || candidateName1F)) {
-            throw '2nd graders can\'t vote for 1st grade candidates!';
+        if (!candidateName2) {
+            throw '2학년 후보자 이름을 입력해 주세요!'
+        }
+        if (student.grade === 1) {
+            if (!candidateName1M || !candidateName1F) {
+                throw '1학년 후보자 이름을 입력해 주세요!'
+            }
+        } else if (candidateName1M || candidateName1F) {
+            throw '2학년과 3학년은 1학년 후보자에게 투표할 수 없습니다!'
         }
 
         return Promise.all([getCandidate1M(candidateName1M), getCandidate1F(candidateName1F), getCandidate2(candidateName2)]);

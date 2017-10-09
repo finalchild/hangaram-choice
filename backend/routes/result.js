@@ -16,7 +16,9 @@ router.post('/', (req, res) => {
     try {
         assertValidAdminPassword(adminPassword);
     } catch (e) {
-        res.status(401).send(e);
+        res.status(401).send({
+            message: e
+        });
         return;
     }
 
@@ -34,7 +36,9 @@ router.post('/', (req, res) => {
             numberOfFirstGradeNotVotedKeys: results[3].numberOfFirstGradeNotVotedKeys,
             numberOfFirstGradeVotedKeys: results[3].numberOfFirstGradeVotedKeys,
             numberOfSecondGradeNotVotedKeys: results[3].numberOfSecondGradeNotVotedKeys,
-            numberOfSecondGradeVotedKeys: results[3].numberOfSecondGradeVotedKeys
+            numberOfSecondGradeVotedKeys: results[3].numberOfSecondGradeVotedKeys,
+            numberOfThirdGradeNotVotedKeys: results[3].numberOfThirdGradeNotVotedKeys,
+            numberOfThirdGradeVotedKeys: results[3].numberOfThirdGradeVotedKeys
         });
     }).catch(e => {
         if (e === '관리자 비밀번호가 잘못되었습니다!') {

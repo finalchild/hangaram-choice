@@ -13,7 +13,9 @@ router.post('/', (req, res) => {
         assertValidAdminPassword(adminPassword);
         assertValidAdminPassword(newAdminPassword);
     } catch (e) {
-        res.status(401).send(e);
+        res.status(401).send({
+            message: e
+        });
     }
 
     compareAdminPassword(adminPassword).then(compareResult => {

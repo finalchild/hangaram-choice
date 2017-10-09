@@ -21,7 +21,7 @@ export class AdminResultComponent {
   results1F = forChart(this.adminService.result.candidates1F);
   results2 = forChart(this.adminService.result.candidates2);
 
-  turnoutColumns = ['name', 'firstGrade', 'secondGrade'];
+  turnoutColumns = ['name', 'firstGrade', 'secondGrade', 'thirdGrade'];
   turnoutDataSource = new TurnoutDataSource(this.adminService);
 
   scheme = {
@@ -61,18 +61,22 @@ class TurnoutDataSource extends DataSource<Element> {
       {
         name: '투표 완료',
         firstGrade: this.adminService.result.numberOfFirstGradeVotedKeys.toString(10),
-        secondGrade: this.adminService.result.numberOfSecondGradeVotedKeys.toString(10)
+        secondGrade: this.adminService.result.numberOfSecondGradeVotedKeys.toString(10),
+        thirdGrade: this.adminService.result.numberOfThirdGradeVotedKeys.toString(10)
       },
       {
         name: '미투표',
         firstGrade: this.adminService.result.numberOfFirstGradeNotVotedKeys.toString(10),
-        secondGrade: this.adminService.result.numberOfSecondGradeNotVotedKeys.toString(10)
+        secondGrade: this.adminService.result.numberOfSecondGradeNotVotedKeys.toString(10),
+        thirdGrade: this.adminService.result.numberOfThirdGradeNotVotedKeys.toString(10)
       },
       {
         name: '총계',
         firstGrade: (this.adminService.result.numberOfFirstGradeVotedKeys + this.adminService.result.numberOfFirstGradeNotVotedKeys)
           .toString(10),
         secondGrade: (this.adminService.result.numberOfSecondGradeVotedKeys + this.adminService.result.numberOfSecondGradeNotVotedKeys)
+          .toString(10),
+        thirdGrade: (this.adminService.result.numberOfThirdGradeVotedKeys + this.adminService.result.numberOfThirdGradeNotVotedKeys)
           .toString(10)
       }
     ];
@@ -90,4 +94,5 @@ interface Element {
   name: string;
   firstGrade: string;
   secondGrade: string;
+  thirdGrade: string;
 }
