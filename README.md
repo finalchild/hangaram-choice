@@ -8,15 +8,17 @@ In order to Run Voting_Sys, You have to follow each steps below.
 
 2) After installing Node.js run "npm install" command using 'cmd' in both './backend','./frontend' folders.
 
-	![alt text](https://raw.githubusercontent.com/timothyjrbeck/Student_Election_Voting_Sys/master/howto.JPG)
-
 3) In those same folders, run "npm start" command as you did on Step 2.
+
+	![alt text](https://raw.githubusercontent.com/timothyjrbeck/Student_Election_Voting_Sys/master/howto.JPG)
 
 and then Bob's your uncle!
 
 go check out http://localhost:4200 (You'll be able to see frontend on that link)
 
-* if there is an error, go to './frontend' directory and run "npm install" command once again. you might need to download some modules
+* 	![alt text](https://raw.githubusercontent.com/timothyjrbeck/Student_Election_Voting_Sys/master/howto.JPG)
+
+	if this(error) happens, terminate batch job and run "npm install" command once again, you might need to install some kind of new moduels
 
 
 developed by overflow
