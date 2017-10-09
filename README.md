@@ -16,7 +16,7 @@ and then Bob's your uncle!
 
 go check out http://localhost:4200 (You'll be able to see frontend on that link)
 
-* 	![alt text](https://raw.githubusercontent.com/timothyjrbeck/Student_Election_Voting_Sys/master/howto.JPG)
+* 	![alt text](https://raw.githubusercontent.com/timothyjrbeck/Student_Election_Voting_Sys/master/error.JPG)
 
 	if this(error) happens, terminate batch job and run "npm install" command once again, you might need to install some kind of new moduels
 
