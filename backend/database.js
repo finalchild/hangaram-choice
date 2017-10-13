@@ -10,15 +10,6 @@ const db = new sqlite3.Database('database.sqlite3', err => {
 
 const saltRounds = 10;
 
-db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS student (unique_key INTEGER NOT NULL PRIMARY KEY, voted INTEGER NOT NULL DEFAULT 0, grade INTEGER NOT NULL)');
-    db.run('CREATE TABLE IF NOT EXISTS candidate1M (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
-    db.run('CREATE TABLE IF NOT EXISTS candidate1F (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
-    db.run('CREATE TABLE IF NOT EXISTS candidate2 (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
-    db.run('CREATE TABLE IF NOT EXISTS admin_password (password TEXT NOT NULL)');
-    db.run(`INSERT INTO admin_password SELECT ? WHERE NOT EXISTS (SELECT * FROM admin_password)`, [bcrypt.hashSync("hangaram", saltRounds)]);
-});
-
 function isValidKey(key) {
     return Number.isSafeInteger(key) && key > 0 && key < 10000000;
 }
@@ -201,6 +192,43 @@ function getCandidates2() {
     });
 }
 
+function setCandidates(candidates) {
+    return new Promise((resolve, reject) => {
+        const candidates1M = candidates.candidates1M.map(candidate => {
+            return `(${candidate.name}, ${candidate.vote})`;
+        }).join(', ');
+        const candidates1F = candidates.candidates1F.map(candidate => {
+            return `(${candidate.name}, ${candidate.vote})`;
+        }).join(', ');
+        const candidates2 = candidates.candidate2.map(candidate => {
+            return `(${candidate.name}, ${candidate.vote})`;
+        }).join(', ');
+
+        db.serialize(() => {
+            db.run('BEGIN TRANSACTION');
+            db.run('DELETE FROM candidate1M');
+            db.run('DELETE FROM candidate1F');
+            db.run('DELETE FROM candidate2');
+            if (candidates1M !== '') {
+                db.run('INSERT INTO candidate1M (name, voted) VALUES ' + candidates1M);
+            }
+            if (candidates1F !== '') {
+                db.run('INSERT INTO candidate1F (name, voted) VALUES ' + candidates1F);
+            }
+            if (candidates2 !== '') {
+                db.run('INSERT INTO candidate2 (name, voted) VALUES' + candidates2);
+            }
+            db.run('COMMIT', [], (err) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(candidates);
+            });
+        })
+    });
+}
+
 // SQL Injection 체크를 하지 않습니다. 절대로 입력받은 것을 인자로 넣지 마세요.
 function setStudentKeys(keys) {
     return new Promise((resolve, reject) => {
@@ -350,6 +378,54 @@ function setAdminPassword(newPlaintextPassword) {
     });
 }
 
+function getPollName() {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * from poll_name', [], (err, row) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(row.name);
+        });
+    });
+}
+
+function setPollName(name) {
+    return new Promise((resolve, reject) => {
+        db.get('UPDATE poll_name SET name = ?', [name], err => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve();
+        });
+    });
+}
+
+function getStatus() {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * from status', [], (err, row) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(row.status);
+        });
+    });
+}
+
+function setStatus(status) {
+    return new Promise((resolve, reject) => {
+        db.get('UPDATE status SET status = ?', [status], err => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve();
+        });
+    });
+}
+
 module.exports.db = db;
 module.exports.isValidKey = isValidKey;
 module.exports.assertValidKey = assertValidKey;
@@ -362,9 +438,14 @@ module.exports.getCandidate2 = getCandidate2;
 module.exports.getCandidates1M = getCandidates1M;
 module.exports.getCandidates1F = getCandidates1F;
 module.exports.getCandidates2 = getCandidates2;
+module.exports.setCandidates = setCandidates;
 module.exports.setStudentKeys = setStudentKeys;
 module.exports.getNumberOfKeys = getNumberOfKeys;
 module.exports.isValidAdminPassword = isValidAdminPassword;
 module.exports.assertValidAdminPassword = assertValidAdminPassword;
 module.exports.compareAdminPassword = compareAdminPassword;
 module.exports.setAdminPassword = setAdminPassword;
+module.exports.getPollName = getPollName;
+module.exports.setPollName = setPollName;
+module.exports.getStatus = getStatus;
+module.exports.setStatus = setStatus;

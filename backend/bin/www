@@ -5,8 +5,28 @@
 const cluster = require('cluster');
 
 if (cluster.isMaster) {
+    const sqlite3 = require('sqlite3').verbose();
+    const bcrypt = require('bcrypt');
     const uuidv4 = require('uuid/v4');
     const id = uuidv4();
+
+    const db = new sqlite3.Database('database.sqlite3', err => {
+        if (err) {
+            console.error(err.message);
+        }
+    });
+    db.serialize(() => {
+        db.run('CREATE TABLE IF NOT EXISTS student (unique_key INTEGER NOT NULL PRIMARY KEY, voted INTEGER NOT NULL DEFAULT 0, grade INTEGER NOT NULL)');
+        db.run('CREATE TABLE IF NOT EXISTS candidate1M (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
+        db.run('CREATE TABLE IF NOT EXISTS candidate1F (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
+        db.run('CREATE TABLE IF NOT EXISTS candidate2 (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
+        db.run('CREATE TABLE IF NOT EXISTS admin_password (password TEXT NOT NULL)');
+        db.run('CREATE TABLE IF NOT EXISTS poll_name (name TEXT NOT NULL)');
+        db.run('CREATE TABLE IF NOT EXISTS status (status TEXT NOT NULL)');
+        db.run('INSERT INTO admin_password VALUES ? WHERE NOT EXISTS (SELECT * FROM admin_password)', [bcrypt.hashSync("hangaram", saltRounds)]);
+        db.run('INSERT INTO poll_name VALUES \'한가람고등학교 학생회장단 선거\' WHERE NOT EXISTS (SELECT * FROM poll_name');
+        db.run('INSERT INTO status VALUES \'closed\' WHERE NOT EXISTS (SELECT * FROM status');
+    });
 
     const cpuCount = require('os').cpus().length;
     for (let i = 0; i < cpuCount; i++) {
