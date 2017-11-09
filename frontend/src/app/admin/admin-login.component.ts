@@ -4,7 +4,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {AdminService} from './admin.service';
-import {Result} from './result';
+import {Status} from './status';
 import {MdIconRegistry} from '@angular/material';
 
 @Component({
@@ -42,12 +42,12 @@ export class AdminLoginComponent {
       return;
     }
 
-    this.http.post(`http://localhost:3000/api/result`, {
+    this.http.post(`http://localhost:3000/api/status`, {
       adminPassword: adminPassword
     })
       .subscribe(data => {
         this.adminService.adminPassword = adminPassword;
-        this.adminService.result = <Result>data;
+        this.adminService.result = <Status>data;
         this.router.navigate(['/admin/result']);
       }, err => {
         if (err instanceof HttpErrorResponse) {

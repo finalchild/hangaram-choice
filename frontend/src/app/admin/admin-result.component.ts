@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AdminService} from './admin.service';
-import {Candidate, downloadResult} from './result';
+import {Candidate, downloadResult} from './status';
 import {MdDialog, MdIconRegistry} from '@angular/material';
 import {HttpClient} from '@angular/common/http';
 import {ChangeAdminPasswordDialogComponent} from './admin-change-admin-password-dialog.component';

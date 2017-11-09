@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
 
-export interface Result {
+export interface Status {
 
   candidates1M: Array<Candidate>;
   candidates1F: Array<Candidate>;
@@ -16,7 +16,7 @@ export interface Result {
 }
 
 
-export function downloadResult(result: Result): void {
+export function downloadResult(result: Status): void {
   const aoa1M: (string|number)[][] = [['후보자', '득표수']];
   for (const candidate of result.candidates1M) {
     aoa1M.push([candidate.name, candidate.votes]);

@@ -6,7 +6,7 @@ import {NgModel} from '@angular/forms';
 import {Keys} from './keys';
 import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
-import {s2ab} from './result';
+import {s2ab} from './status';
 import {mod10} from 'checkdigit';
 
 @Component({

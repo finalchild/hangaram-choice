@@ -44,6 +44,12 @@ router.post('/', (req, res) => {
                 throw '관리자 비밀번호가 잘못되었습니다!';
             }
         })
+        .then(database.getStatus)
+        .then(status => {
+            if (status !== 'closed') {
+                throw '투표가 닫혀 있어야 합니다!'
+            }
+        })
         .then(() => database.setPollName(name))
         .then(() =>
             database.setCandidates({
@@ -59,6 +65,12 @@ router.post('/', (req, res) => {
         .catch(e => {
             if (e === '관리자 비밀번호가 잘못되었습니다!') {
                 res.status(401).send({
+                    message: e
+                });
+                return;
+            }
+            if (e === '투표가 닫혀 있어야 합니다!') {
+                res.status(400).send({
                     message: e
                 });
                 return;

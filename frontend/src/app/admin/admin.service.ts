@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {Result} from './result';
+import {Status} from './status';
 import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class AdminService {
 
   adminPassword: string;
-  result: Result;
+  result: Status;
 
   constructor(private http: HttpClient) {}
 
@@ -19,7 +19,7 @@ export class AdminService {
       adminPassword: this.adminPassword
     })
       .subscribe(data => {
-        this.result = <Result>data;
+        this.result = <Status>data;
       });
   }
 
