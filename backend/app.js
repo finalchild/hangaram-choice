@@ -9,10 +9,12 @@ const cors = require('cors');
 const helmet = require('helmet');
 
 const vote = require('./routes/vote.js');
-const result = require('./routes/result.js');
+const status = require('./routes/status.js');
 const setadminpw = require('./routes/setadminpw.js');
 const generatekeys = require('./routes/generatekeys.js');
 const login = require('./routes/login.js');
+const closepoll = require('./routes/closepoll.js');
+const setpoll = require('./routes/setpoll.js');
 
 const app = express();
 
@@ -32,10 +34,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/vote', vote);
-app.use('/api/result', result);
+app.use('/api/status', status);
 app.use('/api/setadminpw', setadminpw);
 app.use('/api/generatekeys', generatekeys);
 app.use('/api/login', login);
+app.use('/api/closepoll', closepoll);
+app.use('/api/setpoll', setpoll);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

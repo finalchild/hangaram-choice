@@ -1,13 +1,14 @@
 import {Component} from '@angular/core';
 import {AdminService} from './admin.service';
 import {Candidate, downloadResult} from './result';
-import {MdDialog} from '@angular/material';
+import {MdDialog, MdIconRegistry} from '@angular/material';
 import {HttpClient} from '@angular/common/http';
 import {ChangeAdminPasswordDialogComponent} from './admin-change-admin-password-dialog.component';
 import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dialog.component';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'hc-admin-result',
@@ -15,7 +16,12 @@ import 'rxjs/add/observable/of';
 })
 export class AdminResultComponent {
 
-  constructor(private adminService: AdminService, private dialog: MdDialog) {}
+  constructor(private adminService: AdminService,
+              private dialog: MdDialog,
+              iconRegistry: MdIconRegistry,
+              sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIcon('refresh', sanitizer.bypassSecurityTrustResourceUrl('assets/img/refresh.svg'));
+  }
 
   results1M = forChart(this.adminService.result.candidates1M);
   results1F = forChart(this.adminService.result.candidates1F);

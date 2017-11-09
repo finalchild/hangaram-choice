@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const database = require('database');
+const assertValidAdminPassword = require('../database.js').assertValidAdminPassword;
 
 router.post('/', (req, res) => {
     const adminPassword = req.body.adminPassword;
@@ -9,6 +10,13 @@ router.post('/', (req, res) => {
         assertValidAdminPassword(adminPassword);
     } catch (e) {
         res.status(401).send(e);
+        return;
+    }
+
+    if (!req.body.poll) {
+        res.status(400).send({
+            message: '투표 정보가 잘못되었습니다!'
+        });
         return;
     }
 
@@ -27,6 +35,7 @@ router.post('/', (req, res) => {
         res.status(400).send({
             message: '후보자 정보가 잘못되었습니다!'
         });
+        return;
     }
 
     database.compareAdminPassword(adminPassword)
@@ -41,9 +50,7 @@ router.post('/', (req, res) => {
                     candidates1M: candidates1M,
                     candidates1F: candidates1F,
                     candidates2: candidates2
-                }
-            ))
-        .then(database.setStudentKeys)
+                }))
         .then(() => {
             res.status(200).send({
                 message: '성공!'

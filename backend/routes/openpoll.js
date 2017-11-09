@@ -6,7 +6,7 @@ const database = require('database');
 router.post('/', (req, res) => {
     const adminPassword = req.body.adminPassword;
     try {
-        assertValidAdminPassword(adminPassword);
+        database.assertValidAdminPassword(adminPassword);
     } catch (e) {
         res.status(401).send(e);
         return;
@@ -18,11 +18,16 @@ router.post('/', (req, res) => {
                 throw '관리자 비밀번호가 잘못되었습니다!';
             }
         })
-        .then(() => database.setPollName(name))
-        .then(() => {
-            return database.setStatus('closed');
+        .then(database.getStatus)
+        .then(status => {
+            if (status !== 'closed') {
+                throw '투표가 이미 열려 있습니다!'
+            }
         })
-        .then(keys => {
+        .then(() => {
+            return database.setStatus('open');
+        })
+        .then(() => {
             res.status(200).send({
                 message: '성공!'
             });
@@ -30,6 +35,12 @@ router.post('/', (req, res) => {
         .catch(e => {
             if (e === '관리자 비밀번호가 잘못되었습니다!') {
                 res.status(401).send({
+                    message: e
+                });
+                return;
+            }
+            if (e === '투표가 이미 열려 있습니다!') {
+                res.status(400).send({
                     message: e
                 });
                 return;
