@@ -8,7 +8,7 @@ import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dial
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import {DomSanitizer} from "@angular/platform-browser";
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'hc-admin-result',
@@ -18,6 +18,7 @@ export class AdminResultComponent {
 
   constructor(private adminService: AdminService,
               private dialog: MdDialog,
+              private http: HttpClient,
               iconRegistry: MdIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('refresh', sanitizer.bypassSecurityTrustResourceUrl('assets/img/refresh.svg'));
@@ -46,6 +47,22 @@ export class AdminResultComponent {
     downloadResult(this.adminService.result);
   }
 
+}
+
+function refresh() {
+  this.adminService.refreshResult();
+}
+
+function openPoll() {
+  this.http.post('http://localhost:3000/api/openpoll', {
+    adminPassword: this.adminService.adminPassword
+  });
+}
+
+function closePoll() {
+  this.http.post('http://localhost:3000/api/closepoll', {
+    adminPassword: this.adminService.adminPassword
+  });
 }
 
 function forChart(candidates: Array<Candidate>): Array<{name: string, value: number}> {
@@ -93,7 +110,6 @@ class TurnoutDataSource extends DataSource<Element> {
   }
 
   disconnect(collectionViewer: CollectionViewer): void {}
-
 }
 
 interface Element {

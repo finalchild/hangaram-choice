@@ -57,7 +57,6 @@ export class ChangeAdminPasswordDialogComponent {
           console.log(err);
         }
       });
-
   }
 
   onNoClick(): void {

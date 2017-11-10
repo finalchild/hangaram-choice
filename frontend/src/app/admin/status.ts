@@ -12,6 +12,8 @@ export interface Status {
   numberOfSecondGradeVotedKeys: number;
   numberOfThirdGradeNotVotedKeys: number;
   numberOfThirdGradeVotedKeys: number;
+  status: string;
+  pollName: string;
 
 }
 

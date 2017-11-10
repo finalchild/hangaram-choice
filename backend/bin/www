@@ -9,6 +9,7 @@ if (cluster.isMaster) {
     const bcrypt = require('bcrypt');
     const uuidv4 = require('uuid/v4');
     const id = uuidv4();
+    const database = require('../database.js');
 
     const db = new sqlite3.Database('database.sqlite3', err => {
         if (err) {
@@ -28,22 +29,37 @@ if (cluster.isMaster) {
         db.run('INSERT INTO status VALUES \'closed\' WHERE NOT EXISTS (SELECT * FROM status');
     });
 
-    const cpuCount = require('os').cpus().length;
-    for (let i = 0; i < cpuCount; i++) {
-        cluster.fork({
-            candidatesCacheId: id
+    Promise.all([database.getCandidates1M(), database.getCandidates1F(), database.getCandidates2()])
+        .then(results => {
+            const candidateNames =  {
+                candidateNames1M: results[0].map(candidate => candidate.name),
+                candidateNames1F: results[1].map(candidate => candidate.name),
+                candidateNames2: results[2].map(candidate => candidate.name),
+                candidatesCacheId: id
+            };
+
+            const cpuCount = require('os').cpus().length;
+            for (let i = 0; i < cpuCount; i++) {
+                const worker = cluster.fork();
+                worker.send(candidateNames);
+            }
+
+            cluster.on('exit', worker => {
+                console.log(`Worker ${worker.id} died :(`);
+                cluster.fork();
+            });
+
+            console.log(`HangaramChoiceBack running on port ${process.env.PORT || '3000'}`);
         });
-    }
-
-    cluster.on('exit', worker => {
-        console.log(`Worker ${worker.id} died :(`);
-        cluster.fork();
-    });
-
-    console.log(`HangaramChoiceBack running on port ${process.env.PORT || '3000'}`);
 
     return;
 }
+
+const candidateNamesCache = require('../candidate_names_cache');
+
+process.on('message', msg => {
+    candidateNamesCache.setCache(msg);
+});
 
 /**
  * Module dependencies.

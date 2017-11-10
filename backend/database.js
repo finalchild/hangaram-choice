@@ -194,14 +194,51 @@ function getCandidates2() {
 
 function setCandidates(candidates) {
     return new Promise((resolve, reject) => {
-        const candidates1M = candidates.candidates1M.map(candidate => {
+        const candidates1M = candidates.candidateNames1M.map(candidate => {
             return `(${candidate.name}, ${candidate.vote})`;
         }).join(', ');
-        const candidates1F = candidates.candidates1F.map(candidate => {
+        const candidates1F = candidates.candidateNames1F.map(candidate => {
             return `(${candidate.name}, ${candidate.vote})`;
         }).join(', ');
         const candidates2 = candidates.candidate2.map(candidate => {
             return `(${candidate.name}, ${candidate.vote})`;
+        }).join(', ');
+
+        db.serialize(() => {
+            db.run('BEGIN TRANSACTION');
+            db.run('DELETE FROM candidate1M');
+            db.run('DELETE FROM candidate1F');
+            db.run('DELETE FROM candidate2');
+            if (candidates1M !== '') {
+                db.run('INSERT INTO candidate1M (name, voted) VALUES ' + candidates1M);
+            }
+            if (candidates1F !== '') {
+                db.run('INSERT INTO candidate1F (name, voted) VALUES ' + candidates1F);
+            }
+            if (candidates2 !== '') {
+                db.run('INSERT INTO candidate2 (name, voted) VALUES' + candidates2);
+            }
+            db.run('COMMIT', [], (err) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(candidates);
+            });
+        })
+    });
+}
+
+function setCandidateNames(candidateNames) {
+    return new Promise((resolve, reject) => {
+        const candidates1M = candidateNames.candidateNames1M.map(candidateName => {
+            return `($candidateName, 0)`;
+        }).join(', ');
+        const candidates1F = candidateNames.candidateNames1F.map(candidateName => {
+            return `($candidateName, 0)`;
+        }).join(', ');
+        const candidates2 = candidateNames.candidate2.map(candidateName => {
+            return `($candidateName, 0)`;
         }).join(', ');
 
         db.serialize(() => {
@@ -426,6 +463,24 @@ function setStatus(status) {
     });
 }
 
+function getResult() {
+    return Promise.all([getCandidates1M(), getCandidates1F(), getCandidates2(), getNumberOfKeys(), getStatus(), getPollName()]).then(results => {
+        return {
+            candidateNames1M: results[0],
+            candidateNames1F: results[1],
+            candidateNames2: results[2],
+            numberOfFirstGradeNotVotedKeys: results[3].numberOfFirstGradeNotVotedKeys,
+            numberOfFirstGradeVotedKeys: results[3].numberOfFirstGradeVotedKeys,
+            numberOfSecondGradeNotVotedKeys: results[3].numberOfSecondGradeNotVotedKeys,
+            numberOfSecondGradeVotedKeys: results[3].numberOfSecondGradeVotedKeys,
+            numberOfThirdGradeNotVotedKeys: results[3].numberOfThirdGradeNotVotedKeys,
+            numberOfThirdGradeVotedKeys: results[3].numberOfThirdGradeVotedKeys,
+            status: results[4],
+            pollName: results[5]
+        }
+    });
+}
+
 module.exports.db = db;
 module.exports.isValidKey = isValidKey;
 module.exports.assertValidKey = assertValidKey;
@@ -439,6 +494,7 @@ module.exports.getCandidates1M = getCandidates1M;
 module.exports.getCandidates1F = getCandidates1F;
 module.exports.getCandidates2 = getCandidates2;
 module.exports.setCandidates = setCandidates;
+module.exports.setCandidateNames = setCandidateNames;
 module.exports.setStudentKeys = setStudentKeys;
 module.exports.getNumberOfKeys = getNumberOfKeys;
 module.exports.isValidAdminPassword = isValidAdminPassword;
@@ -449,3 +505,4 @@ module.exports.getPollName = getPollName;
 module.exports.setPollName = setPollName;
 module.exports.getStatus = getStatus;
 module.exports.setStatus = setStatus;
+module.exports.getResult = getResult;

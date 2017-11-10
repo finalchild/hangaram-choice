@@ -14,7 +14,7 @@ const setadminpw = require('./routes/setadminpw.js');
 const generatekeys = require('./routes/generatekeys.js');
 const login = require('./routes/login.js');
 const closepoll = require('./routes/closepoll.js');
-const setpoll = require('./routes/setpoll.js');
+const initializepoll = require('./routes/initializepoll.js');
 
 const app = express();
 
@@ -39,7 +39,7 @@ app.use('/api/setadminpw', setadminpw);
 app.use('/api/generatekeys', generatekeys);
 app.use('/api/login', login);
 app.use('/api/closepoll', closepoll);
-app.use('/api/setpoll', setpoll);
+app.use('/api/initializepoll', initializepoll);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

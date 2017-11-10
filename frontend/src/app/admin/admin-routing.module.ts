@@ -13,13 +13,14 @@ import {AdminService} from './admin.service';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {ChangeAdminPasswordDialogComponent} from './admin-change-admin-password-dialog.component';
 import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dialog.component';
+import {InitializeDialogComponent} from './admin-initialize-dialog.component';
 
 @NgModule({
   declarations: [
-    AdminLoginComponent, AdminResultComponent, ChangeAdminPasswordDialogComponent, CreateStudentKeysDialogComponent
+    AdminLoginComponent, AdminResultComponent, ChangeAdminPasswordDialogComponent, CreateStudentKeysDialogComponent, InitializeDialogComponent
   ],
   entryComponents: [
-    ChangeAdminPasswordDialogComponent, CreateStudentKeysDialogComponent
+    ChangeAdminPasswordDialogComponent, CreateStudentKeysDialogComponent, InitializeDialogComponent
   ],
   imports: [
     BrowserModule,

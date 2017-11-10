@@ -1,7 +1,8 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const database = require('database');
+const fs = require('mz/fs');
+const database = require('../database.js');
 
 router.post('/', (req, res) => {
     const adminPassword = req.body.adminPassword;
@@ -27,8 +28,9 @@ router.post('/', (req, res) => {
         .then(() => {
             return database.setStatus('closed');
         })
-        .then(() => {
-            // TODO 투표 정보 자동 저장
+        .then(database.getResult)
+        .then(result => {
+            return fs.writeFile(pollName + ' result at ' + new Date().toDateString() + '.json', JSON.stringify(result));
         })
         .then(() => {
             res.status(200).send({

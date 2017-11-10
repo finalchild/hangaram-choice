@@ -15,7 +15,7 @@ export class AdminService {
   }
 
   refreshResult(): void {
-    this.http.post(`http://localhost:3000/api/result`, {
+    this.http.post('http://localhost:3000/api/status', {
       adminPassword: this.adminPassword
     })
       .subscribe(data => {

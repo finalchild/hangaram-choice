@@ -4,7 +4,7 @@
 <script src="https://npmcdn.com/typescript@2.1.1/lib/typescript.js"></script>
 <div class="admin-result-container">
   <md-toolbar color="primary">
-    한가람고 학생회장단 투표 관리 페이지
+    한가람고 학생회장단 투표 관리 페이지: {{adminService.result.pollName}}
     <button class="margin10" md-button color="primary" (click)="refresh()"><md-icon class="refresh" svgIcon="refresh"></md-icon></button>
   </md-toolbar>
   <md-card class="nopadding">
@@ -73,6 +73,8 @@
     </md-card>
     <md-card class="width50">
       <md-card-content>
+        <button *ngIf="status === 'closed'" (click)="openPoll()">투표 열기</button>
+        <button *ngIf="status === 'open'" (click)="closePoll()">투표 닫기</button>
         <button class="margin10" md-raised-button color="primary" (click)="downloadResult()">투표 현황 Excel로 다운로드</button>
         <br>
         <button class="margin10" md-raised-button color="primary" (click)="openCreateStudentKeysDialog()">학생 키 생성(기존 키 초기화)</button>

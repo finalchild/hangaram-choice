@@ -4,7 +4,7 @@ const router = express.Router();
 
 const Promise = require('bluebird');
 const database = require('../database.js');
-const getCandidateNames = require('../candidate_names.js').getCandidateNames;
+const getCandidateNames = require('../candidate_names_cache.js').getCache;
 
 router.post('/', (req, res) => {
     const key = req.body.key;
@@ -46,7 +46,7 @@ router.post('/', (req, res) => {
             } else {
                 res.status(200).send({
                     grade: student.grade,
-                    candidateNames: database.getCandidateNames()
+                    candidateNames: candidateNames
                 });
             }
         })
