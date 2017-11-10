@@ -1,0 +1,11 @@
+<h1 md-dialog-title>투표 초기화 및 설정</h1>
+<div md-dialog-content>
+  <input [(ngModel)]="pollName">
+  <hc-admin-list-editor [(ngModel)]="candidateNames1M"></hc-admin-list-editor>
+  <hc-admin-list-editor [(ngModel)]="candidateNames1F"></hc-admin-list-editor>
+  <hc-admin-list-editor [(ngModel)]="candidateNames2"></hc-admin-list-editor>
+</div>
+<div md-dialog-actions>
+  <button md-button (click)="onYesClick()" tabindex="4">확인</button>
+  <button md-button (click)="onNoClick()" tabindex="-1">취소</button>
+</div>

@@ -7,7 +7,7 @@ import {isValidAdminPassword} from './admin-login.component';
 
 @Component({
   selector: 'hc-change-admin-password-dialog',
-  templateUrl: './admin-change-admin-password-dialog.component.html',
+  templateUrl: './admin-change-admin-password-dialog.component.html'
 })
 export class ChangeAdminPasswordDialogComponent {
 

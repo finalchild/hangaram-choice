@@ -16,20 +16,27 @@ if (cluster.isMaster) {
             console.error(err.message);
         }
     });
-    db.serialize(() => {
-        db.run('CREATE TABLE IF NOT EXISTS student (unique_key INTEGER NOT NULL PRIMARY KEY, voted INTEGER NOT NULL DEFAULT 0, grade INTEGER NOT NULL)');
-        db.run('CREATE TABLE IF NOT EXISTS candidate1M (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
-        db.run('CREATE TABLE IF NOT EXISTS candidate1F (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
-        db.run('CREATE TABLE IF NOT EXISTS candidate2 (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
-        db.run('CREATE TABLE IF NOT EXISTS admin_password (password TEXT NOT NULL)');
-        db.run('CREATE TABLE IF NOT EXISTS poll_name (name TEXT NOT NULL)');
-        db.run('CREATE TABLE IF NOT EXISTS status (status TEXT NOT NULL)');
-        db.run('INSERT INTO admin_password VALUES ? WHERE NOT EXISTS (SELECT * FROM admin_password)', [bcrypt.hashSync("hangaram", saltRounds)]);
-        db.run('INSERT INTO poll_name VALUES \'한가람고등학교 학생회장단 선거\' WHERE NOT EXISTS (SELECT * FROM poll_name');
-        db.run('INSERT INTO status VALUES \'closed\' WHERE NOT EXISTS (SELECT * FROM status');
-    });
-
-    Promise.all([database.getCandidates1M(), database.getCandidates1F(), database.getCandidates2()])
+    new Promise((resolve, reject) => {
+        db.serialize(() => {
+            db.run('CREATE TABLE IF NOT EXISTS student (unique_key INTEGER NOT NULL PRIMARY KEY, voted INTEGER NOT NULL DEFAULT 0, grade INTEGER NOT NULL)');
+            db.run('CREATE TABLE IF NOT EXISTS candidate1M (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
+            db.run('CREATE TABLE IF NOT EXISTS candidate1F (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
+            db.run('CREATE TABLE IF NOT EXISTS candidate2 (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
+            db.run('CREATE TABLE IF NOT EXISTS admin_password (password TEXT NOT NULL)');
+            db.run('CREATE TABLE IF NOT EXISTS poll_name (name TEXT NOT NULL)');
+            db.run('CREATE TABLE IF NOT EXISTS status (status TEXT NOT NULL)');
+            db.run('INSERT INTO admin_password SELECT ( ? ) WHERE NOT EXISTS (SELECT * FROM admin_password)', [bcrypt.hashSync("hangaram", database.saltRounds)]);
+            db.run('INSERT INTO poll_name SELECT ( \'한가람고등학교 학생회장단 선거\' ) WHERE NOT EXISTS (SELECT * FROM poll_name)');
+            db.run('INSERT INTO status SELECT ( \'closed\' ) WHERE NOT EXISTS (SELECT * FROM status)', [], (err) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve();
+            });
+        });
+    })
+        .then(() => Promise.all([database.getCandidates1M(), database.getCandidates1F(), database.getCandidates2()]))
         .then(results => {
             const candidateNames =  {
                 candidateNames1M: results[0].map(candidate => candidate.name),
@@ -51,7 +58,6 @@ if (cluster.isMaster) {
 
             console.log(`HangaramChoiceBack running on port ${process.env.PORT || '3000'}`);
         });
-
     return;
 }
 

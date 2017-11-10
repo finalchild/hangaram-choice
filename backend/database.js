@@ -482,6 +482,7 @@ function getResult() {
 }
 
 module.exports.db = db;
+module.exports.saltRounds = saltRounds;
 module.exports.isValidKey = isValidKey;
 module.exports.assertValidKey = assertValidKey;
 module.exports.getStudent = getStudent;
