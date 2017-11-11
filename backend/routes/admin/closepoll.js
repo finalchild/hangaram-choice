@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('mz/fs');
-const database = require('../database.js');
+const database = require('../../database.js');
 
 router.post('/', (req, res) => {
     const adminPassword = req.body.adminPassword;
@@ -30,7 +30,7 @@ router.post('/', (req, res) => {
         })
         .then(database.getResult)
         .then(result => {
-            return fs.writeFile(pollName + ' result at ' + new Date().toDateString() + '.json', JSON.stringify(result));
+            return fs.writeFile(result.pollName + ' result at ' + new Date().toDateString() + '.json', JSON.stringify(result));
         })
         .then(() => {
             res.status(200).send({

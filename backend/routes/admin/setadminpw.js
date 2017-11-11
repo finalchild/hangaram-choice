@@ -2,9 +2,9 @@
 const express = require('express');
 const router = express.Router();
 
-const assertValidAdminPassword = require('../database.js').assertValidAdminPassword;
-const compareAdminPassword = require('../database.js').compareAdminPassword;
-const setAdminPassword = require('../database.js').setAdminPassword;
+const assertValidAdminPassword = require('../../database.js').assertValidAdminPassword;
+const compareAdminPassword = require('../../database.js').compareAdminPassword;
+const setAdminPassword = require('../../database.js').setAdminPassword;
 
 router.post('/', (req, res) => {
     const adminPassword = req.body.adminPassword;

@@ -9,6 +9,7 @@ import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import {DomSanitizer} from '@angular/platform-browser';
+import {InitializeDialogComponent} from './admin-initialize-dialog.component';
 
 @Component({
   selector: 'hc-admin-result',
@@ -47,23 +48,39 @@ export class AdminResultComponent {
     downloadResult(this.adminService.result);
   }
 
+  refresh() {
+    this.adminService.refreshResult().then(() => {
+      this.results1M = forChart(this.adminService.result.candidates1M);
+      this.results1F = forChart(this.adminService.result.candidates1F);
+      this.results2 = forChart(this.adminService.result.candidates2);
+      this.turnoutDataSource = new TurnoutDataSource(this.adminService);
+    });
+  }
+
+  openPoll() {
+    this.http.post('http://localhost:3000/api/admin/openpoll', {
+      adminPassword: this.adminService.adminPassword
+    }).subscribe(data => {
+      alert(data['message']);
+      this.refresh();
+    });
+  }
+
+  closePoll() {
+    this.http.post('http://localhost:3000/api/admin/closepoll', {
+      adminPassword: this.adminService.adminPassword
+    }).subscribe(data => {
+      alert(data['message']);
+      this.refresh();
+    });
+  }
+
+  openInitializeDialog() {
+    this.dialog.open(InitializeDialogComponent);
+  }
+
 }
 
-function refresh() {
-  this.adminService.refreshResult();
-}
-
-function openPoll() {
-  this.http.post('http://localhost:3000/api/openpoll', {
-    adminPassword: this.adminService.adminPassword
-  });
-}
-
-function closePoll() {
-  this.http.post('http://localhost:3000/api/closepoll', {
-    adminPassword: this.adminService.adminPassword
-  });
-}
 
 function forChart(candidates: Array<Candidate>): Array<{name: string, value: number}> {
   return candidates.map(function(candidate: Candidate): {name: string, value: number} {

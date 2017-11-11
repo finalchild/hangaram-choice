@@ -73,11 +73,18 @@
     </md-card>
     <md-card class="width50">
       <md-card-content>
-        <button *ngIf="status === 'closed'" (click)="openPoll()">투표 열기</button>
-        <button *ngIf="status === 'open'" (click)="closePoll()">투표 닫기</button>
+        <div *ngIf="adminService.result.status === 'closed'">
+          닫았던 상태 그대로 투표를 복구해 다시 열고 싶다면 바로 "열기"<br>
+          새로운 투표를 열고 싶다면 "초기화 및 설정" 후 "열기"를 눌러 주세요.<br>
+          <button class="margin10" md-raised-button color="primary" (click)="openInitializeDialog()">투표 초기화 및 설정</button>
+          <br>
+          <button class="margin10" md-raised-button color="primary" (click)="openPoll()">투표 열기(초기화/설정 후에 클릭)</button>
+        </div>
+        <div *ngIf="adminService.result.status === 'open'">
+          <button class="margin10" md-raised-button color="primary" (click)="closePoll()">투표 닫기</button>
+        </div>
+        <hr>
         <button class="margin10" md-raised-button color="primary" (click)="downloadResult()">투표 현황 Excel로 다운로드</button>
-        <br>
-        <button class="margin10" md-raised-button color="primary" (click)="openCreateStudentKeysDialog()">학생 키 생성(기존 키 초기화)</button>
         <br>
         <button class="margin10" md-raised-button color="primary" (click)="openChangeAdminPasswordDialog()">관리자 비밀번호 변경</button>
       </md-card-content>

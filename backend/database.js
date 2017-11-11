@@ -194,29 +194,38 @@ function getCandidates2() {
 
 function setCandidates(candidates) {
     return new Promise((resolve, reject) => {
-        const candidates1M = candidates.candidateNames1M.map(candidate => {
-            return `(${candidate.name}, ${candidate.vote})`;
-        }).join(', ');
-        const candidates1F = candidates.candidateNames1F.map(candidate => {
-            return `(${candidate.name}, ${candidate.vote})`;
-        }).join(', ');
-        const candidates2 = candidates.candidate2.map(candidate => {
-            return `(${candidate.name}, ${candidate.vote})`;
-        }).join(', ');
+        const statement1M = 'INSERT INTO candidate1M (name, votes) VALUES ' + new Array(candidates.candidates1M.length).fill('(?, ?)').join(', ');
+        const placeholder1M = [];
+        candidates.candidates1M.forEach(candidate => {
+            placeholder1M.push(candidate.name);
+            placeholder1M.push(candidate.votes);
+        });
+        const statement1F = 'INSERT INTO candidate1F (name, votes) VALUES ' + new Array(candidates.candidates1F.length).fill('(?, ?)').join(', ');
+        const placeholder1F = [];
+        candidates.candidates1F.forEach(candidate => {
+            placeholder1F.push(candidate.name);
+            placeholder1F.push(candidate.votes);
+        });
+        const statement2 = 'INSERT INTO candidate2 (name, votes) VALUES ' + new Array(candidates.candidates2.length).fill('(?, ?)').join(', ');
+        const placeholder2 = [];
+        candidates.candidates2.forEach(candidate => {
+            placeholder2.push(candidate.name);
+            placeholder2.push(candidate.votes);
+        });
 
         db.serialize(() => {
             db.run('BEGIN TRANSACTION');
             db.run('DELETE FROM candidate1M');
             db.run('DELETE FROM candidate1F');
             db.run('DELETE FROM candidate2');
-            if (candidates1M !== '') {
-                db.run('INSERT INTO candidate1M (name, voted) VALUES ' + candidates1M);
+            if (placeholder1M !== '') {
+                db.run(statement1M, placeholder1M);
             }
-            if (candidates1F !== '') {
-                db.run('INSERT INTO candidate1F (name, voted) VALUES ' + candidates1F);
+            if (placeholder1F !== '') {
+                db.run(statement1F, placeholder1F);
             }
-            if (candidates2 !== '') {
-                db.run('INSERT INTO candidate2 (name, voted) VALUES' + candidates2);
+            if (placeholder2 !== '') {
+                db.run(statement2, placeholder2);
             }
             db.run('COMMIT', [], (err) => {
                 if (err) {
@@ -231,36 +240,45 @@ function setCandidates(candidates) {
 
 function setCandidateNames(candidateNames) {
     return new Promise((resolve, reject) => {
-        const candidates1M = candidateNames.candidateNames1M.map(candidateName => {
-            return `($candidateName, 0)`;
-        }).join(', ');
-        const candidates1F = candidateNames.candidateNames1F.map(candidateName => {
-            return `($candidateName, 0)`;
-        }).join(', ');
-        const candidates2 = candidateNames.candidate2.map(candidateName => {
-            return `($candidateName, 0)`;
-        }).join(', ');
+        const statement1M = 'INSERT INTO candidate1M (name, votes) VALUES ' + new Array(candidateNames.candidateNames1M.length).fill('(?, ?)').join(', ');
+        const placeholder1M = [];
+        candidateNames.candidateNames1M.forEach(candidateName => {
+            placeholder1M.push(candidateName);
+            placeholder1M.push(0);
+        });
+        const statement1F = 'INSERT INTO candidate1F (name, votes) VALUES ' + new Array(candidateNames.candidateNames1F.length).fill('(?, ?)').join(', ');
+        const placeholder1F = [];
+        candidateNames.candidateNames1F.forEach(candidateName => {
+            placeholder1F.push(candidateName);
+            placeholder1F.push(0);
+        });
+        const statement2 = 'INSERT INTO candidate2 (name, votes) VALUES ' + new Array(candidateNames.candidateNames2.length).fill('(?, ?)').join(', ');
+        const placeholder2 = [];
+        candidateNames.candidateNames2.forEach(candidateName => {
+            placeholder2.push(candidateName);
+            placeholder2.push(0);
+        });
 
         db.serialize(() => {
             db.run('BEGIN TRANSACTION');
             db.run('DELETE FROM candidate1M');
             db.run('DELETE FROM candidate1F');
             db.run('DELETE FROM candidate2');
-            if (candidates1M !== '') {
-                db.run('INSERT INTO candidate1M (name, voted) VALUES ' + candidates1M);
+            if (placeholder1M !== '') {
+                db.run(statement1M, placeholder1M);
             }
-            if (candidates1F !== '') {
-                db.run('INSERT INTO candidate1F (name, voted) VALUES ' + candidates1F);
+            if (placeholder1F !== '') {
+                db.run(statement1F, placeholder1F);
             }
-            if (candidates2 !== '') {
-                db.run('INSERT INTO candidate2 (name, voted) VALUES' + candidates2);
+            if (placeholder2 !== '') {
+                db.run(statement2, placeholder2);
             }
             db.run('COMMIT', [], (err) => {
                 if (err) {
                     reject(err);
                     return;
                 }
-                resolve(candidates);
+                resolve(candidateNames);
             });
         })
     });
@@ -466,9 +484,9 @@ function setStatus(status) {
 function getResult() {
     return Promise.all([getCandidates1M(), getCandidates1F(), getCandidates2(), getNumberOfKeys(), getStatus(), getPollName()]).then(results => {
         return {
-            candidateNames1M: results[0],
-            candidateNames1F: results[1],
-            candidateNames2: results[2],
+            candidates1M: results[0],
+            candidates1F: results[1],
+            candidates2: results[2],
             numberOfFirstGradeNotVotedKeys: results[3].numberOfFirstGradeNotVotedKeys,
             numberOfFirstGradeVotedKeys: results[3].numberOfFirstGradeVotedKeys,
             numberOfSecondGradeNotVotedKeys: results[3].numberOfSecondGradeNotVotedKeys,

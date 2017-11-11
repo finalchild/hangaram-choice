@@ -86,7 +86,7 @@ export class CreateStudentKeysDialogComponent {
       return;
     }
 
-    this.http.post<Keys>(`http://localhost:3000/api/generatekeys`, {
+    this.http.post<Keys>(`http://localhost:3000/api/admin/generatekeys`, {
       adminPassword: this.adminService.adminPassword,
       firstGraders: firstGraders,
       secondGraders: secondGraders,

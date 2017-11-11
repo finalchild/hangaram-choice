@@ -5,9 +5,9 @@ const router = express.Router();
 const Promise = require('bluebird');
 const crypto = require('mz/crypto');
 
-const assertValidAdminPassword = require('../database.js').assertValidAdminPassword;
-const compareAdminPassword = require('../database.js').compareAdminPassword;
-const setStudentKeys = require('../database.js').setStudentKeys;
+const assertValidAdminPassword = require('../../database.js').assertValidAdminPassword;
+const compareAdminPassword = require('../../database.js').compareAdminPassword;
+const setStudentKeys = require('../../database.js').setStudentKeys;
 
 router.post('/', (req, res) => {
     const adminPassword = req.body.adminPassword;

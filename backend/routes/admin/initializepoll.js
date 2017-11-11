@@ -1,7 +1,7 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const database = require('../database.js');
+const database = require('../../database.js');
 
 router.post('/', (req, res) => {
     const adminPassword = req.body.adminPassword;
@@ -30,7 +30,7 @@ router.post('/', (req, res) => {
         });
         return;
     }
-    if (!isValidCandidateNames(candidates1M) || isValidCandidateNames(candidates1F) || isValidCandidateNames(candidates2)) {
+    if (!isValidCandidateNames(candidateNames1M) || !isValidCandidateNames(candidateNames1F) || !isValidCandidateNames(candidateNames2)) {
         res.status(400).send({
             message: '후보자 이름이 잘못되었습니다!'
         });
@@ -88,7 +88,7 @@ function isValidCandidateNames(candidateNames) {
         return false;
     }
     candidateNames.forEach(candidateName => {
-        if (!candidateName || typeof candidateName !== 'string' || candidateName.length <= 10) {
+        if (!candidateName || typeof candidateName !== 'string' || candidateName.length > 30) {
             return false
         }
     });

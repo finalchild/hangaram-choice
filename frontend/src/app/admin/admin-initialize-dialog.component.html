@@ -1,9 +1,17 @@
 <h1 md-dialog-title>투표 초기화 및 설정</h1>
 <div md-dialog-content>
-  <input [(ngModel)]="pollName">
-  <hc-admin-list-editor [(ngModel)]="candidateNames1M"></hc-admin-list-editor>
-  <hc-admin-list-editor [(ngModel)]="candidateNames1F"></hc-admin-list-editor>
-  <hc-admin-list-editor [(ngModel)]="candidateNames2"></hc-admin-list-editor>
+  <md-form-field>
+    <input mdInput tabIndex="1" placeholder="투표 이름" name="pollName" maxlength="30" required [(ngModel)]="pollName">
+  </md-form-field>
+  <md-form-field>
+    <textarea mdInput mdTextareaAutosize matAutosizeMinRows="3" placeholder="1학년 남자 부회장 후보자 목록" name="candidateNames1M" required [(ngModel)]="candidateNames1M"></textarea>
+  </md-form-field>
+  <md-form-field>
+    <textarea mdInput mdTextareaAutosize matAutosizeMinRows="3" placeholder="1학년 여자 부회장 후보자 목록" name="candidateNames1F" required [(ngModel)]="candidateNames1F"></textarea>
+  </md-form-field>
+  <md-form-field>
+    <textarea mdInput mdTextareaAutosize matAutosizeMinRows="3" placeholder="2학년 회장단 후보자 목록" name="candidateNames2" required [(ngModel)]="candidateNames2"></textarea>
+  </md-form-field>
 </div>
 <div md-dialog-actions>
   <button md-button (click)="onYesClick()" tabindex="4">확인</button>

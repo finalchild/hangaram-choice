@@ -38,7 +38,7 @@ export class ChangeAdminPasswordDialogComponent {
       return;
     }
 
-    this.http.post(`http://localhost:3000/api/setadminpw`, {
+    this.http.post(`http://localhost:3000/api/admin/setadminpw`, {
       adminPassword: this.adminService.adminPassword,
       newAdminPassword: adminPassword
     })

@@ -42,7 +42,7 @@ export class AdminLoginComponent {
       return;
     }
 
-    this.http.post(`http://localhost:3000/api/status`, {
+    this.http.post(`http://localhost:3000/api/admin/status`, {
       adminPassword: adminPassword
     })
       .subscribe(data => {

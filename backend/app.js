@@ -9,12 +9,13 @@ const cors = require('cors');
 const helmet = require('helmet');
 
 const vote = require('./routes/vote.js');
-const status = require('./routes/status.js');
-const setadminpw = require('./routes/setadminpw.js');
-const generatekeys = require('./routes/generatekeys.js');
+const status = require('./routes/admin/status.js');
+const setadminpw = require('./routes/admin/setadminpw.js');
+const generatekeys = require('./routes/admin/generatekeys.js');
 const login = require('./routes/login.js');
-const closepoll = require('./routes/closepoll.js');
-const initializepoll = require('./routes/initializepoll.js');
+const openpoll = require('./routes/admin/openpoll.js');
+const closepoll = require('./routes/admin/closepoll.js');
+const initializepoll = require('./routes/admin/initializepoll.js');
 
 const app = express();
 
@@ -33,13 +34,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/vote', vote);
-app.use('/api/status', status);
-app.use('/api/setadminpw', setadminpw);
-app.use('/api/generatekeys', generatekeys);
 app.use('/api/login', login);
-app.use('/api/closepoll', closepoll);
-app.use('/api/initializepoll', initializepoll);
+app.use('/api/vote', vote);
+app.use('/api/admin/status', status);
+app.use('/api/admin/setadminpw', setadminpw);
+app.use('/api/admin/generatekeys', generatekeys);
+app.use('/api/admin/openpoll', openpoll);
+app.use('/api/admin/closepoll', closepoll);
+app.use('/api/admin/initializepoll', initializepoll);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

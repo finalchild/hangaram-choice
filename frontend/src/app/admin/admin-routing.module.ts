@@ -14,7 +14,6 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {ChangeAdminPasswordDialogComponent} from './admin-change-admin-password-dialog.component';
 import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dialog.component';
 import {InitializeDialogComponent} from './admin-initialize-dialog.component';
-import {ListEditorComponent} from './admin-list-editor.component';
 
 @NgModule({
   declarations: [
@@ -22,11 +21,10 @@ import {ListEditorComponent} from './admin-list-editor.component';
     AdminResultComponent,
     ChangeAdminPasswordDialogComponent,
     CreateStudentKeysDialogComponent,
-    InitializeDialogComponent,
-    ListEditorComponent
+    InitializeDialogComponent
   ],
   entryComponents: [
-    ChangeAdminPasswordDialogComponent, CreateStudentKeysDialogComponent, InitializeDialogComponent, ListEditorComponent
+    ChangeAdminPasswordDialogComponent, CreateStudentKeysDialogComponent, InitializeDialogComponent
   ],
   imports: [
     BrowserModule,
