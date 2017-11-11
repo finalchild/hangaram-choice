@@ -1,19 +1,34 @@
-<h1 md-dialog-title>투표 초기화 및 설정</h1>
-<div md-dialog-content>
-  <md-form-field>
-    <input mdInput tabIndex="1" placeholder="투표 이름" name="pollName" maxlength="30" required [(ngModel)]="pollName">
-  </md-form-field>
-  <md-form-field>
-    <textarea mdInput mdTextareaAutosize matAutosizeMinRows="3" placeholder="1학년 남자 부회장 후보자 목록" name="candidateNames1M" required [(ngModel)]="candidateNames1M"></textarea>
-  </md-form-field>
-  <md-form-field>
-    <textarea mdInput mdTextareaAutosize matAutosizeMinRows="3" placeholder="1학년 여자 부회장 후보자 목록" name="candidateNames1F" required [(ngModel)]="candidateNames1F"></textarea>
-  </md-form-field>
-  <md-form-field>
-    <textarea mdInput mdTextareaAutosize matAutosizeMinRows="3" placeholder="2학년 회장단 후보자 목록" name="candidateNames2" required [(ngModel)]="candidateNames2"></textarea>
-  </md-form-field>
-</div>
-<div md-dialog-actions>
-  <button md-button (click)="onYesClick()" tabindex="4">확인</button>
-  <button md-button (click)="onNoClick()" tabindex="-1">취소</button>
-</div>
+<form (ngSubmit)="onYesClick()">
+  <h1 md-dialog-title>투표 초기화 및 설정</h1>
+  <div md-dialog-content>
+    <md-form-field class="initialize-content">
+      <input mdInput tabIndex="0" autofocus placeholder="투표 이름" name="pollName" maxlength="30" required [(ngModel)]="pollName">
+      <button md-button *ngIf="pollName" mdSuffix md-icon-button aria-label="지우기" (click)="pollName=''">
+        <md-icon svgIcon="clear"></md-icon>
+      </button>
+    </md-form-field>
+    <br>
+    선택지를 한 줄에 하나씩 적어 주세요.(한 팀당 한 줄)
+    <br>
+    기권을 허용하는 경우 기권도 적어 주세요.
+    <br>
+    <md-form-field class="initialize-content">
+      <textarea mdInput mdTextareaAutosize mdAutosizeMinRows="4" placeholder="1학년 남자 부회장 후보자 목록" name="candidateNames1M" required [(ngModel)]="candidateNames1M" tabindex="1"></textarea>
+      <md-error *ngIf="error1M">{{error1M}}</md-error>
+    </md-form-field>
+    <br>
+    <md-form-field class="initialize-content">
+      <textarea mdInput mdTextareaAutosize mdAutosizeMinRows="4" placeholder="1학년 여자 부회장 후보자 목록" name="candidateNames1F" required [(ngModel)]="candidateNames1F" tabindex="2"></textarea>
+      <md-error *ngIf="error1F">{{error1F}}</md-error>
+    </md-form-field>
+    <br>
+    <md-form-field class="initialize-content">
+      <textarea mdInput mdTextareaAutosize mdAutosizeMinRows="4" placeholder="2학년 회장단 후보자 목록" name="candidateNames2" required [(ngModel)]="candidateNames2" tabindex="3"></textarea>
+      <md-error *ngIf="error2">{{error2}}</md-error>
+    </md-form-field>
+  </div>
+  <div md-dialog-actions>
+    <button type="submit" md-button (click)="onYesClick()" tabindex="4">확인</button>
+    <button md-button (click)="onNoClick()" tabindex="-1">취소</button>
+  </div>
+</form>

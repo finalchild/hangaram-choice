@@ -117,3 +117,7 @@ md-table {
   margin-left: auto;
   margin-right: auto;
 }
+
+.initialize-content {
+  width: 100%;
+}

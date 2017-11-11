@@ -61,7 +61,7 @@ export class AdminResultComponent {
     this.http.post('http://localhost:3000/api/admin/openpoll', {
       adminPassword: this.adminService.adminPassword
     }).subscribe(data => {
-      alert(data['message']);
+      alert('설정된 대로 투표를 열었습니다!');
       this.refresh();
     });
   }
@@ -70,7 +70,7 @@ export class AdminResultComponent {
     this.http.post('http://localhost:3000/api/admin/closepoll', {
       adminPassword: this.adminService.adminPassword
     }).subscribe(data => {
-      alert(data['message']);
+      alert('투표를 닫았습니다!');
       this.refresh();
     });
   }
