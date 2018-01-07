@@ -3,8 +3,8 @@ import {NgModule} from '@angular/core';
 import {AdminLoginComponent} from './admin-login.component';
 import {AdminResultComponent} from './admin-result.component';
 import {
-  MdFormFieldModule, MdToolbarModule, MdInputModule, MdIconModule, MdButtonModule,
-  MdCardModule, MdGridListModule, MdDialogModule, MdTableModule
+  MatButtonModule, MatCardModule, MatDialogModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule,
+  MatTableModule, MatToolbarModule
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
@@ -32,22 +32,22 @@ import {InitializeDialogComponent} from './admin-initialize-dialog.component';
       {
         path: 'admin',
         children: [
-          { path: '', redirectTo: 'login', pathMatch: 'full' },
-          { path: 'login', component: AdminLoginComponent },
-          { path: 'result', component: AdminResultComponent, canActivate: [AdminGuardService] }
+          {path: '', redirectTo: 'login', pathMatch: 'full'},
+          {path: 'login', component: AdminLoginComponent},
+          {path: 'result', component: AdminResultComponent, canActivate: [AdminGuardService]}
         ]
       }
     ]),
     FormsModule,
-    MdToolbarModule,
-    MdFormFieldModule,
-    MdInputModule,
-    MdIconModule,
-    MdButtonModule,
-    MdCardModule,
-    MdGridListModule,
-    MdDialogModule,
-    MdTableModule,
+    MatToolbarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    MatGridListModule,
+    MatDialogModule,
+    MatTableModule,
     NgxChartsModule
   ],
   exports: [
@@ -58,4 +58,5 @@ import {InitializeDialogComponent} from './admin-initialize-dialog.component';
     AdminGuardService
   ]
 })
-export class AdminRoutingModule {}
+export class AdminRoutingModule {
+}

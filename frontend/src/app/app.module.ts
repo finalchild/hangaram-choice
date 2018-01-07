@@ -1,23 +1,20 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 
-import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import {BrowserModule} from '@angular/platform-browser';
+import {RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 
-import { AppComponent } from './app.component';
-import { VoteFormComponent } from './vote.component';
-import { ChoiceService } from './choice.service';
-import { LoginComponent } from './login.component';
+import {AppComponent} from './app.component';
+import {VoteFormComponent} from './vote.component';
+import {ChoiceService} from './choice.service';
+import {LoginComponent} from './login.component';
 import {
-  ErrorStateMatcher,
-  MdButtonModule, MdCardModule, MdFormFieldModule, MdIconModule, MdIconRegistry, MdInputModule,
-  MdRadioModule, MdTabsModule, showOnDirtyErrorStateMatcher
+  MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatIconRegistry, MatInputModule, MatRadioModule,
+  MatTabsModule, MatToolbarModule
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {StudentGuardService} from './student-guard.service';
-import {MdToolbarModule} from '@angular/material';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import {AdminRoutingModule} from './admin/admin-routing.module';
 
 @NgModule({
@@ -47,18 +44,18 @@ import {AdminRoutingModule} from './admin/admin-routing.module';
     AdminRoutingModule,
     FormsModule,
     HttpClientModule,
-    MdButtonModule,
-    MdFormFieldModule,
-    MdInputModule,
-    MdRadioModule,
-    MdToolbarModule,
-    MdIconModule,
-    HttpModule,
-    MdTabsModule,
-    MdCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatTabsModule,
+    MatCardModule,
     BrowserAnimationsModule
   ],
-  providers: [ChoiceService, StudentGuardService, MdIconRegistry],
+  providers: [ChoiceService, StudentGuardService, MatIconRegistry],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}

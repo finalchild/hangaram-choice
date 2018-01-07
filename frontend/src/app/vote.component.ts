@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {ChoiceService} from './choice.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {MdIconRegistry, MdTabGroup} from '@angular/material';
+import {MatIconRegistry, MatTabGroup} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
@@ -18,12 +18,12 @@ export class VoteFormComponent {
   constructor(public choiceService: ChoiceService,
               public router: Router,
               private http: HttpClient,
-              iconRegistry: MdIconRegistry,
+              iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('done', sanitizer.bypassSecurityTrustResourceUrl('assets/img/done.svg'));
   }
 
-  onVote(tabElement: MdTabGroup): void {
+  onVote(tabElement: MatTabGroup): void {
     if (!this.candidateNameToVote2) {
       tabElement.selectedIndex = 0;
       return;
@@ -45,15 +45,15 @@ export class VoteFormComponent {
       candidateName1F: this.candidateNameToVote1F,
       candidateName2: this.candidateNameToVote2
     }).subscribe(data => {
-        this.choiceService.resetAuth();
-        alert(data['message']);
-        this.router.navigate(['/login']);
-      }, err => {
-        console.log(err);
-        if (err instanceof HttpErrorResponse) {
-          alert(JSON.parse(err.error)['message']);
-        }
-      });
+      this.choiceService.resetAuth();
+      alert(data);
+      this.router.navigate(['/login']);
+    }, err => {
+      console.log(err);
+      if (err instanceof HttpErrorResponse) {
+        alert(err.error);
+      }
+    });
   }
 
   canVote(): boolean {

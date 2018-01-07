@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {ChoiceService} from './choice.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {ErrorStateMatcher, MdIconRegistry, showOnDirtyErrorStateMatcher} from '@angular/material';
+import {ErrorStateMatcher, MatIconRegistry, ShowOnDirtyErrorStateMatcher} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import {NgModel} from '@angular/forms';
 import {mod10} from 'checkdigit';
@@ -16,13 +16,13 @@ export class LoginComponent {
   constructor(public choiceService: ChoiceService,
               private router: Router,
               private http: HttpClient,
-              iconRegistry: MdIconRegistry,
+              iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('account_circle', sanitizer.bypassSecurityTrustResourceUrl('assets/img/account_circle.svg'));
   }
 
   error: string = undefined;
-  showOnDirtyErrorStateMatcher: ErrorStateMatcher = showOnDirtyErrorStateMatcher;
+  showOnDirtyErrorStateMatcher: ErrorStateMatcher = new ShowOnDirtyErrorStateMatcher();
 
   onInput(keyElement: HTMLInputElement, model: NgModel): void {
     if (!keyElement.value || keyElement.value.length !== 8) {

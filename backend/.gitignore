@@ -1,4 +1,1 @@
-/.idea/
-/node_modules/
-/database.sqlite3
-/config.json
+database.sqlite3

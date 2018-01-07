@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {AdminService} from './admin.service';
 import {Candidate, downloadResult} from './status';
-import {MdDialog, MdIconRegistry} from '@angular/material';
+import {MatDialog, MatIconRegistry} from '@angular/material';
 import {HttpClient} from '@angular/common/http';
 import {ChangeAdminPasswordDialogComponent} from './admin-change-admin-password-dialog.component';
 import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dialog.component';
@@ -10,6 +10,8 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import {DomSanitizer} from '@angular/platform-browser';
 import {InitializeDialogComponent} from './admin-initialize-dialog.component';
+import OpenPollRequest from '../../common/request/admin/OpenPollRequest';
+import ClosePollRequest from '../../common/request/admin/ClosePollRequest';
 
 @Component({
   selector: 'hc-admin-result',
@@ -18,16 +20,16 @@ import {InitializeDialogComponent} from './admin-initialize-dialog.component';
 export class AdminResultComponent {
 
   constructor(private adminService: AdminService,
-              private dialog: MdDialog,
+              private dialog: MatDialog,
               private http: HttpClient,
-              iconRegistry: MdIconRegistry,
+              iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('refresh', sanitizer.bypassSecurityTrustResourceUrl('assets/img/refresh.svg'));
   }
 
-  results1M = forChart(this.adminService.result.candidates1M);
-  results1F = forChart(this.adminService.result.candidates1F);
-  results2 = forChart(this.adminService.result.candidates2);
+  results1M = forChart(this.adminService.status.candidates.candidates1M);
+  results1F = forChart(this.adminService.status.candidates.candidates1F);
+  results2 = forChart(this.adminService.status.candidates.candidates2);
 
   turnoutColumns = ['name', 'firstGrade', 'secondGrade', 'thirdGrade'];
   turnoutDataSource = new TurnoutDataSource(this.adminService);
@@ -45,14 +47,14 @@ export class AdminResultComponent {
   }
 
   downloadResult(): void {
-    downloadResult(this.adminService.result);
+    downloadResult(this.adminService.status);
   }
 
   refresh() {
     this.adminService.refreshResult().then(() => {
-      this.results1M = forChart(this.adminService.result.candidates1M);
-      this.results1F = forChart(this.adminService.result.candidates1F);
-      this.results2 = forChart(this.adminService.result.candidates2);
+      this.results1M = forChart(this.adminService.status.candidates.candidates1M);
+      this.results1F = forChart(this.adminService.status.candidates.candidates1F);
+      this.results2 = forChart(this.adminService.status.candidates.candidates2);
       this.turnoutDataSource = new TurnoutDataSource(this.adminService);
     });
   }
@@ -60,7 +62,7 @@ export class AdminResultComponent {
   openPoll() {
     this.http.post('http://localhost:3000/api/admin/openpoll', {
       adminPassword: this.adminService.adminPassword
-    }).subscribe(data => {
+    } as OpenPollRequest).subscribe(data => {
       alert('설정된 대로 투표를 열었습니다!');
       this.refresh();
     });
@@ -69,7 +71,7 @@ export class AdminResultComponent {
   closePoll() {
     this.http.post('http://localhost:3000/api/admin/closepoll', {
       adminPassword: this.adminService.adminPassword
-    }).subscribe(data => {
+    } as ClosePollRequest).subscribe(data => {
       alert('투표를 닫았습니다!');
       this.refresh();
     });
@@ -81,9 +83,8 @@ export class AdminResultComponent {
 
 }
 
-
-function forChart(candidates: Array<Candidate>): Array<{name: string, value: number}> {
-  return candidates.map(function(candidate: Candidate): {name: string, value: number} {
+function forChart(candidates: Array<Candidate>): Array<{ name: string, value: number }> {
+  return candidates.map(function (candidate: Candidate): { name: string, value: number } {
     return {
       name: candidate.name,
       value: candidate.votes
@@ -95,38 +96,46 @@ class TurnoutDataSource extends DataSource<Element> {
 
   data: Element[];
 
-  constructor(private adminService: AdminService) {
+  constructor(adminService: AdminService) {
     super();
-    this.data = [
-      {
-        name: '투표 완료',
-        firstGrade: this.adminService.result.numberOfFirstGradeVotedKeys.toString(10),
-        secondGrade: this.adminService.result.numberOfSecondGradeVotedKeys.toString(10),
-        thirdGrade: this.adminService.result.numberOfThirdGradeVotedKeys.toString(10)
-      },
-      {
-        name: '미투표',
-        firstGrade: this.adminService.result.numberOfFirstGradeNotVotedKeys.toString(10),
-        secondGrade: this.adminService.result.numberOfSecondGradeNotVotedKeys.toString(10),
-        thirdGrade: this.adminService.result.numberOfThirdGradeNotVotedKeys.toString(10)
-      },
-      {
-        name: '총계',
-        firstGrade: (this.adminService.result.numberOfFirstGradeVotedKeys + this.adminService.result.numberOfFirstGradeNotVotedKeys)
-          .toString(10),
-        secondGrade: (this.adminService.result.numberOfSecondGradeVotedKeys + this.adminService.result.numberOfSecondGradeNotVotedKeys)
-          .toString(10),
-        thirdGrade: (this.adminService.result.numberOfThirdGradeVotedKeys + this.adminService.result.numberOfThirdGradeNotVotedKeys)
-          .toString(10)
-      }
-    ];
+    this.data = getTurnoutElementArray(adminService);
   }
 
   connect(collectionViewer: CollectionViewer): Observable<Element[]> {
     return Observable.of(this.data);
   }
 
-  disconnect(collectionViewer: CollectionViewer): void {}
+  disconnect(collectionViewer: CollectionViewer): void {
+  }
+}
+
+function getTurnoutElementArray(adminService: AdminService): Array<Element> {
+  return [
+    {
+      name: '투표 완료',
+      firstGrade: adminService.status.keyStatus.numberOfFirstGradeVotedKeys.toString(10),
+      secondGrade: adminService.status.keyStatus.numberOfSecondGradeVotedKeys.toString(10),
+      thirdGrade: adminService.status.keyStatus.numberOfThirdGradeVotedKeys.toString(10)
+    },
+    {
+      name: '미투표',
+      firstGrade: adminService.status.keyStatus.numberOfFirstGradeNotVotedKeys.toString(10),
+      secondGrade: adminService.status.keyStatus.numberOfSecondGradeNotVotedKeys.toString(10),
+      thirdGrade: adminService.status.keyStatus.numberOfThirdGradeNotVotedKeys.toString(10)
+    },
+    {
+      name: '총계',
+      firstGrade: (adminService.status.keyStatus.numberOfFirstGradeVotedKeys
+        + adminService.status.keyStatus.numberOfFirstGradeNotVotedKeys)
+        .toString(10),
+      secondGrade: (adminService.status.keyStatus.numberOfSecondGradeVotedKeys
+        + adminService.status.keyStatus.numberOfSecondGradeNotVotedKeys)
+        .toString(10),
+      thirdGrade: (adminService.status.keyStatus.numberOfThirdGradeVotedKeys
+        + adminService.status.keyStatus.numberOfThirdGradeNotVotedKeys)
+        .toString(10)
+    }
+  ];
 }
 
 interface Element {

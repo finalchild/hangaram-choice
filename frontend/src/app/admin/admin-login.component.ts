@@ -4,8 +4,9 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {AdminService} from './admin.service';
-import {Status} from './status';
-import {MdIconRegistry} from '@angular/material';
+import {MatIconRegistry} from '@angular/material';
+import Status from '../../common/Status';
+import StatusRequest from '../../common/request/admin/StatusRequest';
 
 @Component({
   selector: 'hc-admin-login',
@@ -16,7 +17,7 @@ export class AdminLoginComponent {
   constructor(public adminService: AdminService,
               private router: Router,
               private http: HttpClient,
-              iconRegistry: MdIconRegistry,
+              iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('account_circle', sanitizer.bypassSecurityTrustResourceUrl('assets/img/account_circle.svg'));
   }
@@ -44,10 +45,10 @@ export class AdminLoginComponent {
 
     this.http.post(`http://localhost:3000/api/admin/status`, {
       adminPassword: adminPassword
-    })
+    } as StatusRequest)
       .subscribe(data => {
         this.adminService.adminPassword = adminPassword;
-        this.adminService.result = <Status>data;
+        this.adminService.status = <Status>data;
         this.router.navigate(['/admin/result']);
       }, err => {
         if (err instanceof HttpErrorResponse) {

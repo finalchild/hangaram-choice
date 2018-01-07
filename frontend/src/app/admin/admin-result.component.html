@@ -1,93 +1,101 @@
 <script src="https://npmcdn.com/zone.js@0.8.5/dist/zone.js"></script>
 <script src="https://npmcdn.com/reflect-metadata@0.1.3/Reflect.js"></script>
 <script src="https://npmcdn.com/systemjs@0.19.31/dist/system.js"></script>
-<script src="https://npmcdn.com/typescript@2.1.1/lib/typescript.js"></script>
 <div class="admin-result-container">
-  <md-toolbar color="primary">
-    한가람고 학생회장단 투표 관리 페이지: {{adminService.result.pollName}}
-    <button class="margin10" md-button color="primary" (click)="refresh()"><md-icon class="refresh" svgIcon="refresh"></md-icon></button>
-  </md-toolbar>
-  <md-card class="nopadding">
-    <md-grid-list cols="3" rowHeight="400px">
-      <md-grid-tile>
-        <md-grid-tile-header>
+  <mat-toolbar color="primary">
+    한가람고 학생회장단 투표 관리 페이지: {{adminService.status.pollName}}
+    <button class="margin10" mat-button color="primary" (click)="refresh()">
+      <mat-icon class="refresh" svgIcon="refresh"></mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-card class="nopadding">
+    <mat-grid-list cols="3" rowHeight="400px">
+      <mat-grid-tile>
+        <mat-grid-tile-header>
           2학년 회장단 투표 현황
-        </md-grid-tile-header>
+        </mat-grid-tile-header>
         <ngx-charts-pie-chart [view]="[500, 350]"
                               [scheme]="scheme"
                               [results]="results2"
                               [labels]="true">
         </ngx-charts-pie-chart>
-      </md-grid-tile>
-      <md-grid-tile>
-        <md-grid-tile-header>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-grid-tile-header>
           1학년 남자 부회장 투표 현황
-        </md-grid-tile-header>
+        </mat-grid-tile-header>
         <ngx-charts-pie-chart [view]="[500, 350]"
                               [scheme]="scheme"
                               [results]="results1M"
                               [labels]="true">
         </ngx-charts-pie-chart>
-      </md-grid-tile>
-      <md-grid-tile>
-        <md-grid-tile-header>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-grid-tile-header>
           1학년 여자 부회장 투표 현황
-        </md-grid-tile-header>
+        </mat-grid-tile-header>
         <ngx-charts-pie-chart [view]="[500, 350]"
                               [scheme]="scheme"
                               [results]="results1F"
                               [labels]="true">
         </ngx-charts-pie-chart>
-      </md-grid-tile>
-    </md-grid-list>
-  </md-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card>
   <div class="flexrow">
-    <md-card class="width50">
-      <md-card-title>
+    <mat-card class="width50">
+      <mat-card-title>
         투표율
-      </md-card-title>
-      <md-table [dataSource]="turnoutDataSource">
-        <ng-container mdColumnDef="name">
-          <md-header-cell *mdHeaderCellDef></md-header-cell>
-          <md-cell *mdCellDef="let element">{{element.name}}</md-cell>
+      </mat-card-title>
+      <!--
+      <mat-table [dataSource]="turnoutDataSource">
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
         </ng-container>
 
-        <ng-container mdColumnDef="firstGrade">
-          <md-header-cell *mdHeaderCellDef>1학년</md-header-cell>
-          <md-cell *mdCellDef="let element">{{element.firstGrade}}</md-cell>
+        <ng-container matColumnDef="firstGrade">
+          <mat-header-cell *matHeaderCellDef>1학년</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.firstGrade}}</mat-cell>
         </ng-container>
 
-        <ng-container mdColumnDef="secondGrade">
-          <md-header-cell *mdHeaderCellDef>2학년</md-header-cell>
-          <md-cell *mdCellDef="let element">{{element.secondGrade}}</md-cell>
+        <ng-container matColumnDef="secondGrade">
+          <mat-header-cell *matHeaderCellDef>2학년</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.secondGrade}}</mat-cell>
         </ng-container>
 
-        <ng-container mdColumnDef="thirdGrade">
-          <md-header-cell *mdHeaderCellDef>3학년</md-header-cell>
-          <md-cell *mdCellDef="let element">{{element.thirdGrade}}</md-cell>
+        <ng-container matColumnDef="thirdGrade">
+          <mat-header-cell *matHeaderCellDef>3학년</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.thirdGrade}}</mat-cell>
         </ng-container>
 
-        <md-header-row *mdHeaderRowDef="turnoutColumns"></md-header-row>
-        <md-row *mdRowDef="let row; columns: turnoutColumns;"></md-row>
-      </md-table>
-    </md-card>
-    <md-card class="width50">
-      <md-card-content>
-        <div *ngIf="adminService.result.status === 'closed'">
+        <mat-header-row *matHeaderRowDef="turnoutColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: turnoutColumns;"></mat-row>
+      </mat-table>
+      -->
+
+    </mat-card>
+    <mat-card class="width50">
+      <mat-card-content>
+        <div *ngIf="adminService.status.state === 'closed'">
           닫았던 상태 그대로 투표를 복구해 다시 열고 싶다면 바로 "열기"<br>
           새로운 투표를 열고 싶다면 "초기화 및 설정" 후 "열기"를 눌러 주세요.<br>
-          <button class="margin10" md-raised-button color="primary" (click)="openInitializeDialog()">투표 초기화 및 설정</button>
+          <button class="margin10" mat-raised-button color="primary" (click)="openInitializeDialog()">투표 초기화 및 설정
+          </button>
           <br>
-          <button class="margin10" md-raised-button color="primary" (click)="openPoll()">투표 열기(초기화/설정 후에 클릭)</button>
+          <button class="margin10" mat-raised-button color="primary" (click)="openPoll()">투표 열기(초기화/설정 후에 클릭)</button>
         </div>
-        <div *ngIf="adminService.result.status === 'open'">
-          <button class="margin10" md-raised-button color="primary" (click)="closePoll()">투표 닫기</button>
+        <div *ngIf="adminService.status.state === 'open'">
+          <button class="margin10" mat-raised-button color="primary" (click)="closePoll()">투표 닫기</button>
         </div>
         <hr>
-        <button class="margin10" md-raised-button color="primary" (click)="downloadResult()">투표 현황 Excel로 다운로드</button>
+        <button class="margin10" mat-raised-button color="primary" (click)="downloadResult()">투표 현황 Excel로 다운로드</button>
         <br>
-        <button class="margin10" md-raised-button color="primary" (click)="openChangeAdminPasswordDialog()">관리자 비밀번호 변경</button>
-      </md-card-content>
-    </md-card>
+        <button class="margin10" mat-raised-button color="primary" (click)="openChangeAdminPasswordDialog()">관리자 비밀번호
+          변경
+        </button>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

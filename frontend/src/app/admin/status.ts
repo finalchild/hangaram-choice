@@ -1,36 +1,20 @@
 import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
-
-export interface Status {
-
-  candidates1M: Array<Candidate>;
-  candidates1F: Array<Candidate>;
-  candidates2: Array<Candidate>;
-  numberOfFirstGradeNotVotedKeys: number;
-  numberOfFirstGradeVotedKeys: number;
-  numberOfSecondGradeNotVotedKeys: number;
-  numberOfSecondGradeVotedKeys: number;
-  numberOfThirdGradeNotVotedKeys: number;
-  numberOfThirdGradeVotedKeys: number;
-  status: string;
-  pollName: string;
-
-}
-
+import Status from '../../common/Status';
 
 export function downloadResult(result: Status): void {
-  const aoa1M: (string|number)[][] = [['후보자', '득표수']];
-  for (const candidate of result.candidates1M) {
+  const aoa1M: (string | number)[][] = [['후보자', '득표수']];
+  for (const candidate of result.candidates.candidates1M) {
     aoa1M.push([candidate.name, candidate.votes]);
   }
   const sheet1M = XLSX.utils.aoa_to_sheet(aoa1M);
-  const aoa1F: (string|number)[][] = [['후보자', '득표수']];
-  for (const candidate of result.candidates1F) {
+  const aoa1F: (string | number)[][] = [['후보자', '득표수']];
+  for (const candidate of result.candidates.candidates1F) {
     aoa1F.push([candidate.name, candidate.votes]);
   }
   const sheet1F = XLSX.utils.aoa_to_sheet(aoa1F);
-  const aoa2: (string|number)[][] = [['후보자', '득표수']];
-  for (const candidate of result.candidates2) {
+  const aoa2: (string | number)[][] = [['후보자', '득표수']];
+  for (const candidate of result.candidates.candidates2) {
     aoa2.push([candidate.name, candidate.votes]);
   }
   const sheet2 = XLSX.utils.aoa_to_sheet(aoa2);
@@ -64,7 +48,7 @@ export function toArray(candidate: Candidate): [string, number] {
   return [candidate.name, candidate.votes];
 }
 
-export function s2ab(s) {
+export function s2ab(s: string) {
   const buf = new ArrayBuffer(s.length);
   const view = new Uint8Array(buf);
   for (let i = 0; i < s.length; i++) {

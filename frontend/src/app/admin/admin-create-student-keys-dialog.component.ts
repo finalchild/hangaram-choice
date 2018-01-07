@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {MD_DIALOG_DATA, MdDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AdminService} from './admin.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {NgModel} from '@angular/forms';
@@ -8,6 +8,7 @@ import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
 import {s2ab} from './status';
 import {mod10} from 'checkdigit';
+import GenerateKeysRequest from '../../common/request/admin/GenerateKeysRequest';
 
 @Component({
   selector: 'hc-create-student-keys-dialog',
@@ -15,11 +16,11 @@ import {mod10} from 'checkdigit';
 })
 export class CreateStudentKeysDialogComponent {
 
-  constructor(
-    private dialogRef: MdDialogRef<CreateStudentKeysDialogComponent>,
-    private adminService: AdminService,
-    private http: HttpClient,
-    @Inject(MD_DIALOG_DATA) public data: any) { }
+  constructor(private dialogRef: MatDialogRef<CreateStudentKeysDialogComponent>,
+              private adminService: AdminService,
+              private http: HttpClient,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+  }
 
   error1: string;
   error2: string;
@@ -91,7 +92,7 @@ export class CreateStudentKeysDialogComponent {
       firstGraders: firstGraders,
       secondGraders: secondGraders,
       thirdGraders: thirdGraders
-    })
+    } as GenerateKeysRequest)
       .subscribe(data => {
         alert('키가 생성되었습니다');
         downloadKeys(data);

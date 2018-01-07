@@ -1,9 +1,10 @@
 import {Component, Inject} from '@angular/core';
-import {MD_DIALOG_DATA, MdDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AdminService} from './admin.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {NgModel} from '@angular/forms';
 import {isValidAdminPassword} from './admin-login.component';
+import SetAdminPwRequest from '../../common/request/admin/SetAdminPwRequest';
 
 @Component({
   selector: 'hc-change-admin-password-dialog',
@@ -11,11 +12,11 @@ import {isValidAdminPassword} from './admin-login.component';
 })
 export class ChangeAdminPasswordDialogComponent {
 
-  constructor(
-    private dialogRef: MdDialogRef<ChangeAdminPasswordDialogComponent>,
-    private adminService: AdminService,
-    private http: HttpClient,
-    @Inject(MD_DIALOG_DATA) public data: any) { }
+  constructor(private dialogRef: MatDialogRef<ChangeAdminPasswordDialogComponent>,
+              private adminService: AdminService,
+              private http: HttpClient,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+  }
 
   error: string;
 
@@ -41,7 +42,7 @@ export class ChangeAdminPasswordDialogComponent {
     this.http.post(`http://localhost:3000/api/admin/setadminpw`, {
       adminPassword: this.adminService.adminPassword,
       newAdminPassword: adminPassword
-    })
+    } as SetAdminPwRequest)
       .subscribe(data => {
         this.adminService.adminPassword = adminPassword;
         alert(data['message']);

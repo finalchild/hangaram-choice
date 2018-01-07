@@ -5,7 +5,8 @@ import {AdminService} from './admin.service';
 @Injectable()
 export class AdminGuardService implements CanActivate {
 
-  constructor(private adminService: AdminService, private router: Router) {}
+  constructor(private adminService: AdminService, private router: Router) {
+  }
 
   canActivate(): boolean {
     if (!this.adminService.adminPassword) {

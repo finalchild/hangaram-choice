@@ -56,12 +56,12 @@ hc-login:after, hc-vote:after, hc-admin-login:after, hc-admin-result:after {
   child-align: middle;
 }
 
-md-radio-group {
+mat-radio-group {
   display: flex;
   flex-direction: column;
 }
 
-md-radio-button {
+mat-radio-button {
   margin: 10px;
 }
 
@@ -79,7 +79,7 @@ md-radio-button {
   margin: 10px auto;
 }
 
-md-table {
+mat-table {
   width: 30vw;
   height: 200px;
 }

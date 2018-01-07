@@ -1,9 +1,10 @@
 import {Component, Inject} from '@angular/core';
-import {MD_DIALOG_DATA, MdDialog, MdDialogRef, MdIconRegistry} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatIconRegistry} from '@angular/material';
 import {HttpClient} from '@angular/common/http';
 import {AdminService} from './admin.service';
 import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dialog.component';
 import {DomSanitizer} from '@angular/platform-browser';
+import InitializePollRequest from '../../common/request/admin/InitializePollRequest';
 
 @Component({
   selector: 'hc-admin-initialize-dialog',
@@ -11,13 +12,12 @@ import {DomSanitizer} from '@angular/platform-browser';
 })
 export class InitializeDialogComponent {
 
-  constructor(
-    private dialogRef: MdDialogRef<InitializeDialogComponent>,
-    private dialog: MdDialog,
-    private http: HttpClient,
-    private adminService: AdminService,
-    iconRegistry: MdIconRegistry, sanitizer: DomSanitizer,
-    @Inject(MD_DIALOG_DATA) public data: any) {
+  constructor(private dialogRef: MatDialogRef<InitializeDialogComponent>,
+              private dialog: MatDialog,
+              private http: HttpClient,
+              private adminService: AdminService,
+              iconRegistry: MatIconRegistry, sanitizer: DomSanitizer,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
     iconRegistry.addSvgIcon(
       'clear',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/clear.svg'));
@@ -80,13 +80,13 @@ export class InitializeDialogComponent {
 
     this.http.post('http://localhost:3000/api/admin/initializepoll', {
       adminPassword: this.adminService.adminPassword,
-      poll: {
-        pollName: this.pollName,
+      pollName: this.pollName,
+      candidateNames: {
         candidateNames1M: this.candidateNames1M.split('\n'),
         candidateNames1F: this.candidateNames1F.split('\n'),
         candidateNames2: this.candidateNames2.split('\n')
       }
-    }).subscribe(data => {
+    } as InitializePollRequest).subscribe(data => {
       alert(data['message']);
       this.dialogRef.close();
       this.dialog.open(CreateStudentKeysDialogComponent);
