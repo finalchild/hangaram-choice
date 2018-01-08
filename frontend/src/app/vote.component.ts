@@ -4,6 +4,7 @@ import {ChoiceService} from './choice.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {MatIconRegistry, MatTabGroup} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
+import VoteRequest from '../common/request/VoteRequest';
 
 @Component({
   selector: 'hc-vote',
@@ -44,9 +45,9 @@ export class VoteFormComponent {
       candidateName1M: this.candidateNameToVote1M,
       candidateName1F: this.candidateNameToVote1F,
       candidateName2: this.candidateNameToVote2
-    }).subscribe(data => {
+    } as VoteRequest).subscribe(data => {
       this.choiceService.resetAuth();
-      alert(data);
+      alert(data['meessage']);
       this.router.navigate(['/login']);
     }, err => {
       console.log(err);

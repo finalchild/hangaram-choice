@@ -1,12 +1,15 @@
 import {Injectable} from '@angular/core';
-import {CandidateNames} from './candidate_names';
+import CandidateNamesCache from '../common/CandidateNamesCache';
 
 @Injectable()
 export class ChoiceService {
 
   key: number;
   grade: number;
-  candidateNames: CandidateNames = new CandidateNames();
+  cache: CandidateNamesCache = {
+    candidatesCacheId: 0,
+    candidateNames: null
+  };
 
   resetAuth() {
     this.key = undefined;

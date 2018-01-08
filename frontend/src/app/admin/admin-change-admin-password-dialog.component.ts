@@ -3,8 +3,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AdminService} from './admin.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {NgModel} from '@angular/forms';
-import {isValidAdminPassword} from './admin-login.component';
 import SetAdminPwRequest from '../../common/request/admin/SetAdminPwRequest';
+import {isValidAdminPassword} from '../../common/util';
 
 @Component({
   selector: 'hc-change-admin-password-dialog',
@@ -45,14 +45,14 @@ export class ChangeAdminPasswordDialogComponent {
     } as SetAdminPwRequest)
       .subscribe(data => {
         this.adminService.adminPassword = adminPassword;
-        alert(data['message']);
+        alert('성공!');
         this.dialogRef.close();
       }, err => {
         if (err instanceof HttpErrorResponse) {
           model.control.setErrors({
             couldNotLogin: true
           });
-          this.error = JSON.parse(err.error)['message'];
+          this.error = err.error;
           passwordElement.focus();
         } else {
           console.log(err);

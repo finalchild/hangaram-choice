@@ -29,5 +29,7 @@ router.post('/', async (ctx, next) => {
 
     await setAdminPassword(request.newAdminPassword);
     ctx.status = 200;
-    ctx.body = '성공.';
+    ctx.body = {
+        message: '성공.'
+    };
 });

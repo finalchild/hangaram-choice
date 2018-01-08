@@ -4,7 +4,7 @@ import {compareAdminPassword, getState, getStatus, setState} from '../../databas
 import ClosePollRequest from '../../common/request/admin/ClosePollRequest';
 import {assertValidAdminPassword} from '../../common/util';
 
-const router = new Router({prefix: '/api/closepoll'});
+const router = new Router({prefix: '/api/admin/closepoll'});
 export default router;
 
 router.post('/', async (ctx, next) => {
@@ -28,8 +28,10 @@ router.post('/', async (ctx, next) => {
     await setState('closed');
 
     const status = await getStatus();
-    await fs.writeFile(status.pollName + ' result at ' + new Date().toDateString() + '.json', JSON.stringify(status));
+    await fs.writeFile('oldPolls/' + '[' + new Date().toDateString() + '] ' + status.pollName + '.json', JSON.stringify(status));
 
     ctx.status = 200;
-    ctx.body = '성공.';
+    ctx.body = {
+        message: '성공.'
+    };
 });

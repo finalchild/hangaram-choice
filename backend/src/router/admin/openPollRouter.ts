@@ -27,5 +27,7 @@ router.post('/', async (ctx, next) => {
     await setState('open');
 
     ctx.status = 200;
-    ctx.body = '성공.';
+    ctx.body = {
+        message: '성공.'
+    };
 });

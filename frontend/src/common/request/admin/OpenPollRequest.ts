@@ -1,3 +1,3 @@
 export default interface OpenPollRequest {
-  adminPassword: string;
+    adminPassword: string;
 }

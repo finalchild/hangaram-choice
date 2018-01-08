@@ -1,17 +1,15 @@
 import {Component} from '@angular/core';
 import {AdminService} from './admin.service';
 import {Candidate, downloadResult} from './status';
-import {MatDialog, MatIconRegistry} from '@angular/material';
+import {MatDialog, MatIconRegistry, MatTableDataSource} from '@angular/material';
 import {HttpClient} from '@angular/common/http';
 import {ChangeAdminPasswordDialogComponent} from './admin-change-admin-password-dialog.component';
 import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dialog.component';
-import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 import {DomSanitizer} from '@angular/platform-browser';
 import {InitializeDialogComponent} from './admin-initialize-dialog.component';
 import OpenPollRequest from '../../common/request/admin/OpenPollRequest';
 import ClosePollRequest from '../../common/request/admin/ClosePollRequest';
+import 'rxjs/add/observable/of';
 
 @Component({
   selector: 'hc-admin-result',
@@ -25,6 +23,9 @@ export class AdminResultComponent {
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('refresh', sanitizer.bypassSecurityTrustResourceUrl('assets/img/refresh.svg'));
+    this.turnoutDataSource = new MatTableDataSource<Element>(getTurnoutElementArray(this.adminService));
+    console.log(this.turnoutDataSource.data);
+    console.log(this.turnoutDataSource.connect())
   }
 
   results1M = forChart(this.adminService.status.candidates.candidates1M);
@@ -32,7 +33,7 @@ export class AdminResultComponent {
   results2 = forChart(this.adminService.status.candidates.candidates2);
 
   turnoutColumns = ['name', 'firstGrade', 'secondGrade', 'thirdGrade'];
-  turnoutDataSource = new TurnoutDataSource(this.adminService);
+  turnoutDataSource: MatTableDataSource<Element>; // = new MatTableDataSource<Element>(getTurnoutElementArray(this.adminService));
 
   scheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#333399', '#336633', '#FF66FF', '#CC66CC', '#FFCCFF']
@@ -55,7 +56,7 @@ export class AdminResultComponent {
       this.results1M = forChart(this.adminService.status.candidates.candidates1M);
       this.results1F = forChart(this.adminService.status.candidates.candidates1F);
       this.results2 = forChart(this.adminService.status.candidates.candidates2);
-      this.turnoutDataSource = new TurnoutDataSource(this.adminService);
+      this.turnoutDataSource = new MatTableDataSource(getTurnoutElementArray(this.adminService));
     });
   }
 
@@ -92,24 +93,33 @@ function forChart(candidates: Array<Candidate>): Array<{ name: string, value: nu
   });
 }
 
-class TurnoutDataSource extends DataSource<Element> {
-
-  data: Element[];
-
-  constructor(adminService: AdminService) {
-    super();
-    this.data = getTurnoutElementArray(adminService);
-  }
-
-  connect(collectionViewer: CollectionViewer): Observable<Element[]> {
-    return Observable.of(this.data);
-  }
-
-  disconnect(collectionViewer: CollectionViewer): void {
-  }
-}
-
 function getTurnoutElementArray(adminService: AdminService): Array<Element> {
+  console.log([
+    {
+      name: '투표 완료',
+      firstGrade: adminService.status.keyStatus.numberOfFirstGradeVotedKeys.toString(10),
+      secondGrade: adminService.status.keyStatus.numberOfSecondGradeVotedKeys.toString(10),
+      thirdGrade: adminService.status.keyStatus.numberOfThirdGradeVotedKeys.toString(10)
+    },
+    {
+      name: '미투표',
+      firstGrade: adminService.status.keyStatus.numberOfFirstGradeNotVotedKeys.toString(10),
+      secondGrade: adminService.status.keyStatus.numberOfSecondGradeNotVotedKeys.toString(10),
+      thirdGrade: adminService.status.keyStatus.numberOfThirdGradeNotVotedKeys.toString(10)
+    },
+    {
+      name: '총계',
+      firstGrade: (adminService.status.keyStatus.numberOfFirstGradeVotedKeys
+        + adminService.status.keyStatus.numberOfFirstGradeNotVotedKeys)
+        .toString(10),
+      secondGrade: (adminService.status.keyStatus.numberOfSecondGradeVotedKeys
+        + adminService.status.keyStatus.numberOfSecondGradeNotVotedKeys)
+        .toString(10),
+      thirdGrade: (adminService.status.keyStatus.numberOfThirdGradeVotedKeys
+        + adminService.status.keyStatus.numberOfThirdGradeNotVotedKeys)
+        .toString(10)
+    }
+  ]);
   return [
     {
       name: '투표 완료',
@@ -138,7 +148,7 @@ function getTurnoutElementArray(adminService: AdminService): Array<Element> {
   ];
 }
 
-interface Element {
+export interface Element {
   name: string;
   firstGrade: string;
   secondGrade: string;

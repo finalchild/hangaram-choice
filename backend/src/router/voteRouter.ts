@@ -56,5 +56,7 @@ router.post('/', async (ctx, next) => {
 
     await vote(request.key, request.candidateName1M, request.candidateName1F, request.candidateName2);
     ctx.status = 200;
-    ctx.body = '투표를 완료했습니다.';
+    ctx.body = {
+        message: '성공.'
+    };
 });

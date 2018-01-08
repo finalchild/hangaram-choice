@@ -1,4 +1,4 @@
 export default interface Candidate {
-  name: string;
-  votes: number;
+    name: string;
+    votes: number;
 }

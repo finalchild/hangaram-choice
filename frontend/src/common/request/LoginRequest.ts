@@ -1,4 +1,4 @@
 export default interface LoginRequest {
-  key: number;
-  candidatesCacheId: number;
+    key: number;
+    candidatesCacheId: number;
 }

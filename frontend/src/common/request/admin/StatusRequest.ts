@@ -1,3 +1,3 @@
 export default interface StatusRequest {
-  adminPassword: string;
+    adminPassword: string;
 }

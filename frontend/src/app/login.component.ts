@@ -68,13 +68,13 @@ export class LoginComponent {
   login(key: number, keyElement: HTMLInputElement, model: NgModel) {
     this.http.post(`http://localhost:3000/api/login`, {
       key: key,
-      candidateCacheId: this.choiceService.candidateNames.candidatesCacheId
+      candidateCacheId: this.choiceService.cache.candidatesCacheId
     })
       .subscribe(data => {
         this.choiceService.key = key;
         this.choiceService.grade = data['grade'];
-        if (data['candidateNames']) {
-          this.choiceService.candidateNames = data['candidateNames'];
+        if (data['cache']) {
+          this.choiceService.cache = data['cache'];
         }
         this.router.navigate(['/vote']);
       }, err => {

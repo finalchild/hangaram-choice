@@ -1,6 +1,6 @@
 export default interface GenerateKeysRequest {
-  adminPassword: string;
-  firstGraders: number;
-  secondGraders: number;
-  thirdGraders: number;
+    adminPassword: string;
+    firstGraders: number;
+    secondGraders: number;
+    thirdGraders: number;
 }

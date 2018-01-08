@@ -10,7 +10,7 @@
           2학년 회장단
         </ng-template>
         <mat-radio-group required name="candidateNameToVote2" [(ngModel)]="candidateNameToVote2">
-          <mat-radio-button *ngFor="let candidateName of choiceService.candidateNames.candidateNames2"
+          <mat-radio-button *ngFor="let candidateName of choiceService.cache.candidateNames.candidateNames2"
                            [value]="candidateName">
             {{candidateName}}
           </mat-radio-button>
@@ -23,7 +23,7 @@
         </ng-template>
         <mat-radio-group *ngIf="choiceService.grade === 1" required name="candidateNameToVote1M"
                         [(ngModel)]="candidateNameToVote1M">
-          <mat-radio-button *ngFor="let candidateName of choiceService.candidateNames.candidateNames1M"
+          <mat-radio-button *ngFor="let candidateName of choiceService.cache.candidateNames.candidateNames1M"
                            [value]="candidateName">
             {{candidateName}}
           </mat-radio-button>
@@ -36,7 +36,7 @@
         </ng-template>
         <mat-radio-group *ngIf="choiceService.grade === 1" required name="candidateNameToVote1F"
                         [(ngModel)]="candidateNameToVote1F">
-          <mat-radio-button *ngFor="let candidateName of choiceService.candidateNames.candidateNames1F"
+          <mat-radio-button *ngFor="let candidateName of choiceService.cache.candidateNames.candidateNames1F"
                            [value]="candidateName">
             {{candidateName}}
           </mat-radio-button>

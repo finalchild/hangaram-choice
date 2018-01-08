@@ -425,7 +425,7 @@ export async function compareAdminPassword(plaintextPassword: string): Promise<b
 
 export async function setAdminPassword(newPlaintextPassword: string): Promise<void> {
     assertValidAdminPassword(newPlaintextPassword);
-    const hash = bcrypt.hash(newPlaintextPassword, saltRounds);
+    const hash = await bcrypt.hash(newPlaintextPassword, saltRounds);
     await new Promise((resolve, reject) => {
         db.serialize(() => {
             db.run('UPDATE admin_password SET password = ?', [hash], err => {

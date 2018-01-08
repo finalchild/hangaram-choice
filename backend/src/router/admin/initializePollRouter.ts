@@ -9,6 +9,7 @@ export default router;
 
 router.post('/', async (ctx, next) => {
     const request: InitializePollRequest = ctx.request.body;
+
     try {
         assertValidAdminPassword(request.adminPassword);
     } catch (e) {
@@ -35,5 +36,7 @@ router.post('/', async (ctx, next) => {
     await setPollName(request.pollName);
     await setCandidateNames(request.candidateNames);
     ctx.status = 200;
-    ctx.body = '성공!';
+    ctx.body = {
+        message: '성공'
+    };
 });

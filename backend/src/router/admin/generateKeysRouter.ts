@@ -4,7 +4,7 @@ import {compareAdminPassword, setStudentKeys} from '../../database';
 import GenerateKeysRequest from '../../common/request/admin/GenerateKeysRequest';
 import {assertValidAdminPassword} from '../../common/util';
 
-const router = new Router({prefix: '/api/generatekeys'});
+const router = new Router({prefix: '/api/admin/generatekeys'});
 export default router;
 
 router.post('/', async (ctx, next) => {

@@ -48,13 +48,11 @@
         투표율
       </mat-card-title>
       <!--
-      <mat-table [dataSource]="turnoutDataSource">
-
+      <mat-table #table [dataSource]="turnoutDataSource">
         <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>이름</mat-header-cell>
           <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="firstGrade">
           <mat-header-cell *matHeaderCellDef>1학년</mat-header-cell>
           <mat-cell *matCellDef="let element">{{element.firstGrade}}</mat-cell>
@@ -69,7 +67,6 @@
           <mat-header-cell *matHeaderCellDef>3학년</mat-header-cell>
           <mat-cell *matCellDef="let element">{{element.thirdGrade}}</mat-cell>
         </ng-container>
-
         <mat-header-row *matHeaderRowDef="turnoutColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: turnoutColumns;"></mat-row>
       </mat-table>

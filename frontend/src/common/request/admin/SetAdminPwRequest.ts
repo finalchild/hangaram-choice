@@ -1,4 +1,4 @@
 export default interface SetAdminPwRequest {
-  adminPassword: string;
-  newAdminPassword: string;
+    adminPassword: string;
+    newAdminPassword: string;
 }

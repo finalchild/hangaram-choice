@@ -7,6 +7,7 @@ import {AdminService} from './admin.service';
 import {MatIconRegistry} from '@angular/material';
 import Status from '../../common/Status';
 import StatusRequest from '../../common/request/admin/StatusRequest';
+import {isValidAdminPassword} from '../../common/util';
 
 @Component({
   selector: 'hc-admin-login',
@@ -63,8 +64,4 @@ export class AdminLoginComponent {
       });
   }
 
-}
-
-export function isValidAdminPassword(adminPassword) {
-  return typeof adminPassword === 'string' && adminPassword.length <= 20;
 }
