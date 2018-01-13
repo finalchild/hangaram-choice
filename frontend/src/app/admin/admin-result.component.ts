@@ -9,7 +9,6 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {InitializeDialogComponent} from './admin-initialize-dialog.component';
 import OpenPollRequest from '../../common/request/admin/OpenPollRequest';
 import ClosePollRequest from '../../common/request/admin/ClosePollRequest';
-import 'rxjs/add/observable/of';
 
 @Component({
   selector: 'hc-admin-result',
@@ -23,9 +22,6 @@ export class AdminResultComponent {
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('refresh', sanitizer.bypassSecurityTrustResourceUrl('assets/img/refresh.svg'));
-    this.turnoutDataSource = new MatTableDataSource<Element>(getTurnoutElementArray(this.adminService));
-    console.log(this.turnoutDataSource.data);
-    console.log(this.turnoutDataSource.connect())
   }
 
   results1M = forChart(this.adminService.status.candidates.candidates1M);
@@ -33,7 +29,7 @@ export class AdminResultComponent {
   results2 = forChart(this.adminService.status.candidates.candidates2);
 
   turnoutColumns = ['name', 'firstGrade', 'secondGrade', 'thirdGrade'];
-  turnoutDataSource: MatTableDataSource<Element>; // = new MatTableDataSource<Element>(getTurnoutElementArray(this.adminService));
+  turnoutDataSource: MatTableDataSource<Element> = new MatTableDataSource<Element>(getTurnoutElementArray(this.adminService));
 
   scheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#333399', '#336633', '#FF66FF', '#CC66CC', '#FFCCFF']
@@ -94,32 +90,6 @@ function forChart(candidates: Array<Candidate>): Array<{ name: string, value: nu
 }
 
 function getTurnoutElementArray(adminService: AdminService): Array<Element> {
-  console.log([
-    {
-      name: '투표 완료',
-      firstGrade: adminService.status.keyStatus.numberOfFirstGradeVotedKeys.toString(10),
-      secondGrade: adminService.status.keyStatus.numberOfSecondGradeVotedKeys.toString(10),
-      thirdGrade: adminService.status.keyStatus.numberOfThirdGradeVotedKeys.toString(10)
-    },
-    {
-      name: '미투표',
-      firstGrade: adminService.status.keyStatus.numberOfFirstGradeNotVotedKeys.toString(10),
-      secondGrade: adminService.status.keyStatus.numberOfSecondGradeNotVotedKeys.toString(10),
-      thirdGrade: adminService.status.keyStatus.numberOfThirdGradeNotVotedKeys.toString(10)
-    },
-    {
-      name: '총계',
-      firstGrade: (adminService.status.keyStatus.numberOfFirstGradeVotedKeys
-        + adminService.status.keyStatus.numberOfFirstGradeNotVotedKeys)
-        .toString(10),
-      secondGrade: (adminService.status.keyStatus.numberOfSecondGradeVotedKeys
-        + adminService.status.keyStatus.numberOfSecondGradeNotVotedKeys)
-        .toString(10),
-      thirdGrade: (adminService.status.keyStatus.numberOfThirdGradeVotedKeys
-        + adminService.status.keyStatus.numberOfThirdGradeNotVotedKeys)
-        .toString(10)
-    }
-  ]);
   return [
     {
       name: '투표 완료',

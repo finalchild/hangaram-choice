@@ -102,7 +102,7 @@ export class CreateStudentKeysDialogComponent {
           firstGradersModel.control.setErrors({
             couldNotLogin: true
           });
-          this.error1 = JSON.parse(err.error)['message'];
+          this.error1 = err.error;
           firstGradersElement.focus();
         } else {
           console.log(err);

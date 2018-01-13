@@ -82,7 +82,7 @@ export class LoginComponent {
           model.control.setErrors({
             couldNotLogin: true
           });
-          this.error = JSON.parse(err.error)['message'];
+          this.error = err.error;
           keyElement.focus();
         } else {
           console.log(err);
