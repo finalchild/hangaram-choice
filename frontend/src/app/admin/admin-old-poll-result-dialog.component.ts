@@ -1,10 +1,10 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
-import {AdminService} from './admin.service';
 import {HttpClient} from '@angular/common/http';
 import {mod10} from 'checkdigit';
 import Status from '../../common/Status';
 import {forChart} from './admin-result.component';
+import {downloadResult} from './status';
 
 @Component({
   selector: 'hc-old-poll-result-dialog',
@@ -13,9 +13,6 @@ import {forChart} from './admin-result.component';
 export class OldPollResultDialogComponent {
 
   constructor(private dialogRef: MatDialogRef<OldPollResultDialogComponent>,
-              private dialog: MatDialog,
-              private adminService: AdminService,
-              private http: HttpClient,
               @Inject(MAT_DIALOG_DATA) public data: Status) {
 
   }
@@ -30,4 +27,9 @@ export class OldPollResultDialogComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+  downloadResult(): void {
+    downloadResult(this.data);
+  }
+
 }

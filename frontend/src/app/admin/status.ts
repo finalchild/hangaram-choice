@@ -37,17 +37,6 @@ export function downloadResult(result: Status): void {
   saveAs(new Blob([s2ab(wbout)], {type: 'application/octet-stream'}), '투표결과.xlsx');
 }
 
-export interface Candidate {
-
-  name: string;
-  votes: number;
-
-}
-
-export function toArray(candidate: Candidate): [string, number] {
-  return [candidate.name, candidate.votes];
-}
-
 export function s2ab(s: string) {
   const buf = new ArrayBuffer(s.length);
   const view = new Uint8Array(buf);

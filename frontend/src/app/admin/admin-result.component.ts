@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AdminService} from './admin.service';
-import {Candidate, downloadResult} from './status';
+import {downloadResult} from './status';
 import {MatDialog, MatIconRegistry, MatTableDataSource} from '@angular/material';
 import {HttpClient} from '@angular/common/http';
 import {ChangeAdminPasswordDialogComponent} from './admin-change-admin-password-dialog.component';
@@ -10,6 +10,7 @@ import {InitializeDialogComponent} from './admin-initialize-dialog.component';
 import OpenPollRequest from '../../common/request/admin/OpenPollRequest';
 import ClosePollRequest from '../../common/request/admin/ClosePollRequest';
 import {ListOldPollsDialogComponent} from './admin-list-old-polls-dialog.component';
+import Candidate from '../../common/Candidate';
 
 @Component({
   selector: 'hc-admin-result',
