@@ -9,6 +9,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {InitializeDialogComponent} from './admin-initialize-dialog.component';
 import OpenPollRequest from '../../common/request/admin/OpenPollRequest';
 import ClosePollRequest from '../../common/request/admin/ClosePollRequest';
+import {ListOldPollsDialogComponent} from './admin-list-old-polls-dialog.component';
 
 @Component({
   selector: 'hc-admin-result',
@@ -78,9 +79,13 @@ export class AdminResultComponent {
     this.dialog.open(InitializeDialogComponent);
   }
 
+  openListOldPollDialog() {
+    this.dialog.open(ListOldPollsDialogComponent);
+  }
+
 }
 
-function forChart(candidates: Array<Candidate>): Array<{ name: string, value: number }> {
+export function forChart(candidates: Array<Candidate>): Array<{ name: string, value: number }> {
   return candidates.map(function (candidate: Candidate): { name: string, value: number } {
     return {
       name: candidate.name,

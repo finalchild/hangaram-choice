@@ -121,9 +121,6 @@ function downloadKeys(keys: Keys): void {
   const firstGradeSheet = XLSX.utils.aoa_to_sheet(keys.firstGradeKeys.map(key => [toKeyWithCheckDigit(key)]));
   const secondGradeSheet = XLSX.utils.aoa_to_sheet(keys.secondGradeKeys.map(key => [toKeyWithCheckDigit(key)]));
   const thirdGradeSheet = XLSX.utils.aoa_to_sheet(keys.thirdGradeKeys.map(key => [toKeyWithCheckDigit(key)]));
-  console.log(firstGradeSheet);
-  console.log(secondGradeSheet);
-  console.log(thirdGradeSheet);
 
   const workbook = {
     Sheets: {},
@@ -145,6 +142,5 @@ function downloadKeys(keys: Keys): void {
 
 function toKeyWithCheckDigit(key: number): string {
   const s = key.toString(10);
-  console.log(s.padStart(7, '0') + mod10.create(s));
   return s.padStart(7, '0') + mod10.create(s);
 }
