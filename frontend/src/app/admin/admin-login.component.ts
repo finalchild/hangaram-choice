@@ -56,7 +56,7 @@ export class AdminLoginComponent {
           model.control.setErrors({
             couldNotLogin: true
           });
-          this.error = err.error;
+          this.error = err.error
           passwordElement.focus();
         } else {
           console.log(err);
