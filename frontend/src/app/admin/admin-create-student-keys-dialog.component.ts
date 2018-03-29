@@ -3,12 +3,12 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AdminService} from './admin.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {NgModel} from '@angular/forms';
-import {Keys} from './keys';
 import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
 import {s2ab} from './status';
 import {mod10} from 'checkdigit';
 import GenerateKeysRequest from '../../common/request/admin/GenerateKeysRequest';
+import Keys from '../../common/Keys';
 
 @Component({
   selector: 'hc-create-student-keys-dialog',
