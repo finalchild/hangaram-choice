@@ -15,9 +15,9 @@ export function assertValidAdminPassword(plaintextPassword: any): void {
 }
 
 export function isValidPollName(name: any): boolean {
-    return typeof name === 'string' && /^[ㄱ-ㅎ가-힣a-zA-Z0-9:()\- ]{1,40}$/.test(name);
+    return typeof name === 'string' && /^[ㄱ-ㅎ가-힣a-zA-Z0-9:()\-\[\] ]{1,40}$/.test(name);
 }
 
 export function isValidPollNameExtended(name: any): boolean {
-    return typeof name === 'string' && /^[ㄱ-ㅎ가-힣a-zA-Z0-9:()\- ]{1,120}$/.test(name);
+    return typeof name === 'string' && /^[ㄱ-ㅎ가-힣a-zA-Z0-9:()\-\[\] ]{1,120}$/.test(name);
 }
