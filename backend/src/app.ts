@@ -1,7 +1,7 @@
 import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as serve from 'koa-static';
-import * as cors from '@koa/cors';
+import * as send from 'koa-send';
 
 import loginRouter from './router/loginRouter';
 import voteRouter from './router/voteRouter';
@@ -16,7 +16,6 @@ import statusRouter from './router/admin/statusRouter';
 
 export const app = new Koa();
 
-app.use(cors());
 app.use(bodyParser());
 app.use(loginRouter.routes());
 app.use(loginRouter.allowedMethods());
@@ -38,6 +37,21 @@ app.use(setAdminPwRouter.routes());
 app.use(setAdminPwRouter.allowedMethods());
 app.use(statusRouter.routes());
 app.use(statusRouter.allowedMethods());
-app.use(serve('./public'));
+app.use(async (ctx, next) => {
+    await next();
+
+    if (ctx.method !== 'HEAD' && ctx.method !== 'GET') return;
+    // response is already handled
+    if (ctx.body != null || ctx.status !== 404) return;
+
+    try {
+        await send(ctx, 'public/index.html');
+    } catch (err) {
+        if (err.status !== 404) {
+            throw err
+        }
+    }
+});
+app.use(serve('public'));
 
 if (!module.parent) app.listen(process.env.PORT || '80');

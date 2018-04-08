@@ -48,7 +48,7 @@ export class VoteFormComponent {
       candidateName2: this.candidateNameToVote2
     } as VoteRequest).subscribe(data => {
       this.choiceService.resetAuth();
-      alert(data['meessage']);
+      alert(data['message']);
       this.router.navigate(['/login']);
     }, err => {
       console.log(err);

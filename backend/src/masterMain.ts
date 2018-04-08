@@ -1,4 +1,4 @@
-import * as cluster from "cluster";
+import * as cluster from 'cluster';
 import * as sqlite3 from 'sqlite3';
 import * as bcrypt from 'bcrypt';
 import * as uuidv4 from 'uuid/v4';
@@ -47,10 +47,16 @@ export default async function masterMain(): Promise<void> {
     }
 
     const cpuCount = cpus().length;
+    const workers = [];
     for (let i = 0; i < cpuCount; i++) {
         const worker = cluster.fork();
         worker.send(cache);
+        workers.push(worker);
     }
+
+    cluster.on('message', (worker, message, handle) => {
+        workers.forEach(worker => worker.send(message));
+    });
 
     cluster.on('exit', worker => {
         console.log(`Worker ${worker.id} died :(`);

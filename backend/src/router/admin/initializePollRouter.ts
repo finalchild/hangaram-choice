@@ -1,4 +1,5 @@
 import * as Router from 'koa-router';
+import * as uuidv4 from 'uuid/v4';
 import {compareAdminPassword, getState, setCandidateNames, setPollName} from '../../database';
 import {isValidCandidateNames} from '../../common/CandidateNames';
 import InitializePollRequest from '../../common/request/admin/InitializePollRequest';
@@ -35,6 +36,10 @@ router.post('/', async (ctx, next) => {
     }
     await setPollName(request.pollName);
     await setCandidateNames(request.candidateNames);
+    process.send({
+        candidatesCacheId: uuidv4(),
+        candidateNames: request.candidateNames
+    });
     ctx.status = 200;
     ctx.body = {
         message: '성공'

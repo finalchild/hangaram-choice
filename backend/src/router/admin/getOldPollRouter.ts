@@ -2,7 +2,6 @@ import * as Router from 'koa-router';
 import {fs} from 'mz';
 import {compareAdminPassword} from '../../database';
 import {assertValidAdminPassword, isValidPollNameExtended} from '../../common/util';
-import ListOldPollsRequest from '../../common/request/admin/ListOldPollsRequest';
 import GetOldPollRequest from '../../common/request/admin/GetOldPollRequest';
 
 const router = new Router({prefix: '/api/admin/getoldpoll'});

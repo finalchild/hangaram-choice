@@ -87,13 +87,14 @@ export class InitializeDialogComponent {
         candidateNames1F: this.candidateNames1F.split('\n'),
         candidateNames2: this.candidateNames2.split('\n')
       }
-    } as InitializePollRequest).subscribe(data => {
-      alert(data['message']);
-      this.dialogRef.close();
-      this.dialog.open(CreateStudentKeysDialogComponent);
-    }, err => {
-      console.log(err);
-    });
+    } as InitializePollRequest)
+      .subscribe(data => {
+        alert(data['message']);
+        this.dialogRef.close();
+        this.dialog.open(CreateStudentKeysDialogComponent);
+      }, err => {
+        console.log(err);
+      });
   }
 
   onNoClick(): void {

@@ -7,8 +7,7 @@ const router = new Router({prefix: '/api/vote'});
 export default router;
 
 router.post('/', async (ctx, next) => {
-    const request: any = ctx.request.body;
-
+    const request: VoteRequest = ctx.request.body;
     try {
         assertValidKey(request.key);
     } catch (e) {
@@ -60,6 +59,6 @@ router.post('/', async (ctx, next) => {
     await vote(request.key, request.candidateName1M, request.candidateName1F, request.candidateName2);
     ctx.status = 200;
     ctx.body = {
-        message: '성공.'
+        message: '투표 완료!'
     };
 });
