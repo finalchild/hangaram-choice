@@ -5,6 +5,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {MatIconRegistry, MatTabGroup} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import VoteRequest from '../common/request/VoteRequest';
+import {backendUrl} from "./app.component";
 
 @Component({
   selector: 'hc-vote',
@@ -40,7 +41,7 @@ export class VoteFormComponent {
       }
     }
 
-    this.http.post(`http://localhost:3000/api/vote`, {
+    this.http.post(backendUrl + '/api/vote', {
       key: this.choiceService.key,
       candidateName1M: this.candidateNameToVote1M,
       candidateName1F: this.candidateNameToVote1F,

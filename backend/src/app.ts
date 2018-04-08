@@ -1,5 +1,6 @@
 import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
+import * as serve from 'koa-static';
 import * as cors from '@koa/cors';
 
 import loginRouter from './router/loginRouter';
@@ -13,8 +14,7 @@ import openPollRouter from './router/admin/openPollRouter';
 import setAdminPwRouter from './router/admin/setAdminPwRouter';
 import statusRouter from './router/admin/statusRouter';
 
-const app = new Koa();
-export default app;
+export const app = new Koa();
 
 app.use(cors());
 app.use(bodyParser());
@@ -38,5 +38,6 @@ app.use(setAdminPwRouter.routes());
 app.use(setAdminPwRouter.allowedMethods());
 app.use(statusRouter.routes());
 app.use(statusRouter.allowedMethods());
+app.use(serve('./public'));
 
-if (!module.parent) app.listen(process.env.PORT || '3000');
+if (!module.parent) app.listen(process.env.PORT || '80');

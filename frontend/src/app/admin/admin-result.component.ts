@@ -11,6 +11,7 @@ import OpenPollRequest from '../../common/request/admin/OpenPollRequest';
 import ClosePollRequest from '../../common/request/admin/ClosePollRequest';
 import {ListOldPollsDialogComponent} from './admin-list-old-polls-dialog.component';
 import Candidate from '../../common/Candidate';
+import {backendUrl} from "../app.component";
 
 @Component({
   selector: 'hc-admin-result',
@@ -59,7 +60,7 @@ export class AdminResultComponent {
   }
 
   openPoll() {
-    this.http.post('http://localhost:3000/api/admin/openpoll', {
+    this.http.post(backendUrl + '/api/admin/openpoll', {
       adminPassword: this.adminService.adminPassword
     } as OpenPollRequest).subscribe(data => {
       alert('설정된 대로 투표를 열었습니다!');
@@ -68,7 +69,7 @@ export class AdminResultComponent {
   }
 
   closePoll() {
-    this.http.post('http://localhost:3000/api/admin/closepoll', {
+    this.http.post(backendUrl + '/api/admin/closepoll', {
       adminPassword: this.adminService.adminPassword
     } as ClosePollRequest).subscribe(data => {
       alert('투표를 닫았습니다!');

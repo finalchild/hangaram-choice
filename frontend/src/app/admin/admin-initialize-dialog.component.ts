@@ -5,6 +5,7 @@ import {AdminService} from './admin.service';
 import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dialog.component';
 import {DomSanitizer} from '@angular/platform-browser';
 import InitializePollRequest from '../../common/request/admin/InitializePollRequest';
+import {backendUrl} from "../app.component";
 
 @Component({
   selector: 'hc-admin-initialize-dialog',
@@ -78,7 +79,7 @@ export class InitializeDialogComponent {
       return;
     }
 
-    this.http.post('http://localhost:3000/api/admin/initializepoll', {
+    this.http.post(backendUrl + '/api/admin/initializepoll', {
       adminPassword: this.adminService.adminPassword,
       pollName: this.pollName,
       candidateNames: {

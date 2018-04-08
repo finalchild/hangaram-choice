@@ -6,6 +6,7 @@ import {ErrorStateMatcher, MatIconRegistry, ShowOnDirtyErrorStateMatcher} from '
 import {DomSanitizer} from '@angular/platform-browser';
 import {NgModel} from '@angular/forms';
 import {mod10} from 'checkdigit';
+import {backendUrl} from "./app.component";
 
 @Component({
   selector: 'hc-login',
@@ -66,7 +67,7 @@ export class LoginComponent {
   }
 
   login(key: number, keyElement: HTMLInputElement, model: NgModel) {
-    this.http.post(`http://localhost:3000/api/login`, {
+    this.http.post(backendUrl + '/api/login', {
       key: key,
       candidateCacheId: this.choiceService.cache.candidatesCacheId
     })

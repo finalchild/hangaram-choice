@@ -9,6 +9,7 @@ import {s2ab} from './status';
 import {mod10} from 'checkdigit';
 import GenerateKeysRequest from '../../common/request/admin/GenerateKeysRequest';
 import Keys from '../../common/Keys';
+import {backendUrl} from "../app.component";
 
 @Component({
   selector: 'hc-create-student-keys-dialog',
@@ -87,7 +88,7 @@ export class CreateStudentKeysDialogComponent {
       return;
     }
 
-    this.http.post<Keys>(`http://localhost:3000/api/admin/generatekeys`, {
+    this.http.post<Keys>(backendUrl + '/api/admin/generatekeys', {
       adminPassword: this.adminService.adminPassword,
       firstGraders: firstGraders,
       secondGraders: secondGraders,

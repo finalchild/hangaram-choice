@@ -6,3 +6,5 @@ import {Component} from '@angular/core';
 })
 export class AppComponent {
 }
+
+export const backendUrl = 'http://localhost';

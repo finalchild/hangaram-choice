@@ -57,6 +57,6 @@ export default async function masterMain(): Promise<void> {
         cluster.fork();
     });
 
-    console.log(`HangaramChoiceBack running on port ${process.env.PORT || '3000'}`);
+    console.log(`HangaramChoiceBack running on port ${process.env.PORT || '80'}`);
     return;
 }

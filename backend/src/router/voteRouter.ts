@@ -7,7 +7,7 @@ const router = new Router({prefix: '/api/vote'});
 export default router;
 
 router.post('/', async (ctx, next) => {
-    const request: VoteRequest = ctx.request.body;
+    const request: any = ctx.request.body;
 
     try {
         assertValidKey(request.key);
@@ -48,8 +48,11 @@ router.post('/', async (ctx, next) => {
         ctx.throw('2학년과 3학년은 1학년 후보자에게 투표할 수 없습니다!');
         return;
     }
-    const results = await Promise.all([getCandidate1M(request.candidateName1M), getCandidate1F(request.candidateName1F), getCandidate2(request.candidateName2)]);
-    if (!results[0] || !results[1] || !results[2]) {
+
+    const promiseCandidate1M = getCandidate1M(request.candidateName1M);
+    const promiseCandidate1F = getCandidate1F(request.candidateName1F);
+    const promiseCandidate2 = getCandidate2(request.candidateName2);
+    if (!await promiseCandidate1M || !await promiseCandidate1F || !await promiseCandidate2) {
         ctx.throw(401, '후보자 이름이 잘못되었습니다!');
         return;
     }

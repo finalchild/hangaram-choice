@@ -5,6 +5,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {NgModel} from '@angular/forms';
 import SetAdminPwRequest from '../../common/request/admin/SetAdminPwRequest';
 import {isValidAdminPassword} from '../../common/util';
+import {backendUrl} from "../app.component";
 
 @Component({
   selector: 'hc-change-admin-password-dialog',
@@ -39,7 +40,7 @@ export class ChangeAdminPasswordDialogComponent {
       return;
     }
 
-    this.http.post(`http://localhost:3000/api/admin/setadminpw`, {
+    this.http.post(backendUrl + '/api/admin/setadminpw', {
       adminPassword: this.adminService.adminPassword,
       newAdminPassword: adminPassword
     } as SetAdminPwRequest)

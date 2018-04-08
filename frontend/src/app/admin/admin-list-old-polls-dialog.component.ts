@@ -6,6 +6,7 @@ import {mod10} from 'checkdigit';
 import ListOldPollsRequest from '../../common/request/admin/ListOldPollsRequest';
 import GetOldPollRequest from '../../common/request/admin/GetOldPollRequest';
 import {OldPollResultDialogComponent} from './admin-old-poll-result-dialog.component';
+import {backendUrl} from "../app.component";
 
 @Component({
   selector: 'hc-list-old-polls-dialog',
@@ -18,7 +19,7 @@ export class ListOldPollsDialogComponent {
               private adminService: AdminService,
               private http: HttpClient,
               @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.http.post<Array<String>>('http://localhost:3000/api/admin/listoldpolls', {
+    this.http.post<Array<String>>(backendUrl + '/api/admin/listoldpolls', {
       adminPassword: this.adminService.adminPassword
     } as ListOldPollsRequest).subscribe(data => {
       this.oldPollNames = data;
@@ -32,7 +33,7 @@ export class ListOldPollsDialogComponent {
   }
 
   onOldPollNameClick(oldPollName: String) {
-    this.http.post('http://localhost:3000/api/admin/getoldpoll', {
+    this.http.post(backendUrl + '/api/admin/getoldpoll', {
       adminPassword: this.adminService.adminPassword,
       oldPollName: oldPollName
     } as GetOldPollRequest).subscribe(data => {

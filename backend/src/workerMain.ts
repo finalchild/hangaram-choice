@@ -1,10 +1,10 @@
 import {setCache} from './candidateNamesCache';
+import {app} from './app';
 
 export default function workerMain(): void {
     process.on('message', msg => {
         setCache(msg);
     });
 
-    const app = require('./app').default;
-    app.listen(process.env.PORT || '3000');
+    app.listen(process.env.PORT || '80');
 }

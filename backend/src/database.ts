@@ -49,7 +49,6 @@ export async function tryToSetVoted(key: number): Promise<void> {
             });
         });
     });
-    return;
 }
 
 /**
@@ -91,7 +90,6 @@ export async function vote(key: number, candidateName1M: string, candidateName1F
                 });
             });
     });
-    return;
 }
 
 export function getCandidate1M(candidateName: string) {
@@ -194,12 +192,15 @@ export async function getCandidates2(): Promise<Array<Candidate>> {
 }
 
 export async function getCandidates(): Promise<Candidates> {
-    const results = await Promise.all([getCandidates1M(), getCandidates1F(), getCandidates2()]);
+    const promiseCandidates1M = getCandidates1M();
+    const promiseCandidates1F = getCandidates1F();
+    const promiseCandidates2 = getCandidates2();
+
     return {
-        candidates1M: results[0],
-        candidates1F: results[1],
-        candidates2: results[2]
-    };
+        candidates1M: await promiseCandidates1M,
+        candidates1F: await promiseCandidates1F,
+        candidates2: await promiseCandidates2
+    }
 }
 
 export async function setCandidates(candidates: Candidates): Promise<Candidates> {
@@ -301,7 +302,6 @@ export async function setCandidateNames(candidateNames: CandidateNames): Promise
             });
         });
     });
-    return;
 }
 
 // SQL Injection 체크를 하지 않습니다. 절대로 입력받은 것을 인자로 넣지 마세요.
@@ -392,14 +392,13 @@ export async function getKeyStatus(): Promise<KeyStatus> {
         });
     });
 
-    const results = await Promise.all([firstGradeNotVotedPromise, firstGradeVotedPromise, secondGradeNotVotedPromise, secondGradeVotedPromise, thirdGradeNotVotedPromise, thirdGradeVotedPromise]);
     return {
-        numberOfFirstGradeNotVotedKeys: results[0],
-        numberOfFirstGradeVotedKeys: results[1],
-        numberOfSecondGradeNotVotedKeys: results[2],
-        numberOfSecondGradeVotedKeys: results[3],
-        numberOfThirdGradeNotVotedKeys: results[4],
-        numberOfThirdGradeVotedKeys: results[5]
+        numberOfFirstGradeNotVotedKeys: await firstGradeNotVotedPromise,
+        numberOfFirstGradeVotedKeys: await firstGradeVotedPromise,
+        numberOfSecondGradeNotVotedKeys: await secondGradeNotVotedPromise,
+        numberOfSecondGradeVotedKeys: await secondGradeVotedPromise,
+        numberOfThirdGradeNotVotedKeys: await thirdGradeNotVotedPromise,
+        numberOfThirdGradeVotedKeys: await thirdGradeVotedPromise
     };
 }
 
@@ -491,11 +490,15 @@ export async function setState(state: string): Promise<void> {
 }
 
 export async function getStatus(): Promise<Status> {
-    const results = await Promise.all([getCandidates(), getKeyStatus(), getState(), getPollName()]);
+    const promiseCandidates = getCandidates();
+    const promiseKeyStatus = getKeyStatus();
+    const promiseState = getState();
+    const promisePollName = getPollName();
+
     return {
-        candidates: results[0],
-        keyStatus: results[1],
-        state: results[2],
-        pollName: results[3]
+        candidates: await promiseCandidates,
+        keyStatus: await promiseKeyStatus,
+        state: await promiseState,
+        pollName: await promisePollName
     };
 }

@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {defer, Promise} from 'q';
 import Status from '../../common/Status';
 import StatusRequest from '../../common/request/admin/StatusRequest';
+import {backendUrl} from "../app.component";
 
 @Injectable()
 export class AdminService {
@@ -19,7 +20,7 @@ export class AdminService {
 
   refreshResult(): Promise<void> {
     const deferred = defer<void>();
-    this.http.post('http://localhost:3000/api/admin/status', {
+    this.http.post(backendUrl + '/api/admin/status', {
       adminPassword: this.adminPassword
     } as StatusRequest)
       .subscribe(data => {

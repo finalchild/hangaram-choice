@@ -8,6 +8,7 @@ import {MatIconRegistry} from '@angular/material';
 import Status from '../../common/Status';
 import StatusRequest from '../../common/request/admin/StatusRequest';
 import {isValidAdminPassword} from '../../common/util';
+import {backendUrl} from "../app.component";
 
 @Component({
   selector: 'hc-admin-login',
@@ -44,7 +45,7 @@ export class AdminLoginComponent {
       return;
     }
 
-    this.http.post(`http://localhost:3000/api/admin/status`, {
+    this.http.post(backendUrl + '/api/admin/status', {
       adminPassword: adminPassword
     } as StatusRequest)
       .subscribe(data => {
@@ -56,7 +57,7 @@ export class AdminLoginComponent {
           model.control.setErrors({
             couldNotLogin: true
           });
-          this.error = err.error
+          this.error = err.error;
           passwordElement.focus();
         } else {
           console.log(err);
