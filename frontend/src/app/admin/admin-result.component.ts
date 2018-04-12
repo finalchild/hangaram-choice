@@ -19,7 +19,7 @@ import {backendUrl} from "../app.component";
 })
 export class AdminResultComponent {
 
-  constructor(private adminService: AdminService,
+  constructor(public adminService: AdminService,
               private dialog: MatDialog,
               private http: HttpClient,
               iconRegistry: MatIconRegistry,
