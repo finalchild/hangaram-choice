@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 
-import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 
@@ -12,10 +11,10 @@ import {
   MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatIconRegistry, MatInputModule, MatRadioModule,
   MatTabsModule, MatToolbarModule
 } from '@angular/material';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {StudentGuardService} from './student-guard.service';
 import {HttpClientModule} from '@angular/common/http';
-import {AdminRoutingModule} from './admin/admin-routing.module';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -39,9 +38,12 @@ import {AdminRoutingModule} from './admin/admin-routing.module';
         path: 'vote',
         canActivate: [StudentGuardService],
         component: VoteFormComponent
+      },
+      {
+        path: 'admin',
+        loadChildren: 'app/admin/admin-routing.module#AdminRoutingModule'
       }
     ]),
-    AdminRoutingModule,
     FormsModule,
     HttpClientModule,
     MatButtonModule,

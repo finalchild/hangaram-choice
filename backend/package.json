@@ -4,7 +4,7 @@
   "description": "The backend of student council election system for Hangaram High School.",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node ./src/server.ts"
+    "start": "node ./built/server.js"
   },
   "author": "Final Child",
   "license": "ISC",

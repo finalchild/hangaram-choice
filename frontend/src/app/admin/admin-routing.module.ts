@@ -3,12 +3,10 @@ import {NgModule} from '@angular/core';
 import {AdminLoginComponent} from './admin-login.component';
 import {AdminResultComponent} from './admin-result.component';
 import {
-  MatButtonModule, MatCardModule, MatDialogModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule,
-  MatListModule,
+  MatButtonModule, MatCardModule,
+  MatDialogModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatListModule,
   MatTableModule, MatToolbarModule
 } from '@angular/material';
-import {FormsModule} from '@angular/forms';
-import {BrowserModule} from '@angular/platform-browser';
 import {AdminGuardService} from './admin-guard.service';
 import {AdminService} from './admin.service';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
@@ -17,6 +15,9 @@ import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dial
 import {InitializeDialogComponent} from './admin-initialize-dialog.component';
 import {ListOldPollsDialogComponent} from './admin-list-old-polls-dialog.component';
 import {OldPollResultDialogComponent} from './admin-old-poll-result-dialog.component';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -36,10 +37,10 @@ import {OldPollResultDialogComponent} from './admin-old-poll-result-dialog.compo
     OldPollResultDialogComponent
   ],
   imports: [
-    BrowserModule,
+    CommonModule,
     RouterModule.forChild([
       {
-        path: 'admin',
+        path: '',
         children: [
           {path: '', redirectTo: 'login', pathMatch: 'full'},
           {path: 'login', component: AdminLoginComponent},
@@ -58,7 +59,8 @@ import {OldPollResultDialogComponent} from './admin-old-poll-result-dialog.compo
     MatDialogModule,
     MatTableModule,
     MatListModule,
-    NgxChartsModule
+    NgxChartsModule,
+    BrowserAnimationsModule
   ],
   exports: [
     RouterModule

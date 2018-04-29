@@ -5,7 +5,7 @@ import * as uuidv4 from 'uuid/v4';
 import {cpus} from 'os'
 
 import CandidateNamesCache from './common/CandidateNamesCache';
-import {getCandidateNames, getCandidates1F, getCandidates1M, saltRounds} from './database';
+import {getCandidateNames, saltRounds} from './database';
 import {fs} from 'mz';
 
 export default async function masterMain(): Promise<void> {
