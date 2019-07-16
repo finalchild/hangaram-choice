@@ -1,0 +1,171 @@
+body {
+    margin: 30px;
+}
+
+.login, .vote {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+
+.login:before, .login:after, .vote:before, .vote:after, .column-center:before, .column-center:after {
+    flex-grow: 1;
+    content: '';
+}
+
+.login:after, .vote:after {
+    content: '© 2017 Overflow';
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 11pt;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-header-div {
+    padding: 0 0 0 55px !important;
+}
+
+.login-container {
+    width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+
+    padding: 30px;
+
+    border: outset;
+}
+
+.account_circle {
+    vertical-align: text-bottom;
+    margin-right: 5px;
+}
+
+.vote-content {
+    overflow-x: auto;
+    overflow-y: visible;
+    text-align: center;
+    white-space: nowrap;
+    width: 100vw;
+}
+
+.vote-paper {
+    border: outset;
+    width: 500px;
+    padding: 30px 30px 15px;
+}
+
+.vote-actions {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.result-card {
+    margin: 10px auto;
+}
+
+.marginauto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.nopadding {
+    padding: 0 !important;
+}
+
+.flexrow {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.flexcolumn {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.width50 {
+    width: 50% !important;
+}
+
+.margin10 {
+    margin: 10px !important;
+}
+
+.initialize-content {
+    width: 100%;
+}
+
+.candidate-card {
+    width: 174px !important;
+    margin-left: 4vw;
+    margin-right: 4vw;
+    display: inline-block !important;
+}
+
+.candidate-card > .mdl-card__media {
+    background-color: lightgray;
+}
+
+.candidate2-card {
+    width: 522px !important;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    display: inline-block !important;
+}
+
+.candidate2-card > .mdl-card__media {
+    background-color: lightgray;
+    font-size: 0;
+}
+
+.abstention-card {
+    margin-bottom: 75px;
+    width: 155px !important;
+}
+
+.abstention-card2 {
+    margin-bottom: 75px;
+    width: 155px !important;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    display: inline-block !important;
+}
+
+.abstention-card > .mdl-card__title > .mdl-card__title-text {
+    align-items: center;
+    height: 154px;
+}
+
+.abstention-card2 > .mdl-card__title > .mdl-card__title-text {
+    align-items: center;
+    height: 154px;
+}
+
+.vote-layout-spacer {
+    flex-grow: 1;
+    display: inline-block;
+}
+
+.candidate-name {
+    text-align: center;
+    margin: auto !important;
+}
+
+.candidate-radio {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 10px !important;
+    display: block !important;
+    width: 0;
+}
+
+.mdl-radio {
+    padding-left: 15px !important;
+}
+
+.student-img {
+    height: 222px;
+    width: 174px;
+    object-fit: cover;
+}

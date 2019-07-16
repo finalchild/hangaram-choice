@@ -1,4 +1,5 @@
-database.sqlite3
-oldPolls
-public
-built
+/.idea
+/node_modules
+/database.sqlite3
+/oldPolls
+/built
