@@ -1,0 +1,97 @@
+<script src="https://npmcdn.com/zone.js@0.8.5/dist/zone.js"></script>
+<script src="https://npmcdn.com/reflect-metadata@0.1.3/Reflect.js"></script>
+<script src="https://npmcdn.com/systemjs@0.19.31/dist/system.js"></script>
+<div class="admin-result-container">
+  <mat-toolbar color="primary">
+    한가람고 학생회장단 투표 관리 페이지: {{adminService.status.pollName}}
+    <button class="margin10" mat-button color="primary" (click)="refresh()">
+      <mat-icon class="refresh" svgIcon="refresh"></mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-card class="nopadding">
+    <mat-grid-list cols="3" rowHeight="400px">
+      <mat-grid-tile>
+        <mat-grid-tile-header>
+          <span>2학년 회장단 투표 현황 </span><span (click)="details2()" style="text-decoration: underline; color: blue;">자세히</span>
+        </mat-grid-tile-header>
+        <ngx-charts-pie-chart [view]="[500, 350]"
+                              [scheme]="scheme"
+                              [results]="results2"
+                              [labels]="true">
+        </ngx-charts-pie-chart>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-grid-tile-header>
+          <span>1학년 남자 부회장 투표 현황 </span><span (click)="details1M()" style="text-decoration: underline; color: blue;">자세히</span>
+        </mat-grid-tile-header>
+        <ngx-charts-pie-chart [view]="[500, 350]"
+                              [scheme]="scheme"
+                              [results]="results1M"
+                              [labels]="true">
+        </ngx-charts-pie-chart>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-grid-tile-header>
+          <span>1학년 여자 부회장 투표 현황 </span><span (click)="details1F()" style="text-decoration: underline; color: blue;">자세히</span>
+        </mat-grid-tile-header>
+        <ngx-charts-pie-chart [view]="[500, 350]"
+                              [scheme]="scheme"
+                              [results]="results1F"
+                              [labels]="true">
+        </ngx-charts-pie-chart>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card>
+  <div class="flexrow">
+    <mat-card class="width50">
+      <mat-card-header>
+        <mat-card-title>
+          투표율
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-table #myTable [dataSource]="turnoutDataSource">
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef>이름</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="firstGrade">
+            <mat-header-cell *matHeaderCellDef>1학년</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.firstGrade}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="secondGrade">
+            <mat-header-cell *matHeaderCellDef>2학년</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.secondGrade}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="thirdGrade">
+            <mat-header-cell *matHeaderCellDef>3학년</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.thirdGrade}}</mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="turnoutColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: turnoutColumns;"></mat-row>
+        </mat-table>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="width50">
+      <mat-card-content>
+        <div *ngIf="adminService.status.state === 'closed'">
+          닫았던 상태 그대로 투표를 복구해 다시 열고 싶다면 바로 "열기"<br>
+          새로운 투표를 열고 싶다면 "초기화 및 설정" 후 "열기"를 눌러 주세요.<br>
+          <button class="margin10" mat-raised-button color="primary" (click)="openInitializeDialog()">투표 초기화 및 설정</button>
+          <br>
+          <button class="margin10" mat-raised-button color="primary" (click)="openPoll()">투표 열기(초기화/설정 후에 클릭)</button>
+        </div>
+        <div *ngIf="adminService.status.state === 'open'">
+          <button class="margin10" mat-raised-button color="primary" (click)="closePoll()">투표 닫기</button>
+        </div>
+        <hr>
+        <button class="margin10" mat-raised-button color="primary" (click)="viewStudents()">학생 키 관리</button>
+        <br>
+        <button class="margin10" mat-raised-button color="primary" (click)="openListOldPollDialog()">과거 투표 결과 확인</button>
+        <br>
+        <button class="margin10" mat-raised-button color="primary" (click)="openChangeAdminPasswordDialog()">관리자 비밀번호 변경</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

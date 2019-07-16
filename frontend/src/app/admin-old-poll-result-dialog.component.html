@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>과거 투표 결과</h1>
+<div mat-dialog-content style="width:70em">
+  <mat-list>
+    <mat-grid-list cols="3" rowHeight="400px">
+      <mat-grid-tile>
+        <mat-grid-tile-header>
+          <span>2학년 회장단 투표 결과 </span><span (click)="details2()" style="text-decoration: underline; color: blue;">자세히</span>
+        </mat-grid-tile-header>
+        <ngx-charts-pie-chart [view]="[500, 350]"
+                              [scheme]="scheme"
+                              [results]="results2"
+                              [labels]="true">
+        </ngx-charts-pie-chart>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-grid-tile-header>
+          <span>1학년 남자 부회장 투표 결과 </span><span (click)="details1M()" style="text-decoration: underline; color: blue;">자세히</span>
+        </mat-grid-tile-header>
+        <ngx-charts-pie-chart [view]="[500, 350]"
+                              [scheme]="scheme"
+                              [results]="results1M"
+                              [labels]="true">
+        </ngx-charts-pie-chart>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-grid-tile-header>
+          <span>1학년 여자 부회장 투표 결과 </span><span (click)="details1F()" style="text-decoration: underline; color: blue;">자세히</span>
+        </mat-grid-tile-header>
+        <ngx-charts-pie-chart [view]="[500, 350]"
+                              [scheme]="scheme"
+                              [results]="results1F"
+                              [labels]="true">
+        </ngx-charts-pie-chart>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" tabindex="-1">뒤로</button>
+</div>

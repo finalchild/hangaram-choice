@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 import {setCache} from './candidateNamesCache';
 import {app} from './app';
 
@@ -6,5 +8,7 @@ export default function workerMain(): void {
         setCache(message);
     });
 
-    app.listen(process.env.PORT || '80');
+    const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+
+    app.listen(config.port);
 }

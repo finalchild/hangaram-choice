@@ -1,9 +1,9 @@
 import * as Router from 'koa-router';
 import * as uuidv4 from 'uuid/v4';
 import {compareAdminPassword, getState, setCandidateNames, setPollName} from '../../database';
-import {isValidCandidateNames} from 'hangaram-choice-common/CandidateNames';
-import InitializePollRequest from 'hangaram-choice-common/request/admin/InitializePollRequest';
-import {assertValidAdminPassword, isValidPollName} from 'hangaram-choice-common/util';
+import {isValidCandidateNames} from '../../common/CandidateNames';
+import InitializePollRequest from '../../common/request/admin/InitializePollRequest';
+import {assertValidAdminPassword, isValidPollName} from '../../common/util';
 
 const router = new Router({prefix: '/api/admin/initializepoll'});
 export default router;

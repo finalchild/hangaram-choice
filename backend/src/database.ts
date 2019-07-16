@@ -1,13 +1,14 @@
 import * as bcrypt from 'bcrypt';
 import {Database} from 'sqlite3';
-import Status from 'hangaram-choice-common/Status';
-import Candidates from 'hangaram-choice-common/Candidates';
-import Candidate from 'hangaram-choice-common/Candidate';
-import KeyStatus from 'hangaram-choice-common/KeyStatus';
-import Keys from 'hangaram-choice-common/Keys';
-import CandidateNames from 'hangaram-choice-common/CandidateNames';
-import Student from 'hangaram-choice-common/Student';
-import {assertValidAdminPassword, assertValidKey} from 'hangaram-choice-common/util';
+import Status from './common/Status';
+import Candidates from './common/Candidates';
+import Candidate from './common/Candidate';
+import KeyStatus from './common/KeyStatus';
+import Keys from './common/Keys';
+import CandidateNames from './common/CandidateNames';
+import Student from './common/Student';
+import {assertValidAdminPassword, assertValidKey} from './common/util';
+import StudentInfoes from './common/StudentInfoes';
 
 export const db = new Database('database.sqlite3', err => {
     if (err) {
@@ -21,12 +22,26 @@ export async function getStudent(key: number): Promise<Student> {
     assertValidKey(key);
     return await new Promise<Student>((resolve, reject) => {
         db.serialize(() => {
-            db.get('SELECT unique_key AS key, voted, grade FROM student WHERE Key = ?', [key], (err, row) => {
+            db.get('SELECT unique_key AS key, voted, grade, name, student_number AS studentNumber FROM student WHERE Key = ?', [key], (err, row) => {
                 if (err) {
                     reject(err);
                     return;
                 }
                 resolve(row);
+            });
+        });
+    });
+}
+
+export async function getStudents(): Promise<Array<Student>> {
+    return await new Promise<Array<Student>>((resolve, reject) => {
+        db.serialize(() => {
+            db.all('SELECT unique_key AS key, voted, grade, name, student_number AS studentNumber FROM student', [], (err, rows) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(rows);
             });
         });
     });
@@ -253,7 +268,6 @@ export async function setCandidates(candidates: Candidates): Promise<Candidates>
 export async function getCandidateNames(): Promise<CandidateNames> {
     const candidates = await getCandidates();
     return {
-        pollName: await getPollName(),
         candidateNames1M: candidates.candidates1M.map(candidate => candidate.name),
         candidateNames1F: candidates.candidates1F.map(candidate => candidate.name),
         candidateNames2: candidates.candidates2.map(candidate => candidate.name)
@@ -306,16 +320,19 @@ export async function setCandidateNames(candidateNames: CandidateNames): Promise
 }
 
 // SQL Injection 체크를 하지 않습니다. 절대로 입력받은 것을 인자로 넣지 마세요.
-export async function setStudentKeys(keys: Keys): Promise<void> {
-    const firstGradeStudents = keys.firstGradeKeys.map(key => {
-        return `(${key}, 0, 1)`;
-    });
-    const secondGradeStudents = keys.secondGradeKeys.map(key => {
-        return `(${key}, 0, 2)`;
-    });
-    const thirdGradeStudents = keys.thirdGradeKeys.map(key => {
-        return `(${key}, 0, 3)`;
-    });
+export async function setStudentKeys(keys: Keys, studentInfoes: StudentInfoes): Promise<void> {
+    const firstGradeStudents = [];
+    for (let i = 0; i < studentInfoes.firstGradeStudentInfoes.length; i++) {
+        firstGradeStudents.push(`(${keys.firstGradeKeys[i]}, 0, 1, '${studentInfoes.firstGradeStudentInfoes[i].name}', ${studentInfoes.firstGradeStudentInfoes[i].studentNumber})`);
+    }
+    const secondGradeStudents = [];
+    for (let i = 0; i < studentInfoes.secondGradeStudentInfoes.length; i++) {
+        secondGradeStudents.push(`(${keys.secondGradeKeys[i]}, 0, 2, '${studentInfoes.secondGradeStudentInfoes[i].name}', ${studentInfoes.secondGradeStudentInfoes[i].studentNumber})`);
+    }
+    const thirdGradeStudents = [];
+    for (let i = 0; i < studentInfoes.thirdGradeStudentInfoes.length; i++) {
+        thirdGradeStudents.push(`(${keys.thirdGradeKeys[i]}, 0, 3, '${studentInfoes.thirdGradeStudentInfoes[i].name}', ${studentInfoes.thirdGradeStudentInfoes[i].studentNumber})`);
+    }
     const values = firstGradeStudents.concat(secondGradeStudents).concat(thirdGradeStudents).join(', ');
 
     await new Promise((resolve, reject) => {
@@ -323,7 +340,7 @@ export async function setStudentKeys(keys: Keys): Promise<void> {
             db.run('BEGIN TRANSACTION');
             db.run('DELETE FROM student');
             if (values !== '') {
-                db.run('INSERT INTO student (unique_key, voted, grade) VALUES ' + values);
+                db.run('INSERT INTO student (unique_key, voted, grade, name, student_number) VALUES ' + values);
             }
             db.run('COMMIT', [], (err) => {
                 if (err) {

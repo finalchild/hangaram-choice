@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import * as uuidv4 from 'uuid/v4';
 import {cpus} from 'os'
 
-import CandidateNamesCache from 'hangaram-choice-common/CandidateNamesCache';
+import CandidateNamesCache from './common/CandidateNamesCache';
 import {getCandidateNames, saltRounds} from './database';
 import {fs} from 'mz';
 
@@ -18,12 +18,13 @@ export default async function masterMain(): Promise<void> {
 
     await new Promise((resolve, reject) => {
         db.serialize(() => {
-            db.run('CREATE TABLE IF NOT EXISTS student (unique_key INTEGER NOT NULL PRIMARY KEY, voted INTEGER NOT NULL DEFAULT 0, grade INTEGER NOT NULL)');
+            db.run('CREATE TABLE IF NOT EXISTS student (unique_key INTEGER NOT NULL PRIMARY KEY, voted INTEGER NOT NULL DEFAULT 0, grade INTEGER NOT NULL, name TEXT NOT NULL, student_number INTEGER NOT NULL)');
             db.run('CREATE TABLE IF NOT EXISTS candidate1M (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
             db.run('CREATE TABLE IF NOT EXISTS candidate1F (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
             db.run('CREATE TABLE IF NOT EXISTS candidate2 (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
             db.run('CREATE TABLE IF NOT EXISTS admin_password (password TEXT NOT NULL)');
             db.run('CREATE TABLE IF NOT EXISTS poll_name (name TEXT NOT NULL)');
+            db.run('CREATE TABLE IF NOT EXISTS poll_start_time (time TEXT NOT NULL)');
             db.run('CREATE TABLE IF NOT EXISTS state (state TEXT NOT NULL)');
             db.run('INSERT INTO admin_password SELECT ( ? ) WHERE NOT EXISTS (SELECT * FROM admin_password)', [bcrypt.hashSync('hangaram', saltRounds)]);
             db.run('INSERT INTO poll_name SELECT ( \'한가람고등학교 학생회장단 선거\' ) WHERE NOT EXISTS (SELECT * FROM poll_name)');
@@ -58,11 +59,14 @@ export default async function masterMain(): Promise<void> {
         workers.forEach(worker => worker.send(message));
     });
 
-    cluster.on('exit', worker => {
-        console.log(`Worker ${worker.id} died :(`);
+    cluster.on('exit', (worker, code, signal) => {
+        console.log('worker %d died :( (%s). restarting...',
+            worker.process.pid, signal || code);
         cluster.fork();
     });
 
-    console.log(`HangaramChoiceBack running on port ${process.env.PORT || '80'}`);
+    const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+
+    console.log(`HangaramChoiceBack running on port ${config.port}`);
     return;
 }

@@ -1,63 +1,92 @@
-import {NgModule} from '@angular/core';
-
 import {RouterModule} from '@angular/router';
-import {FormsModule} from '@angular/forms';
-
-import {AppComponent} from './app.component';
-import {VoteFormComponent} from './vote.component';
-import {ChoiceService} from './choice.service';
-import {LoginComponent} from './login.component';
+import {NgModule} from '@angular/core';
+import {AdminLoginComponent} from './admin-login.component';
+import {AdminResultComponent} from './admin-result.component';
 import {
-  MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatIconRegistry, MatInputModule, MatRadioModule,
-  MatTabsModule, MatToolbarModule
+  MatButtonModule, MatCardModule,
+  MatDialogModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatSortModule,
+  MatTableModule, MatToolbarModule
 } from '@angular/material';
-import {StudentGuardService} from './student-guard.service';
-import {HttpClientModule} from '@angular/common/http';
-import {BrowserModule} from '@angular/platform-browser';
+import {AdminGuardService} from './admin-guard.service';
+import {AdminService} from './admin.service';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {ChangeAdminPasswordDialogComponent} from './admin-change-admin-password-dialog.component';
+import {CreateStudentKeysDialogComponent} from './admin-create-student-keys-dialog.component';
+import {InitializeDialogComponent} from './admin-initialize-dialog.component';
+import {ListOldPollsDialogComponent} from './admin-list-old-polls-dialog.component';
+import {OldPollResultDialogComponent} from './admin-old-poll-result-dialog.component';
+import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AppComponent} from './app.component';
+import {BrowserModule} from '@angular/platform-browser';
+import {HttpClientModule} from '@angular/common/http';
+import {StudentsDialogComponent} from './admin-students-dialog.component';
+import {VoteDetailDialogComponent} from './admin-vote-detail-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    VoteFormComponent
+    AdminLoginComponent,
+    AdminResultComponent,
+    ChangeAdminPasswordDialogComponent,
+    CreateStudentKeysDialogComponent,
+    InitializeDialogComponent,
+    ListOldPollsDialogComponent,
+    OldPollResultDialogComponent,
+    StudentsDialogComponent,
+    VoteDetailDialogComponent
+  ],
+  bootstrap: [AppComponent],
+  entryComponents: [
+    ChangeAdminPasswordDialogComponent,
+    CreateStudentKeysDialogComponent,
+    InitializeDialogComponent,
+    ListOldPollsDialogComponent,
+    OldPollResultDialogComponent,
+    StudentsDialogComponent,
+    VoteDetailDialogComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot([
       {
-        path: '',
+        path: 'login',
+        component: AdminLoginComponent
+      },
+      {
+        path: 'result',
+        component: AdminResultComponent,
+        canActivate: [AdminGuardService]
+      },
+      {
+        path: '**',
         redirectTo: 'login',
         pathMatch: 'full'
-      },
-      {
-        path: 'login',
-        component: LoginComponent
-      },
-      {
-        path: 'vote',
-        canActivate: [StudentGuardService],
-        component: VoteFormComponent
-      },
-      {
-        path: 'admin',
-        loadChildren: 'app/admin/admin-routing.module#AdminRoutingModule'
       }
     ]),
     FormsModule,
-    HttpClientModule,
-    MatButtonModule,
+    MatToolbarModule,
     MatFormFieldModule,
     MatInputModule,
-    MatRadioModule,
-    MatToolbarModule,
     MatIconModule,
-    MatTabsModule,
+    MatButtonModule,
     MatCardModule,
-    BrowserAnimationsModule
+    MatGridListModule,
+    MatDialogModule,
+    MatTableModule,
+    MatListModule,
+    NgxChartsModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    MatSortModule
   ],
-  providers: [ChoiceService, StudentGuardService, MatIconRegistry],
-  bootstrap: [AppComponent]
+  exports: [
+    RouterModule
+  ],
+  providers: [
+    AdminService,
+    AdminGuardService
+  ]
 })
 export class AppModule {
 }

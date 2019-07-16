@@ -4,7 +4,7 @@ import {ChoiceService} from './choice.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {MatIconRegistry, MatTabGroup} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
-import VoteRequest from 'hangaram-choice-common/request/VoteRequest';
+import VoteRequest from '../common/request/VoteRequest';
 import {backendUrl} from "./app.component";
 
 @Component({

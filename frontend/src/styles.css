@@ -23,9 +23,10 @@ hc-login:before, hc-login:after, hc-vote:before, hc-vote:after, hc-admin-login:b
 }
 
 hc-login:after, hc-vote:after, hc-admin-login:after, hc-admin-result:after {
-  content: '© 2017 Overflow';
+  content: '© 2018 Overflow';
   color: rgba(0, 0, 0, 0.54);
   font-size: 11pt;
+  text-align: center;
   margin-left: auto;
   margin-right: auto;
 }
@@ -34,7 +35,7 @@ hc-login:after, hc-vote:after, hc-admin-login:after, hc-admin-result:after {
   vertical-align: text-bottom;
 }
 
-.container-login {
+.login-container {
   width: 300px;
   margin-left: auto;
   margin-right: auto;
@@ -121,3 +122,20 @@ mat-table {
 .initialize-content {
   width: 100%;
 }
+
+.students-dialog-table {
+  width: 500px;
+}
+
+.students-dialog-filter {
+  width: 500px;
+}
+
+.students-dialog-content {
+  height: 750px;
+}
+
+.detail {
+  width: 600px;
+}
+

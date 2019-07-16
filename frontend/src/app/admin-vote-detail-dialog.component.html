@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <table class="detail">
+    <tbody>
+      <tr>
+        <td colspan="2">총 유권자 수 : {{totalStudents}}</td>
+        <td colspan="2">비투표자 수 : {{nonVoters}}</td>
+        <td colspan="2">투표율 : {{turnoutRateString}}</td>
+      </tr>
+      <tr *ngFor="let candidateData of candidateDatas">
+        <td>{{candidateData.name}}</td>
+        <td><img width="104px" height="132.688px" [src]="candidateData.photo" onerror="this.style.display='none'"></td>
+        <td colspan="4">{{candidateData.votesString}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" tabindex="-1">뒤로</button>
+</div>

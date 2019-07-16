@@ -1,10 +1,12 @@
 import * as cluster from 'cluster';
-import masterMain from './masterMain';
-import workerMain from './workerMain';
 
-if (cluster.isMaster) {
-    masterMain();
-} else {
-    workerMain();
+main();
+
+async function main() {
+    if (cluster.isMaster) {
+        (await import('./masterMain')).default();
+    } else {
+        (await import('./workerMain')).default();
+    }
 }
 

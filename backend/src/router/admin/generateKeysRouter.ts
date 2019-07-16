@@ -1,8 +1,9 @@
 import * as Router from 'koa-router';
 import {crypto} from 'mz';
 import {compareAdminPassword, setStudentKeys} from '../../database';
-import GenerateKeysRequest from 'hangaram-choice-common/request/admin/GenerateKeysRequest';
-import {assertValidAdminPassword} from 'hangaram-choice-common/util';
+import GenerateKeysRequest from '../../common/request/admin/GenerateKeysRequest';
+import {assertValidAdminPassword} from '../../common/util';
+import Keys from '../../common/Keys';
 
 const router = new Router({prefix: '/api/admin/generatekeys'});
 export default router;
@@ -17,11 +18,8 @@ router.post('/', async (ctx, next) => {
         return;
     }
 
-    if (!Number.isSafeInteger(request.firstGraders) || request.firstGraders < 0 || request.firstGraders >= 10000000
-        || !Number.isSafeInteger(request.secondGraders) || request.secondGraders < 0 || request.secondGraders >= 10000000
-        || !Number.isSafeInteger(request.thirdGraders) || request.thirdGraders < 0 || request.thirdGraders >= 10000000) {
-        ctx.throw(400, '요청한 개수가 잘못되었습니다!');
-        return;
+    if (typeof request.studentInfoes !== 'object' || !Array.isArray(request.studentInfoes.firstGradeStudentInfoes) || !Array.isArray(request.studentInfoes.secondGradeStudentInfoes) || !Array.isArray(request.studentInfoes.thirdGradeStudentInfoes)) {
+        ctx.throw(401, '학생 정보가 잘못되었습니다!');
     }
 
     if (!await compareAdminPassword(request.adminPassword)) {
@@ -29,26 +27,35 @@ router.post('/', async (ctx, next) => {
         return;
     }
 
-    const firstGradeKeys = new Set<number>();
-    const secondGradeKeys = new Set<number>();
-    const thirdGradeKeys = new Set<number>();
-    for (let i = 0; i < request.firstGraders; i++) {
-        firstGradeKeys.add(await generateNewRandomKey(firstGradeKeys, secondGradeKeys, thirdGradeKeys));
+    const firstGradeKeySet = new Set<number>();
+    const firstGradeKeys = [];
+    const secondGradeKeySet = new Set<number>();
+    const secondGradeKeys = [];
+    const thirdGradeKeySet = new Set<number>();
+    const thirdGradeKeys = [];
+    for (let i = 0; i < request.studentInfoes.firstGradeStudentInfoes.length; i++) {
+        const newKey = await generateNewRandomKey(firstGradeKeySet, secondGradeKeySet, thirdGradeKeySet);
+        firstGradeKeySet.add(newKey);
+        firstGradeKeys.push(newKey);
     }
-    for (let i = 0; i < request.secondGraders; i++) {
-        secondGradeKeys.add(await generateNewRandomKey(firstGradeKeys, secondGradeKeys, thirdGradeKeys));
+    for (let i = 0; i < request.studentInfoes.secondGradeStudentInfoes.length; i++) {
+        const newKey = await generateNewRandomKey(firstGradeKeySet, secondGradeKeySet, thirdGradeKeySet);
+        secondGradeKeySet.add(newKey);
+        secondGradeKeys.push(newKey);
     }
-    for (let i = 0; i < request.thirdGraders; i++) {
-        thirdGradeKeys.add(await generateNewRandomKey(firstGradeKeys, secondGradeKeys, thirdGradeKeys));
+    for (let i = 0; i < request.studentInfoes.thirdGradeStudentInfoes.length; i++) {
+        const newKey = await generateNewRandomKey(firstGradeKeySet, secondGradeKeySet, thirdGradeKeySet);
+        thirdGradeKeySet.add(newKey);
+        thirdGradeKeys.push(newKey);
     }
 
-    const keys = {
-        firstGradeKeys: Array.from(firstGradeKeys.values()),
-        secondGradeKeys: Array.from(secondGradeKeys.values()),
-        thirdGradeKeys: Array.from(thirdGradeKeys.values())
+    const keys: Keys = {
+        firstGradeKeys: firstGradeKeys,
+        secondGradeKeys: secondGradeKeys,
+        thirdGradeKeys: thirdGradeKeys
     };
 
-    await setStudentKeys(keys);
+    await setStudentKeys(keys, request.studentInfoes);
 
     ctx.status = 200;
     ctx.body = keys;

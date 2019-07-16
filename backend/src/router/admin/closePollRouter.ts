@@ -1,8 +1,8 @@
 import * as Router from 'koa-router';
 import {fs} from 'mz';
 import {compareAdminPassword, getState, getStatus, setState} from '../../database';
-import ClosePollRequest from 'hangaram-choice-common/request/admin/ClosePollRequest';
-import {assertValidAdminPassword} from 'hangaram-choice-common/util';
+import ClosePollRequest from '../../common/request/admin/ClosePollRequest';
+import {assertValidAdminPassword} from '../../common/util';
 
 const router = new Router({prefix: '/api/admin/closepoll'});
 export default router;
@@ -16,6 +16,7 @@ router.post('/', async (ctx, next) => {
         ctx.throw(401, e);
         return;
     }
+
     if (!await compareAdminPassword(request.adminPassword)) {
         ctx.throw(401, '관리자 비밀번호가 잘못되었습니다!');
         return;

@@ -1,4 +1,4 @@
-import CandidateNamesCache from 'hangaram-choice-common/CandidateNamesCache';
+import CandidateNamesCache from './common/CandidateNamesCache';
 
 let candidateNamesCache: CandidateNamesCache;
 

@@ -1,7 +1,7 @@
 import * as Router from 'koa-router';
 import {compareAdminPassword, getState, setState} from '../../database';
-import OpenPollRequest from 'hangaram-choice-common/request/admin/OpenPollRequest';
-import {assertValidAdminPassword} from 'hangaram-choice-common/util';
+import OpenPollRequest from '../../common/request/admin/OpenPollRequest';
+import {assertValidAdminPassword} from '../../common/util';
 
 const router = new Router({prefix: '/api/admin/openpoll'});
 export default router;
