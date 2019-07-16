@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import CandidateNamesCache from '../common/CandidateNamesCache';
+import CandidateNamesCache from 'hangaram-choice-common/CandidateNamesCache';
 
 @Injectable()
 export class ChoiceService {
