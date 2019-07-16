@@ -1,4 +1,5 @@
 export default interface CandidateNames {
+    pollName: string;
     candidateNames1M: Array<string>;
     candidateNames1F: Array<string>;
     candidateNames2: Array<string>;
@@ -12,7 +13,7 @@ export function isValidCandidateNameArray(candidateNames: Array<string>): boolea
     if (!Array.isArray(candidateNames)) {
         return false;
     }
-    for (let candidateName in candidateNames) {
+    for (const candidateName in candidateNames) {
         if (!candidateName || typeof candidateName !== 'string' || candidateName.length > 30) {
             return false;
         }

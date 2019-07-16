@@ -1,7 +1,7 @@
 import * as Router from 'koa-router';
 import {compareAdminPassword, getStatus} from '../../database';
-import StatusRequest from '../../common/request/admin/StatusRequest';
-import {assertValidAdminPassword} from '../../common/util';
+import StatusRequest from 'hangaram-choice-common/request/admin/StatusRequest';
+import {assertValidAdminPassword} from 'hangaram-choice-common/util';
 
 const router = new Router({prefix: '/api/admin/status'});
 export default router;

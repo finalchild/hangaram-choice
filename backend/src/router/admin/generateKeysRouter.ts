@@ -1,8 +1,8 @@
 import * as Router from 'koa-router';
 import {crypto} from 'mz';
 import {compareAdminPassword, setStudentKeys} from '../../database';
-import GenerateKeysRequest from '../../common/request/admin/GenerateKeysRequest';
-import {assertValidAdminPassword} from '../../common/util';
+import GenerateKeysRequest from 'hangaram-choice-common/request/admin/GenerateKeysRequest';
+import {assertValidAdminPassword} from 'hangaram-choice-common/util';
 
 const router = new Router({prefix: '/api/admin/generatekeys'});
 export default router;

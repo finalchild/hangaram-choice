@@ -1,13 +1,13 @@
 import * as bcrypt from 'bcrypt';
 import {Database} from 'sqlite3';
-import Status from './common/Status';
-import Candidates from './common/Candidates';
-import Candidate from './common/Candidate';
-import KeyStatus from './common/KeyStatus';
-import Keys from './common/Keys';
-import CandidateNames from './common/CandidateNames';
-import Student from './common/Student';
-import {assertValidAdminPassword, assertValidKey} from './common/util';
+import Status from 'hangaram-choice-common/Status';
+import Candidates from 'hangaram-choice-common/Candidates';
+import Candidate from 'hangaram-choice-common/Candidate';
+import KeyStatus from 'hangaram-choice-common/KeyStatus';
+import Keys from 'hangaram-choice-common/Keys';
+import CandidateNames from 'hangaram-choice-common/CandidateNames';
+import Student from 'hangaram-choice-common/Student';
+import {assertValidAdminPassword, assertValidKey} from 'hangaram-choice-common/util';
 
 export const db = new Database('database.sqlite3', err => {
     if (err) {
@@ -253,6 +253,7 @@ export async function setCandidates(candidates: Candidates): Promise<Candidates>
 export async function getCandidateNames(): Promise<CandidateNames> {
     const candidates = await getCandidates();
     return {
+        pollName: await getPollName(),
         candidateNames1M: candidates.candidates1M.map(candidate => candidate.name),
         candidateNames1F: candidates.candidates1F.map(candidate => candidate.name),
         candidateNames2: candidates.candidates2.map(candidate => candidate.name)

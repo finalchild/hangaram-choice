@@ -1,8 +1,8 @@
 import * as Router from 'koa-router';
 import {fs} from 'mz';
 import {compareAdminPassword, getState, getStatus, setState} from '../../database';
-import ClosePollRequest from '../../common/request/admin/ClosePollRequest';
-import {assertValidAdminPassword} from '../../common/util';
+import ClosePollRequest from 'hangaram-choice-common/request/admin/ClosePollRequest';
+import {assertValidAdminPassword} from 'hangaram-choice-common/util';
 
 const router = new Router({prefix: '/api/admin/closepoll'});
 export default router;

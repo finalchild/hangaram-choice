@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import * as uuidv4 from 'uuid/v4';
 import {cpus} from 'os'
 
-import CandidateNamesCache from './common/CandidateNamesCache';
+import CandidateNamesCache from 'hangaram-choice-common/CandidateNamesCache';
 import {getCandidateNames, saltRounds} from './database';
 import {fs} from 'mz';
 

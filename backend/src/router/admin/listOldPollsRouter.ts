@@ -1,8 +1,8 @@
 import * as Router from 'koa-router';
 import {fs} from 'mz';
 import {compareAdminPassword} from '../../database';
-import {assertValidAdminPassword} from '../../common/util';
-import ListOldPollsRequest from '../../common/request/admin/ListOldPollsRequest';
+import {assertValidAdminPassword} from 'hangaram-choice-common/util';
+import ListOldPollsRequest from 'hangaram-choice-common/request/admin/ListOldPollsRequest';
 
 const router = new Router({prefix: '/api/admin/listoldpolls'});
 export default router;

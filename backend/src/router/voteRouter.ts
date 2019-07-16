@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
-import VoteRequest from '../common/request/VoteRequest';
-import {assertValidKey} from '../common/util';
+import VoteRequest from 'hangaram-choice-common/request/VoteRequest';
+import {assertValidKey} from 'hangaram-choice-common/util';
 import {getCandidate1F, getCandidate1M, getCandidate2, getState, getStudent, vote} from '../database';
 
 const router = new Router({prefix: '/api/vote'});

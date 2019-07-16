@@ -1,7 +1,7 @@
 import * as Router from 'koa-router';
 import {getCache} from '../candidateNamesCache';
-import LoginRequest from '../common/request/LoginRequest';
-import {assertValidKey} from '../common/util';
+import LoginRequest from 'hangaram-choice-common/request/LoginRequest';
+import {assertValidKey} from 'hangaram-choice-common/util';
 import {getState, getStudent} from '../database';
 
 const router = new Router({prefix: '/api/login'});
