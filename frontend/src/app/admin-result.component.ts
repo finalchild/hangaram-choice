@@ -14,7 +14,7 @@ import {forChart} from './forChart';
 import {StudentsDialogComponent} from './admin-students-dialog.component';
 import {DetailArgument, VoteDetailDialogComponent} from './admin-vote-detail-dialog.component';
 import Status from '../common/Status';
-import {downloadResult} from './status';
+import {downloadResultImpl} from './status';
 
 @Component({
   selector: 'hc-admin-result',
@@ -54,7 +54,7 @@ export class AdminResultComponent {
   }
 
   downloadResult(): void {
-    downloadResult(this.adminService.status);
+    downloadResultImpl(this.adminService.status);
   }
 
   refresh(): void {

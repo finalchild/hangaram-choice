@@ -4,7 +4,7 @@ import Status from '../common/Status';
 import Student from '../common/Student';
 import {toKeyWithCheckDigit} from './admin-create-student-keys-dialog.component';
 
-export async function downloadResult(result: Status): Promise<void> {
+export async function downloadResultImpl(result: Status): Promise<void> {
   const workbook = await XLSX.fromBlankAsync();
   const sheet2 = workbook.addSheet('2학년 회장단');
   sheet2.cell('A1').value('후보자');

@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {mod10} from 'checkdigit';
 import Status from '../common/Status';
-import {downloadResult} from './status';
+import {downloadResultImpl} from './status';
 import {forChart} from './forChart';
 import {DetailArgument, VoteDetailDialogComponent} from './admin-vote-detail-dialog.component';
 
@@ -30,7 +30,7 @@ export class OldPollResultDialogComponent {
   }
 
   downloadResult(): void {
-    downloadResult(this.data);
+    downloadResultImpl(this.data);
   }
 
   details2() {

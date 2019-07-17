@@ -19,6 +19,20 @@ if (config.filter) {
         filter: config.filter
     }));
 }
+
+app.use(async (ctx, next) => {
+    try {
+        await next();
+    } catch (err) {
+        ctx.status = err.status || 500;
+        ctx.type = 'application/json';
+        ctx.body = {
+            error: err.message
+        };
+        ctx.app.emit('error', err, ctx);
+    }
+});
+
 app.use(bodyParser());
 app.use(rootRouter.routes());
 app.use(rootRouter.allowedMethods());
@@ -35,16 +49,6 @@ app.use(async (ctx, next) => {
         if (err.status !== 404) {
             throw err;
         }
-    }
-});
-app.use(async (ctx, next) => {
-    await next();
-    console.log(ctx.status);
-    console.log(ctx.body);
-    if (ctx.status >= 400 && ctx.status < 500 && ctx.status !== 404 && typeof ctx.body === 'string') {
-        ctx.body = {
-            error: ctx.body
-        };
     }
 });
 
