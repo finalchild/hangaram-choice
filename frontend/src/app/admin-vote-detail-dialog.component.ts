@@ -1,6 +1,5 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {mod10} from 'checkdigit';
 import Status from '../common/Status';
 
 @Component({

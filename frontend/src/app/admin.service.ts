@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {defer, Promise} from 'q';
 import Status from '../common/Status';
 import StatusRequest from '../common/request/admin/StatusRequest';
-import {backendUrl} from "./app.component";
+import {backendUrl} from './app.component';
 
 @Injectable()
 export class AdminService {

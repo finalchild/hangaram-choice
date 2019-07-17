@@ -7,7 +7,7 @@ export function assertValidKey(key: any): void {
 }
 
 export function isValidStudentNumber(studentNumber: any): boolean {
-    return Number.isSafeInteger(studentNumber) && studentNumber >= 10101 && studentNumber < 40000;
+    return Number.isSafeInteger(studentNumber) && studentNumber >= 10000 && studentNumber < 40000;
 }
 
 export function assertValidStudentNumber(studentNumber: any): void {

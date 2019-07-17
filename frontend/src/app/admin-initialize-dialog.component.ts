@@ -83,8 +83,8 @@ export class InitializeDialogComponent {
 
     this.http.post(backendUrl + '/api/admin/initializepoll', {
       adminPassword: this.adminService.adminPassword,
-      pollName: this.pollName,
       candidateNames: {
+        pollName: this.pollName,
         candidateNames1M: split1M,
         candidateNames1F: split1F,
         candidateNames2: split2

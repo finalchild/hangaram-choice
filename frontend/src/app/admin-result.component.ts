@@ -9,7 +9,7 @@ import {InitializeDialogComponent} from './admin-initialize-dialog.component';
 import OpenPollRequest from '../common/request/admin/OpenPollRequest';
 import ClosePollRequest from '../common/request/admin/ClosePollRequest';
 import {ListOldPollsDialogComponent} from './admin-list-old-polls-dialog.component';
-import {backendUrl} from "./app.component";
+import {backendUrl} from './app.component';
 import {forChart} from './forChart';
 import {StudentsDialogComponent} from './admin-students-dialog.component';
 import {DetailArgument, VoteDetailDialogComponent} from './admin-vote-detail-dialog.component';
@@ -97,7 +97,7 @@ export class AdminResultComponent {
       data: {
         title: '2학년 회장단 투표',
         type: '2',
-        photoBaseUrl: '/students/',
+        photoBaseUrl: '/students/' + encodeURIComponent(this.adminService.status.pollName) + '/',
         status: this.adminService.status
       } as DetailArgument
     });
@@ -108,7 +108,7 @@ export class AdminResultComponent {
       data: {
         title: '1학년 남자 부회장 투표',
         type: '1M',
-        photoBaseUrl: '/students/',
+        photoBaseUrl: '/students/' + encodeURIComponent(this.adminService.status.pollName) + '/',
         status: this.adminService.status
       } as DetailArgument
     });
@@ -119,7 +119,7 @@ export class AdminResultComponent {
       data: {
         title: '1학년 여자 부회장 투표',
         type: '1F',
-        photoBaseUrl: '/students/',
+        photoBaseUrl: '/students/' + encodeURIComponent(this.adminService.status.pollName) + '/',
         status: this.adminService.status
       } as DetailArgument
     });

@@ -2,8 +2,8 @@ import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSort, MatTableDataSource} from '@angular/material';
 import {AdminService} from './admin.service';
 import {HttpClient} from '@angular/common/http';
-import {backendUrl} from "./app.component";
-import StudentsRequest from '../common/request/admin/StudentRequest';
+import {backendUrl} from './app.component';
+import StudentsRequest from '../common/request/admin/StudentsRequest';
 import Student from '../common/Student';
 import {CreateStudentKeysDialogComponent, toKeyWithCheckDigit} from './admin-create-student-keys-dialog.component';
 import {downloadStudents} from './status';
@@ -26,7 +26,7 @@ export class StudentsDialogComponent implements OnInit {
   displayedColumns = ['studentNumber', 'name', 'key', 'voted'];
   filterValue = '';
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   create(): void {
     this.dialog.open(CreateStudentKeysDialogComponent).afterClosed().subscribe(() => {
@@ -112,7 +112,7 @@ function getStudentArray(students: Array<Student>): Array<Element> {
       studentNumber: student.studentNumber.toString(10),
       key: toKeyWithCheckDigit(student.key),
       voted: student.voted === 1 ? '투표 완료' : '투표 미완료'
-    }
+    };
   });
 }
 

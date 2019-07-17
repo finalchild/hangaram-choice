@@ -7,6 +7,7 @@ import listOldPollsRouter from './listOldPollsRouter';
 import openPollRouter from './openPollRouter';
 import setAdminPwRouter from './setAdminPwRouter';
 import statusRouter from './statusRouter';
+import studentsRouter from './studentsRouter';
 
 const router = new Router({prefix: '/admin'});
 export default router;
@@ -27,3 +28,5 @@ router.use(setAdminPwRouter.routes());
 router.use(setAdminPwRouter.allowedMethods());
 router.use(statusRouter.routes());
 router.use(statusRouter.allowedMethods());
+router.use(studentsRouter.routes());
+router.use(studentsRouter.allowedMethods());

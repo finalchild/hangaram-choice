@@ -3,12 +3,10 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AdminService} from './admin.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {NgModel} from '@angular/forms';
-import XLSX from 'xlsx-populate/browser/xlsx-populate';
-import {saveAs} from 'file-saver';
 import {mod10} from 'checkdigit';
 import GenerateKeysRequest from '../common/request/admin/GenerateKeysRequest';
 import Keys from '../common/Keys';
-import {backendUrl} from "./app.component";
+import {backendUrl} from './app.component';
 import StudentInfoes from '../common/StudentInfoes';
 import StudentInfo from '../common/StudentInfo';
 
@@ -29,12 +27,20 @@ export class CreateStudentKeysDialogComponent {
   onYesClick(inputFile: HTMLInputElement, inputFileControl: NgModel) {
     const file = inputFile.files[0];
     readFileContent(file).then((content) => {
-      const studentInfoes = readStudentInfoes(content);
+      let studentInfoes: StudentInfoes;
+      try {
+        studentInfoes = readStudentInfoes(content);
+      } catch (e) {
+        console.log(e);
+        return;
+      }
+      console.log('heh');
       this.http.post<Keys>(backendUrl + '/api/admin/generatekeys', {
         adminPassword: this.adminService.adminPassword,
         studentInfoes
       } as GenerateKeysRequest)
         .subscribe(data => {
+          console.log('he2');
           alert('키가 생성되었습니다');
           this.dialogRef.close();
         }, err => {
@@ -48,7 +54,7 @@ export class CreateStudentKeysDialogComponent {
             console.log(err);
           }
         });
-    })
+    });
   }
 
   onNoClick(): void {
@@ -62,44 +68,33 @@ function readStudentInfoes(text: string): StudentInfoes {
   const firstGradeStudentInfoes = [];
   const secondGradeStudentInfoes = [];
   const thirdGradeStudentInfoes = [];
-  let currentGrade = 1;
-  let currentClass = 1;
-  let currentNumber = 1;
-  for (let s of split) {
-    if (s.match(/^\d/)) {
-      if (s.length === 1) {
-        currentClass = parseInt(s, 10);
-        currentNumber = 1;
-      } else {
-        currentGrade = parseInt(s.charAt(0), 10);
-        currentClass = 1;
-        currentNumber = 1;
-      }
-    } else if (s.length === 0) {
-      currentNumber++;
-    } else {
-      switch (currentGrade) {
-        case 1:
-          firstGradeStudentInfoes.push({
-            name: s,
-            studentNumber: currentGrade * 10000 + currentClass * 100 + currentNumber
-          } as StudentInfo);
-          currentNumber++;
-          break;
-        case 2:
-          secondGradeStudentInfoes.push({
-            name: s,
-            studentNumber: currentGrade * 10000 + currentClass * 100 + currentNumber
-          } as StudentInfo);
-          currentNumber++;
-          break;
-        case 3:
-          thirdGradeStudentInfoes.push({
-            name: s,
-            studentNumber: currentGrade * 10000 + currentClass * 100 + currentNumber
-          } as StudentInfo);
-          currentNumber++;
-      }
+  for (const s of split) {
+    if (s === '') continue;
+    const space = s.indexOf(' ');
+    const studentNumber = parseInt(s.substring(0, space), 10);
+    if (!Number.isSafeInteger(studentNumber) || studentNumber < 10000 || studentNumber >= 40000) throw '학번이 잘못되었습니다: ' + s.substring(0, space);
+    const name = s.substring(space + 1);
+    switch (Math.floor(studentNumber / 10000)) {
+      case 1:
+        firstGradeStudentInfoes.push({
+          name,
+          studentNumber
+        } as StudentInfo);
+        break;
+      case 2:
+        secondGradeStudentInfoes.push({
+          name,
+          studentNumber
+        } as StudentInfo);
+        break;
+      case 3:
+        thirdGradeStudentInfoes.push({
+          name,
+          studentNumber
+        } as StudentInfo);
+        break;
+      default:
+        throw '학번이 잘못되었습니다: ' + s.substring(0, space);
     }
   }
   return {
@@ -112,7 +107,7 @@ function readStudentInfoes(text: string): StudentInfoes {
 async function readFileContent(file): Promise<string> {
   const reader = new FileReader();
   return new Promise((resolve, reject) => {
-    reader.onload = event => resolve(reader.result);
+    reader.onload = event => resolve(reader.result as string);
     reader.onerror = error => reject(error);
     reader.readAsText(file);
   }) as Promise<string>;

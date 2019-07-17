@@ -4,11 +4,11 @@ import {compareAdminPassword} from '../../database';
 import {assertValidAdminPassword} from '../../common/util';
 import ListOldPollsRequest from '../../common/request/admin/ListOldPollsRequest';
 
-const router = new Router({prefix: '/api/admin/listoldpolls'});
+const router = new Router({prefix: '/listoldpolls'});
 export default router;
 
 router.post('/', async (ctx, next) => {
-    const request: ListOldPollsRequest = ctx.request.body;
+    const request = <ListOldPollsRequest>ctx.request.body;
 
     try {
         assertValidAdminPassword(request.adminPassword);

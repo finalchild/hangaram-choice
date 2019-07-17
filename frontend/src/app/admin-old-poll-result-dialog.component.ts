@@ -38,7 +38,7 @@ export class OldPollResultDialogComponent {
       data: {
         title: '2학년 회장단 투표',
         type: '2',
-        photoBaseUrl: '/students/',
+        photoBaseUrl: '/students/' + encodeURIComponent(this.data.pollName) + '/',
         status: this.data
       } as DetailArgument
     });
@@ -49,7 +49,7 @@ export class OldPollResultDialogComponent {
       data: {
         title: '1학년 남자 부회장 투표',
         type: '1M',
-        photoBaseUrl: '/students/',
+        photoBaseUrl: '/students/' + encodeURIComponent(this.data.pollName) + '/',
         status: this.data
       } as DetailArgument
     });
@@ -60,7 +60,7 @@ export class OldPollResultDialogComponent {
       data: {
         title: '1학년 여자 부회장 투표',
         type: '1F',
-        photoBaseUrl: '/students/',
+        photoBaseUrl: '/students/' + encodeURIComponent(this.data.pollName) + '/',
         status: this.data
       } as DetailArgument
     });

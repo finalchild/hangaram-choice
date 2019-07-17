@@ -1,9 +1,0 @@
-<h1 mat-dialog-title>과거 투표 목록</h1>
-<div mat-dialog-content>
-  <mat-list>
-    <mat-list-item *ngFor="let oldPollName of oldPollNames"><button mat-raised-button (click)="onOldPollNameClick(oldPollName)">{{oldPollName}}</button></mat-list-item>
-  </mat-list>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()" tabindex="-1">뒤로</button>
-</div>

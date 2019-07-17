@@ -3,11 +3,11 @@ import {compareAdminPassword, setAdminPassword} from '../../database';
 import SetAdminPwRequest from '../../common/request/admin/SetAdminPwRequest';
 import {assertValidAdminPassword} from '../../common/util';
 
-const router = new Router({prefix: '/api/admin/setadminpw'});
+const router = new Router({prefix: '/setadminpw'});
 export default router;
 
 router.post('/', async (ctx, next) => {
-    const request: SetAdminPwRequest = ctx.request.body;
+    const request = <SetAdminPwRequest>ctx.request.body;
 
     try {
         assertValidAdminPassword(request.adminPassword);

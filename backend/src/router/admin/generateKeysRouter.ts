@@ -1,25 +1,25 @@
 import * as Router from 'koa-router';
 import {crypto} from 'mz';
 import {compareAdminPassword, setStudentKeys} from '../../database';
-import GenerateKeysRequest from '../../common/request/admin/GenerateKeysRequest';
+import GenerateKeysRequest, {isValidGenerateKeysRequest} from '../../common/request/admin/GenerateKeysRequest';
 import {assertValidAdminPassword} from '../../common/util';
 import Keys from '../../common/Keys';
 
-const router = new Router({prefix: '/api/admin/generatekeys'});
+const router = new Router({prefix: '/generatekeys'});
 export default router;
 
 router.post('/', async (ctx, next) => {
-    const request: GenerateKeysRequest = ctx.request.body;
+    const req = ctx.request.body;
+    if (!isValidGenerateKeysRequest(req)) {
+        ctx.throw(400, '요청이 잘못되었습니다!');
+    }
+    const request = req as GenerateKeysRequest;
 
     try {
         assertValidAdminPassword(request.adminPassword);
     } catch (e) {
         ctx.throw(401, '관리자 비밀번호가 잘못되었습니다!');
         return;
-    }
-
-    if (typeof request.studentInfoes !== 'object' || !Array.isArray(request.studentInfoes.firstGradeStudentInfoes) || !Array.isArray(request.studentInfoes.secondGradeStudentInfoes) || !Array.isArray(request.studentInfoes.thirdGradeStudentInfoes)) {
-        ctx.throw(401, '학생 정보가 잘못되었습니다!');
     }
 
     if (!await compareAdminPassword(request.adminPassword)) {

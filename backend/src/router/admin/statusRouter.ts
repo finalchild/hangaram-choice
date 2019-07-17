@@ -3,11 +3,11 @@ import {compareAdminPassword, getStatus} from '../../database';
 import StatusRequest from '../../common/request/admin/StatusRequest';
 import {assertValidAdminPassword} from '../../common/util';
 
-const router = new Router({prefix: '/api/admin/status'});
+const router = new Router({prefix: '/status'});
 export default router;
 
 router.post('/', async (ctx, next) => {
-    const request: StatusRequest = ctx.request.body;
+    const request = <StatusRequest>ctx.request.body;
 
     try {
         assertValidAdminPassword(request.adminPassword);

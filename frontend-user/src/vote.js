@@ -1,5 +1,5 @@
 if (sessionStorage.getItem('key') === null) {
-    location = 'login.html';
+    location.replace('login.html');
 }
 
 const key = parseInt(sessionStorage.getItem('key'), 10);
@@ -7,6 +7,9 @@ sessionStorage.removeItem('key');
 
 const grade = parseInt(sessionStorage.getItem('grade'), 10);
 sessionStorage.removeItem('grade');
+
+const studentNumber = parseInt(sessionStorage.getItem('studentNumber'), 10);
+sessionStorage.removeItem('studentNumber');
 
 const cache = JSON.parse(sessionStorage.getItem('cache'));
 
@@ -38,20 +41,20 @@ voteSubmitButton.addEventListener('click', async function(e) {
     let candidateNameToVote2;
     let candidateNameToVote1M;
     let candidateNameToVote1F;
-    if (typeof selectedRadioButton2 !== 'undefined') {
+    if (selectedRadioButton2 !== undefined) {
         candidateNameToVote2 = selectedRadioButton2.value;
     } else {
-        candidateNameToVote2 = undefined;
+        candidateNameToVote2 = null;
     }
-    if (typeof selectedRadioButton1M !== 'undefined') {
+    if (selectedRadioButton1M !== undefined) {
         candidateNameToVote1M = selectedRadioButton1M.value;
     } else {
-        candidateNameToVote1M = undefined;
+        candidateNameToVote1M = null;
     }
-    if (typeof selectedRadioButton1F !== 'undefined') {
+    if (selectedRadioButton1F !== undefined) {
         candidateNameToVote1F = selectedRadioButton1F.value;
     } else {
-        candidateNameToVote1F = undefined;
+        candidateNameToVote1F = null;
     }
     if (!candidateNameToVote2) {
         choose2Tab.classList.add('is-active');
@@ -88,7 +91,8 @@ voteSubmitButton.addEventListener('click', async function(e) {
     const request = new Request('/api/vote', {
         method: 'POST',
         body: JSON.stringify({
-            key: key,
+            key,
+            studentNumber,
             candidateName1M: candidateNameToVote1M,
             candidateName1F: candidateNameToVote1F,
             candidateName2: candidateNameToVote2
@@ -105,13 +109,13 @@ voteSubmitButton.addEventListener('click', async function(e) {
         timeout: 3000
     });
 
-    setTimeout(() => {location = 'login.html'}, 3000);
+    setTimeout(() => {location.replace('login.html')}, 3000);
     voted = true;
     voteSubmitButton.disabled = true;
 });
 
 voteBackButton.addEventListener('click', async function(e) {
-    location = 'login.html';
+    location.replace('login.html');
 });
 
 Array.prototype.forEach.call(voteRadioButtons, voteRadioButton => {
@@ -123,26 +127,26 @@ Array.prototype.forEach.call(voteRadioButtons, voteRadioButton => {
         let candidateNameToVote2;
         let candidateNameToVote1M;
         let candidateNameToVote1F;
-        if (typeof selectedRadioButton2 !== 'undefined') {
+        if (selectedRadioButton2 !== undefined) {
             candidateNameToVote2 = selectedRadioButton2.value;
         } else {
-            candidateNameToVote2 = undefined;
+            candidateNameToVote2 = null;
         }
-        if (typeof selectedRadioButton1M !== 'undefined') {
+        if (selectedRadioButton1M !== undefined) {
             candidateNameToVote1M = selectedRadioButton1M.value;
         } else {
-            candidateNameToVote1M = undefined;
+            candidateNameToVote1M = null;
         }
-        if (typeof selectedRadioButton1F !== 'undefined') {
+        if (selectedRadioButton1F !== undefined) {
             candidateNameToVote1F = selectedRadioButton1F.value;
         } else {
-            candidateNameToVote1F = undefined;
+            candidateNameToVote1F = null;
         }
 
-        doneIcon2.hidden = !candidateNameToVote2;
+        doneIcon2.hidden = candidateNameToVote2 === null;
         if (grade === 1) {
-            doneIcon1M.hidden = !candidateNameToVote1M;
-            doneIcon1F.hidden = !candidateNameToVote1F;
+            doneIcon1M.hidden = candidateNameToVote1M === null;
+            doneIcon1F.hidden = candidateNameToVote1F === null;
         }
 
         voteSubmitButton.disabled = !canVote();
@@ -158,32 +162,27 @@ function canVote() {
     let candidateNameToVote2;
     let candidateNameToVote1M;
     let candidateNameToVote1F;
-    if (typeof selectedRadioButton2 !== 'undefined') {
+    if (selectedRadioButton2 !== undefined) {
         candidateNameToVote2 = selectedRadioButton2.value;
     } else {
-        candidateNameToVote2 = undefined;
+        candidateNameToVote2 = null;
     }
-    if (typeof selectedRadioButton1M !== 'undefined') {
+    if (selectedRadioButton1M !== undefined) {
         candidateNameToVote1M = selectedRadioButton1M.value;
     } else {
-        candidateNameToVote1M = undefined;
+        candidateNameToVote1M = null;
     }
-    if (typeof selectedRadioButton1F !== 'undefined') {
+    if (selectedRadioButton1F !== undefined) {
         candidateNameToVote1F = selectedRadioButton1F.value;
     } else {
-        candidateNameToVote1F = undefined;
+        candidateNameToVote1F = null;
     }
 
-    if (!candidateNameToVote2) {
+    if (candidateNameToVote2 === null) {
         return false;
     }
-    if (grade === 1) {
-        if (!candidateNameToVote1M) {
-            return false;
-        }
-        if (!candidateNameToVote1F) {
-            return false;
-        }
+    if (grade === 1 && (candidateNameToVote1M === null || candidateNameToVote1F === null)) {
+        return false;
     }
     return true;
 }

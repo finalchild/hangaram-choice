@@ -5,17 +5,7 @@ import * as serve from 'koa-static';
 import * as send from 'koa-send';
 import * as fs from 'fs';
 
-import loginRouter from './router/loginRouter';
-import voteRouter from './router/voteRouter';
-import closePollRouter from './router/admin/closePollRouter';
-import generateKeysRouter from './router/admin/generateKeysRouter';
-import getOldPollRouter from './router/admin/getOldPollRouter';
-import initializePollRouter from './router/admin/initializePollRouter';
-import listOldPollsRouter from './router/admin/listOldPollsRouter';
-import openPollRouter from './router/admin/openPollRouter';
-import setAdminPwRouter from './router/admin/setAdminPwRouter';
-import statusRouter from './router/admin/statusRouter';
-import studentsRouter from './router/admin/studentsRouter';
+import rootRouter from './router/apiRouter';
 
 export let app;
 
@@ -30,28 +20,8 @@ if (config.filter) {
     }));
 }
 app.use(bodyParser());
-app.use(loginRouter.routes());
-app.use(loginRouter.allowedMethods());
-app.use(voteRouter.routes());
-app.use(voteRouter.allowedMethods());
-app.use(closePollRouter.routes());
-app.use(closePollRouter.allowedMethods());
-app.use(generateKeysRouter.routes());
-app.use(generateKeysRouter.allowedMethods());
-app.use(getOldPollRouter.routes());
-app.use(getOldPollRouter.allowedMethods());
-app.use(initializePollRouter.routes());
-app.use(initializePollRouter.allowedMethods());
-app.use(listOldPollsRouter.routes());
-app.use(listOldPollsRouter.allowedMethods());
-app.use(openPollRouter.routes());
-app.use(openPollRouter.allowedMethods());
-app.use(setAdminPwRouter.routes());
-app.use(setAdminPwRouter.allowedMethods());
-app.use(statusRouter.routes());
-app.use(statusRouter.allowedMethods());
-app.use(studentsRouter.routes());
-app.use(studentsRouter.allowedMethods());
+app.use(rootRouter.routes());
+app.use(rootRouter.allowedMethods());
 app.use(async (ctx, next) => {
     await next();
 
@@ -65,6 +35,16 @@ app.use(async (ctx, next) => {
         if (err.status !== 404) {
             throw err;
         }
+    }
+});
+app.use(async (ctx, next) => {
+    await next();
+    console.log(ctx.status);
+    console.log(ctx.body);
+    if (ctx.status >= 400 && ctx.status < 500 && ctx.status !== 404 && typeof ctx.body === 'string') {
+        ctx.body = {
+            error: ctx.body
+        };
     }
 });
 

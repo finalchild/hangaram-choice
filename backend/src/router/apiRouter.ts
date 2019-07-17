@@ -3,7 +3,7 @@ import loginRouter from './loginRouter';
 import voteRouter from './voteRouter';
 import adminRouter from './admin/adminRouter';
 
-const router = new Router({prefix: '/'});
+const router = new Router({prefix: '/api'});
 export default router;
 
 router.use(loginRouter.routes());

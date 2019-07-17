@@ -4,11 +4,11 @@ import {compareAdminPassword} from '../../database';
 import {assertValidAdminPassword, isValidPollNameExtended} from '../../common/util';
 import GetOldPollRequest from '../../common/request/admin/GetOldPollRequest';
 
-const router = new Router({prefix: '/api/admin/getoldpoll'});
+const router = new Router({prefix: '/getoldpoll'});
 export default router;
 
 router.post('/', async (ctx, next) => {
-    const request: GetOldPollRequest = ctx.request.body;
+    const request = <GetOldPollRequest>ctx.request.body;
 
     try {
         assertValidAdminPassword(request.adminPassword);

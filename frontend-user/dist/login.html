@@ -23,6 +23,12 @@
             <form class="flexcolumn marginauto">
                 <div class="marginauto">
                     <label for="login-key"><i class="material-icons account_circle">account_circle</i></label>
+                    <div id="student-number-input-container" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" pattern="(?:[1-3][0-9]{0,4})?" id="login-student-number" autocomplete="off" maxlength="5">
+                        <label class="mdl-textfield__label" for="login-student-number">학번</label>
+                        <span class="mdl-textfield__error" id="student-number-error">잘못된 학번입니다!</span>
+                    </div>
+                    <label for="login-key"><i class="material-icons vpn_key">vpn_key</i></label>
                     <div id="key-input-container" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <input class="mdl-textfield__input" type="text" pattern="[0-9]{0,8}" id="login-key" autocomplete="off" maxlength="8">
                         <label class="mdl-textfield__label" for="login-key">학생 키</label>

@@ -1,22 +1,33 @@
+import {isValidPollName} from './util';
+
 export default interface CandidateNames {
+    pollName: string;
     candidateNames1M: Array<string>;
     candidateNames1F: Array<string>;
     candidateNames2: Array<string>;
 }
 
-export function isValidCandidateNames(candidateNames: CandidateNames): boolean {
-    return isValidCandidateNameArray(candidateNames.candidateNames1M) && isValidCandidateNameArray(candidateNames.candidateNames1F) && isValidCandidateNameArray(candidateNames.candidateNames2);
+export function isValidCandidateNames(x: any): boolean {
+    return typeof x === 'object' && x !== null
+        && isValidPollName(x.pollName)
+        && isValidCandidateNameArray(x.candidateNames1M)
+        && isValidCandidateNameArray(x.candidateNames1F)
+        && isValidCandidateNameArray(x.candidateNames2);
 }
 
-export function isValidCandidateNameArray(candidateNames: Array<string>): boolean {
-    if (!Array.isArray(candidateNames)) {
+export function isValidCandidateNameArray(x: any): boolean {
+    if (!Array.isArray(x)) {
         return false;
     }
-    for (let candidateName in candidateNames) {
-        if (!candidateName || typeof candidateName !== 'string' || candidateName.length > 30) {
+    for (const candidateName of x) {
+        if (!isValidStudentName(candidateName)) {
             return false;
         }
     }
 
     return true;
+}
+
+export function isValidStudentName(x: any): boolean {
+    return typeof x === 'string' && x.length > 0 || x.length < 30;
 }

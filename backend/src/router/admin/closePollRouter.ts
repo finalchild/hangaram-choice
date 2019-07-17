@@ -4,11 +4,11 @@ import {compareAdminPassword, getState, getStatus, setState} from '../../databas
 import ClosePollRequest from '../../common/request/admin/ClosePollRequest';
 import {assertValidAdminPassword} from '../../common/util';
 
-const router = new Router({prefix: '/api/admin/closepoll'});
+const router = new Router({prefix: '/closepoll'});
 export default router;
 
 router.post('/', async (ctx, next) => {
-    const request: ClosePollRequest = ctx.request.body;
+    const request = <ClosePollRequest>ctx.request.body;
 
     try {
         assertValidAdminPassword(request.adminPassword);

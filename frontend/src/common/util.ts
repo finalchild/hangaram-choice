@@ -11,7 +11,7 @@ export function isValidStudentNumber(studentNumber: any): boolean {
 }
 
 export function assertValidStudentNumber(studentNumber: any): void {
-    if (isValidStudentNumber(studentNumber)) throw 'Invalid student number!';
+    if (!isValidStudentNumber(studentNumber)) throw 'Invalid student number!';
 }
 
 export function isValidAdminPassword(plaintextPassword: any): boolean {

@@ -37,7 +37,7 @@ body {
     border: outset;
 }
 
-.account_circle {
+.account_circle .vpn_key {
     vertical-align: text-bottom;
     margin-right: 5px;
 }

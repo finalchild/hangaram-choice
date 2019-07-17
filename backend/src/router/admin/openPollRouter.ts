@@ -3,11 +3,11 @@ import {compareAdminPassword, getState, setState} from '../../database';
 import OpenPollRequest from '../../common/request/admin/OpenPollRequest';
 import {assertValidAdminPassword} from '../../common/util';
 
-const router = new Router({prefix: '/api/admin/openpoll'});
+const router = new Router({prefix: '/openpoll'});
 export default router;
 
 router.post('/', async (ctx, next) => {
-    const request: OpenPollRequest = ctx.request.body;
+    const request = <OpenPollRequest>ctx.request.body;
 
     try {
         assertValidAdminPassword(request.adminPassword);

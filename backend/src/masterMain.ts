@@ -19,9 +19,9 @@ export default async function masterMain(): Promise<void> {
     await new Promise((resolve, reject) => {
         db.serialize(() => {
             db.run('CREATE TABLE IF NOT EXISTS student (unique_key INTEGER NOT NULL PRIMARY KEY, voted INTEGER NOT NULL DEFAULT 0, grade INTEGER NOT NULL, name TEXT NOT NULL, student_number INTEGER NOT NULL)');
-            db.run('CREATE TABLE IF NOT EXISTS candidate1M (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
-            db.run('CREATE TABLE IF NOT EXISTS candidate1F (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
-            db.run('CREATE TABLE IF NOT EXISTS candidate2 (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL)');
+            db.run('CREATE TABLE IF NOT EXISTS candidate1M (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL, first_grade_votes INTEGER NOT NULL, second_grade_votes INTEGER NOT NULL, third_grade_votes INTEGER NOT NULL)');
+            db.run('CREATE TABLE IF NOT EXISTS candidate1F (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL, first_grade_votes INTEGER NOT NULL, second_grade_votes INTEGER NOT NULL, third_grade_votes INTEGER NOT NULL)');
+            db.run('CREATE TABLE IF NOT EXISTS candidate2 (name TEXT NOT NULL PRIMARY KEY, votes INTEGER NOT NULL, first_grade_votes INTEGER NOT NULL, second_grade_votes INTEGER NOT NULL, third_grade_votes INTEGER NOT NULL)');
             db.run('CREATE TABLE IF NOT EXISTS admin_password (password TEXT NOT NULL)');
             db.run('CREATE TABLE IF NOT EXISTS poll_name (name TEXT NOT NULL)');
             db.run('CREATE TABLE IF NOT EXISTS poll_start_time (time TEXT NOT NULL)');

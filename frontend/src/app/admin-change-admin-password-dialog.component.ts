@@ -5,7 +5,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {NgModel} from '@angular/forms';
 import SetAdminPwRequest from '../common/request/admin/SetAdminPwRequest';
 import {isValidAdminPassword} from '../common/util';
-import {backendUrl} from "./app.component";
+import {backendUrl} from './app.component';
 
 @Component({
   selector: 'hc-change-admin-password-dialog',

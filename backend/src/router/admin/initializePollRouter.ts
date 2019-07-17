@@ -4,12 +4,13 @@ import {compareAdminPassword, getState, setCandidateNames, setPollName} from '..
 import {isValidCandidateNames} from '../../common/CandidateNames';
 import InitializePollRequest from '../../common/request/admin/InitializePollRequest';
 import {assertValidAdminPassword, isValidPollName} from '../../common/util';
+import { fs } from 'mz';
 
-const router = new Router({prefix: '/api/admin/initializepoll'});
+const router = new Router({prefix: '/initializepoll'});
 export default router;
 
 router.post('/', async (ctx, next) => {
-    const request: InitializePollRequest = ctx.request.body;
+    const request = <InitializePollRequest>ctx.request.body;
 
     try {
         assertValidAdminPassword(request.adminPassword);
@@ -17,7 +18,7 @@ router.post('/', async (ctx, next) => {
         ctx.throw(401, e);
         return;
     }
-    if (!isValidPollName(request.pollName)) {
+    if (!isValidPollName(request.candidateNames.pollName)) {
         ctx.throw(400, '투표 이름이 잘못되었습니다!');
         return;
     }
@@ -34,7 +35,7 @@ router.post('/', async (ctx, next) => {
         ctx.throw(400, '투표가 닫혀 있어야 합니다!');
         return;
     }
-    await setPollName(request.pollName);
+    await fs.mkdir('public/students/' + request.candidateNames.pollName, <any>{recursive: true});
     await setCandidateNames(request.candidateNames);
     process.send({
         candidatesCacheId: uuidv4(),
