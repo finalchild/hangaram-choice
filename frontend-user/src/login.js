@@ -129,7 +129,6 @@ async function loadTemplate(cache, grade) {
     const abstention1M = candidateNames1M.includes('기권');
     const abstention1F = candidateNames1F.includes('기권');
     const abstention2 = candidateNames2.includes('기권');
-
     if (abstention1M) {
         remove(candidateNames1M, '기권');
     }
@@ -138,6 +137,18 @@ async function loadTemplate(cache, grade) {
     }
     if (abstention2) {
         remove(candidateNames2, '기권');
+    }
+    let veto1M = candidateNames1M.length === 2 && (candidateNames1M[1] === '기권' || candidateNames1M[1].includes('(반대)'));
+    let veto1F = candidateNames1F.length === 2 && (candidateNames1F[1] === '기권' || candidateNames1F[1].includes('(반대)'));
+    let veto2 = candidateNames2.length === 2 && (candidateNames2[1] === '기권' || candidateNames2[1].includes('(반대)'));
+    if (veto1M) {
+        veto1M = candidateNames1M.pop();
+    }
+    if (veto1F) {
+        veto1F = candidateNames1F.pop();
+    }
+    if (veto2) {
+        veto2 = candidateNames2.pop();
     }
 
     const candidateNames2Objects = candidateNames2.map(e => ({original: e, split: e.split(', ')}));
@@ -148,6 +159,9 @@ async function loadTemplate(cache, grade) {
         abstention1M,
         abstention1F,
         abstention2,
+        veto1M,
+        veto1F,
+        veto2,
         firstGrade: grade === 1,
         pollNameEscaped
     });

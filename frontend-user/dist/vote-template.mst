@@ -44,6 +44,21 @@
                         </div>
                     </div>
                     {{/abstention2}}
+                    {{#veto2}}
+                    <div class="mdl-card mdl-shadow--2dp candidate2-card animated fadeInDown">
+                        <div class="mdl-card__media mdl-card--expand">
+                            <img class="student-img-wide" src="/veto-wide.png">
+                        </div>
+                        <div class="mdl-card__title mdl-card--expand">
+                            <h2 class="mdl-card__title-text candidate-name">{{ veto2 }}</h2>
+                        </div>
+                        <div class="mdl-card-actions mdl-card--border">
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect candidate-radio" for="candidateNameToVote2-{{ veto2 }}">
+                                <input type="radio" id="candidateNameToVote2-{{ veto2 }}" class="mdl-radio__button vote-radio" name="candidateNameToVote2" value="{{ veto2 }}">
+                            </label>
+                        </div>
+                    </div>
+                    {{/veto2}}
                 </div>
             </section>
             {{#firstGrade}}
@@ -76,6 +91,21 @@
                         </div>
                     </div>
                     {{/abstention1M}}
+                    {{#veto1M}}
+                    <div class="mdl-card mdl-shadow--2dp candidate-card animated fadeInDown">
+                        <div class="mdl-card__media mdl-card--expand">
+                            <img class="student-img" src="/veto.png">
+                        </div>
+                        <div class="mdl-card__title mdl-card--expand">
+                            <h2 class="mdl-card__title-text candidate-name">{{ veto1M }}</h2>
+                        </div>
+                        <div class="mdl-card-actions mdl-card--border">
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect candidate-radio" for="candidateNameToVote1M-{{ veto1M }}">
+                                <input type="radio" id="candidateNameToVote1M-{{ veto1M }}" class="mdl-radio__button vote-radio" name="candidateNameToVote1M" value="{{ veto1M }}">
+                            </label>
+                        </div>
+                    </div>
+                    {{/veto1M}}
                 </div>
             </section>
             <section class="mdl-layout__tab-panel" id="choose1F">
@@ -107,6 +137,21 @@
                         </div>
                     </div>
                     {{/abstention1F}}
+                    {{#veto1F}}
+                    <div class="mdl-card mdl-shadow--2dp candidate-card animated fadeInDown">
+                        <div class="mdl-card__media mdl-card--expand">
+                            <img class="student-img" src="/veto.png">
+                        </div>
+                        <div class="mdl-card__title mdl-card--expand">
+                            <h2 class="mdl-card__title-text candidate-name">{{ veto1F }}</h2>
+                        </div>
+                        <div class="mdl-card-actions mdl-card--border">
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect candidate-radio" for="candidateNameToVote1F-{{ veto1F }}">
+                                <input type="radio" id="candidateNameToVote1F-{{ veto1F }}" class="mdl-radio__button vote-radio" name="candidateNameToVote1F" value="{{ veto1F }}">
+                            </label>
+                        </div>
+                    </div>
+                    {{/veto1F}}
                 </div>
             </section>
             {{/firstGrade}}

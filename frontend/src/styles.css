@@ -23,7 +23,7 @@ hc-login:before, hc-login:after, hc-vote:before, hc-vote:after, hc-admin-login:b
 }
 
 hc-login:after, hc-vote:after, hc-admin-login:after, hc-admin-result:after {
-  content: '© 2018 Overflow';
+  content: '© 2017-2019 Overflow';
   color: rgba(0, 0, 0, 0.54);
   font-size: 11pt;
   text-align: center;

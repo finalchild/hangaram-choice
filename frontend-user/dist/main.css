@@ -15,7 +15,7 @@ body {
 }
 
 .login:after, .vote:after {
-    content: '© 2017 Overflow';
+    content: '© 2017-2019 Overflow';
     color: rgba(0, 0, 0, 0.54);
     font-size: 11pt;
     text-align: center;
@@ -167,5 +167,11 @@ body {
 .student-img {
     height: 222px;
     width: 174px;
+    object-fit: cover;
+}
+
+.student-img-wide {
+    height: 222px;
+    width: 522px;
     object-fit: cover;
 }

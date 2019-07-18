@@ -69,11 +69,19 @@ function readStudentInfoes(text: string): StudentInfoes {
   const secondGradeStudentInfoes = [];
   const thirdGradeStudentInfoes = [];
   for (const s of split) {
-    if (s === '') continue;
-    const space = s.indexOf(' ');
-    const studentNumber = parseInt(s.substring(0, space), 10);
-    if (!Number.isSafeInteger(studentNumber) || studentNumber < 10000 || studentNumber >= 40000) throw '학번이 잘못되었습니다: ' + s.substring(0, space);
-    const name = s.substring(space + 1);
+    if (/^\s*$/.test(s)) continue;
+    const replaced = s.trim().replace(/\s\s+/g, ' ');
+    const space = replaced.lastIndexOf(' ');
+    const studentNumberString = replaced.substring(0, space);
+    const studentNumberStringSplit = studentNumberString.split(' ');
+    let studentNumber;
+    if (studentNumberStringSplit.length === 3) {
+      studentNumber = parseInt(studentNumberStringSplit[0], 10) * 10000 + parseInt(studentNumberStringSplit[1], 10) * 100 + parseInt(studentNumberStringSplit[2], 10);
+    } else {
+      studentNumber = parseInt(studentNumberString, 10);
+    }
+    if (!Number.isSafeInteger(studentNumber) || studentNumber < 10000 || studentNumber >= 40000) throw '학번이 잘못되었습니다: ' + studentNumberString;
+    const name = replaced.substring(space + 1);
     switch (Math.floor(studentNumber / 10000)) {
       case 1:
         firstGradeStudentInfoes.push({
@@ -94,7 +102,7 @@ function readStudentInfoes(text: string): StudentInfoes {
         } as StudentInfo);
         break;
       default:
-        throw '학번이 잘못되었습니다: ' + s.substring(0, space);
+        throw '학번이 잘못되었습니다: ' + studentNumberString;
     }
   }
   return {
