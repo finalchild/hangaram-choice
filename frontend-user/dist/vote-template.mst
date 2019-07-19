@@ -157,7 +157,7 @@
             {{/firstGrade}}
         </form>
         <div class="vote-actions">
-            <button id="vote-submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" disabled>{{#firstGrade}}모두 {{/firstGrade}}투표하기</button>
+            <button id="vote-submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" disabled>투표 완료</button>
             <button id="vote-back" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">로그인 화면으로 돌아가기</button>
         </div>
     </main>
